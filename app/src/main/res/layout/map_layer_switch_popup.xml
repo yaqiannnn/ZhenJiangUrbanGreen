@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/ic_popupwindow_bkg">
+
+    <ListView
+        android:paddingTop="5dp"
+        android:id="@+id/lv_layer_list"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:scrollingCache="false">
+
+    </ListView>
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="90dp"-->
+        <!--android:text="@string/app_name"/>-->
+</LinearLayout>

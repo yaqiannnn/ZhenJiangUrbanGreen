@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:orientation="horizontal">
+
+
+    <ImageButton
+        android:id="@+id/btn_map_menu"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="#EEE"
+        android:padding="2dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ic_map_menu" />
+
+    <ImageView
+
+        android:id="@+id/iv_divide_line"
+        android:layout_width="1dp"
+        android:layout_height="45dp"
+        android:background="#999" />
+
+    <EditText
+        android:id="@+id/et_search"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_weight="1"
+        android:background="#EEE"
+        android:editable="false"
+        android:hint="   在此输入要搜索的内容"
+        android:maxLines="1" />
+
+
+</LinearLayout>

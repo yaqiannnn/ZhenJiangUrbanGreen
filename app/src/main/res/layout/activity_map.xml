@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="com.nju.urbangreen.zhenjiangurbangreen.map.MapActivity">
+
+    <com.esri.android.map.MapView
+        android:id="@+id/map_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.esri.android.map.MapView>
+
+    <ImageButton
+        android:id="@+id/imgbtn_global_view"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/topbar"
+        android:layout_margin="10dp"
+        android:background="@mipmap/ic_global_view" />
+
+    <ImageButton
+        android:id="@+id/imgbtn_layer_switch"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/imgbtn_global_view"
+        android:layout_margin="10dp"
+        android:background="@mipmap/ic_layer_switch" />
+
+    <CheckBox
+        android:id="@+id/cb_nearby"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/imgbtn_layer_switch"
+        android:layout_margin="10dp"
+        android:background="@mipmap/ic_nearby_unselected"
+        android:button="@null" />
+
+
+    <ImageButton
+
+        android:id="@+id/imgbtn_locate"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginLeft="10dp"
+        android:background="@mipmap/ic_locate" />
+
+    <com.nju.urbangreen.zhenjiangurbangreen.map.MapTopBarLayout
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp">
+
+    </com.nju.urbangreen.zhenjiangurbangreen.map.MapTopBarLayout>
+
+    <LinearLayout
+        android:id="@+id/bottombar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:text="添加管养记录"
+                android:textColor="#fff" />
+            <View
+                android:background="#fff"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:text="添加巡查记录"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#fff" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:text="添加大事记"
+                android:textColor="#fff" />
+            <View
+                android:background="#fff"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:text="查看基本信息"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
