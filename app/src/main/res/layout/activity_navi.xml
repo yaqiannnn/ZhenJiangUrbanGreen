@@ -8,9 +8,9 @@
     tools:context="com.nju.urbangreen.zhenjiangurbangreen.navigation.NaviActivity">
 
     <TextView
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="@color/colorPrimary"
 
         android:gravity="center"
         android:paddingTop="5dp"
@@ -30,25 +30,26 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_margin="20dp"
             android:layout_weight="1"
-            >
+            android:orientation="vertical">
 
             <ImageButton
-                android:layout_gravity="center_horizontal"
+                android:id="@+id/imgbtn_maintain_record"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
                 android:background="@mipmap/ic_maintain" />
+
             <TextView
-                android:textSize="14sp"
-                android:layout_marginTop="3dp"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="管养记录"/>
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="管养记录"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <View
@@ -57,25 +58,26 @@
             android:background="#fff" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_margin="20dp"
             android:layout_weight="1"
-            >
+            android:orientation="vertical">
 
             <ImageButton
-                android:layout_gravity="center"
+                android:id="@+id/imgbtn_inspection_record"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="@mipmap/ic_check" />
+                android:layout_gravity="center"
+                android:background="@mipmap/ic_inspection" />
+
             <TextView
-                android:textSize="14sp"
-                android:layout_marginTop="3dp"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="养护巡查"/>
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="养护巡查"
+                android:textSize="14sp" />
         </LinearLayout>
         >
     </LinearLayout>
@@ -92,25 +94,27 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_margin="20dp"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageButton
-                android:layout_gravity="center"
+                android:id="@+id/imgbtn_events_record"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_gravity="center"
                 android:background="@mipmap/ic_event" />
+
             <TextView
-                android:textSize="14sp"
-                android:layout_marginTop="3dp"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="大事记"/>
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="大事记"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <View
@@ -119,25 +123,27 @@
             android:background="#fff" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_margin="20dp"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageButton
-                android:layout_gravity="center"
+                android:id="@+id/imgbtn_message_mag"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_gravity="center"
                 android:background="@mipmap/ic_message" />
+
             <TextView
-                android:textSize="14sp"
-                android:layout_marginTop="3dp"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="消息通知"/>
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="消息通知"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -153,25 +159,27 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_margin="20dp"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageButton
-                android:layout_gravity="center"
+                android:id="@+id/imgbtn_file_mag"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_gravity="center"
                 android:background="@mipmap/ic_file" />
+
             <TextView
-                android:textSize="14sp"
-                android:layout_marginTop="3dp"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="附件管理"/>
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="附件管理"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <View
@@ -180,26 +188,27 @@
             android:background="#fff" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_margin="20dp"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageButton
                 android:id="@+id/imgbtn_settings"
-                android:layout_gravity="center"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_gravity="center"
                 android:background="@mipmap/ic_settings" />
+
             <TextView
-                android:textSize="14sp"
-                android:layout_marginTop="3dp"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="设置"/>
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="设置"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 

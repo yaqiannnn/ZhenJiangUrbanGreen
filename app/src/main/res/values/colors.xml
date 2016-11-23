@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorBackground">#ffffff</color>
     <color name="black">#ffffff</color>
+	<color name="background_tab_pressed">#6633B5E5</color>
 </resources>

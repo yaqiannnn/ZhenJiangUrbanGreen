@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    tools:context="com.nju.urbangreen.zhenjiangurbangreen.events.EventsActivity">
+
+    <com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip
+        app:pstsUnderlineHeight="2dp"
+        app:pstsIndicatorHeight="2dp"
+        app:pstsShouldExpand="true"
+        android:id="@+id/psts_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+    </com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip>
+
+    <android.support.v4.view.ViewPager
+        android:layout_below="@+id/psts_tabs"
+        android:id="@+id/vp_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+</RelativeLayout>
