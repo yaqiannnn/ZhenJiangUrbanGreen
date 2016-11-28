@@ -31,15 +31,17 @@
             android:exported="true" />
 
         <activity android:name=".inspectRecord.InspectListActivity">
+
+        </activity>
+        <activity android:name=".inspectRecord.InspectInfoActivity"></activity>
+        <activity android:name=".maintainRecord.MaintainInfoActivity"></activity>
+        <activity android:name=".maintainRecord.MaintainListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".inspectRecord.InspectInfoActivity"></activity>
-        <activity android:name=".maintainRecord.MaintainInfoActivity"></activity>
-        <activity android:name=".maintainRecord.MaintainListActivity"></activity>
     </application>
 
 </manifest>

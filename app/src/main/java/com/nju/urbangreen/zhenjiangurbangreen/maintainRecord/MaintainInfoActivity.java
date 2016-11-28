@@ -1,6 +1,7 @@
 package com.nju.urbangreen.zhenjiangurbangreen.maintainRecord;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,8 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MaintainInfoActivity extends AppCompatActivity {
 
@@ -30,15 +34,28 @@ public class MaintainInfoActivity extends AppCompatActivity {
     private String[] typeArray;
     private ArrayAdapter<String> typeAdapter;
 
+    private MaintainObject myObject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent=getIntent();
+        if(intent.getSerializableExtra("MaintainInfo")==null)
+        {
+            //todo add new Object
+            myObject=new MaintainObject("new ID","new Code");
+        }
+        else
+            myObject=(MaintainObject)intent.getSerializableExtra("MaintainInfo");
+
         setContentView(R.layout.activity_maintain_info);
         spnMaintainType =(AppCompatSpinner)findViewById(R.id.spn_maintainInfo_type);
         initSpinner();
         tvMaintainDate=(AppCompatTextView)findViewById(R.id.tv_maintainInfo_date);
         initDatePicker();
         etMaintainContent=(TextInputLayout)findViewById(R.id.et_maintainInfo_content);
+        etMaintainContent.getEditText().setText(myObject.getContent());
         mToolbar=(Toolbar)findViewById(R.id.Toolbar);
         initToolbar();
     }
@@ -64,6 +81,9 @@ public class MaintainInfoActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+        int typeIndex=typeAdapter.getPosition(myObject.getMaintainType());
+        if(typeIndex!=-1)
+            spnMaintainType.setSelection(typeIndex);
         spnMaintainType.setVisibility(View.VISIBLE);
     }
 
@@ -87,7 +107,11 @@ public class MaintainInfoActivity extends AppCompatActivity {
                 dtpckMaintainDate.show();
             }
         });
-        tvMaintainDate.setText(year+"-"+month+"-"+day);
+        Date objectDate=myObject.getMaintainDate();
+        if(objectDate.toString().equals(""))
+            tvMaintainDate.setText(year+"-"+month+"-"+day);
+        else
+            tvMaintainDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(objectDate));
     }
 
     void initToolbar()
