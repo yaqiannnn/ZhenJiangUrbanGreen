@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainInfoActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -18,97 +20,59 @@
         android:orientation="vertical"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="6dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="8dp">
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="事件类型"
+            android:text="养护类型"
             android:textSize="12sp"
             android:textColor="@color/colorAccent"/>
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spn_inspectInfo_type" />
+            android:id="@+id/spn_maintainInfo_type" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical">
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="巡查日期"
+            android:text="养护日期"
             android:textSize="12sp"
             android:textColor="@color/colorAccent"/>
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_inspectInfo_date"
+            android:id="@+id/tv_maintainInfo_date"
             android:textSize="24sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp">
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_inspectInfo_score">
-            <EditText
-                android:hint="巡查得分"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="24dp"
-                android:inputType="number"
-                android:maxLines="1"/>
-        </android.support.design.widget.TextInputLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp">
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="0dp">
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/et_inspectInfo_content">
+            android:id="@+id/et_maintainInfo_content"
+            android:layout_marginLeft="0dp">
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="巡查记录"
-                android:textSize="24sp"/>
-        </android.support.design.widget.TextInputLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp">
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_inspectInfo_opinion">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="巡查意见"
+                android:hint="养护内容"
                 android:textSize="24sp"/>
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
@@ -118,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="8dp">
         <android.support.v7.widget.AppCompatButton
             android:layout_width="match_parent"
@@ -129,7 +93,6 @@
             android:textColor="@color/colorBackground"
             android:textSize="24sp"/>
     </LinearLayout>
-
 
 
 </LinearLayout>

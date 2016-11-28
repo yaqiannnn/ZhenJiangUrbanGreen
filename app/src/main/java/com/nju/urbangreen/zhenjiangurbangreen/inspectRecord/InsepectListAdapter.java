@@ -9,9 +9,9 @@ import com.nju.urbangreen.zhenjiangurbangreen.R;
 import java.util.List;
 
 /**
- * Created by lxs on 2016/11/24.
+ * Created by lxs on 2016/11/20.
  */
-public class InsepectListAdapter extends RecyclerView.Adapter<InspectInfoHolder> {
+public class InsepectListAdapter extends RecyclerView.Adapter<InspectListHolder> {
     private List<InspectObject> inspectList;
 
     public InsepectListAdapter(List<InspectObject> list)
@@ -20,15 +20,15 @@ public class InsepectListAdapter extends RecyclerView.Adapter<InspectInfoHolder>
     }
 
     @Override
-    public InspectInfoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public InspectListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=View.inflate(parent.getContext(), R.layout.recycleritem_inspect,null);
-        InspectInfoHolder holder=new InspectInfoHolder(view);
+        InspectListHolder holder=new InspectListHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(InspectInfoHolder holder, int position) {
-
+    public void onBindViewHolder(InspectListHolder holder, int position) {
+        holder.setMyObject(inspectList.get(position));
     }
 
     @Override

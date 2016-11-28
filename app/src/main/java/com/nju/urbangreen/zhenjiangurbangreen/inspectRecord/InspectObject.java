@@ -1,11 +1,12 @@
 package com.nju.urbangreen.zhenjiangurbangreen.inspectRecord;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by lxs on 2016/11/24.
+ * Created by lxs on 2016/11/20.
  */
-public class InspectObject {
+public class InspectObject implements Serializable{
     private String ID;
     private String Code;
     private String InspectType;
@@ -20,6 +21,13 @@ public class InspectObject {
     {
         this.ID=id;
         this.Code=code;
+        this.InspectType="";
+        this.InspectDate=new Date();
+        this.CompanyID="";
+        this.Inspector="";
+        this.Score="";
+        this.Content="";
+        this.InspectOpinion="";
     }
     public InspectObject(String id,String code,String inspectType,Date inspectDate,String companyID,
                          String inspector,String score,String content,String inspectOpinion)
