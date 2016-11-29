@@ -11,6 +11,7 @@
         app:pstsUnderlineHeight="2dp"
         app:pstsIndicatorHeight="2dp"
         app:pstsShouldExpand="true"
+        app:pstsTabPaddingLeftRight="2dp"
         android:id="@+id/psts_tabs"
         android:layout_width="match_parent"
         android:layout_height="50dp">
