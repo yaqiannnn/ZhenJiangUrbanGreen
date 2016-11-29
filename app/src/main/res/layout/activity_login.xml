@@ -31,7 +31,7 @@
             android:layout_height="50dp"
             android:background="@drawable/edit_shape_up"
             android:gravity="center_vertical"
-            android:hint="请输入用户名" />
+            android:hint="请输入用户名:zlw" />
 
         <View
 
@@ -45,7 +45,7 @@
             android:layout_height="50dp"
             android:background="@drawable/edit_shape_down"
             android:gravity="center_vertical"
-            android:hint="请输入密码" />
+            android:hint="请输入密码:123" />
         <Button
             android:id="@+id/btn_login"
             android:layout_marginTop="10dp"

@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">ZhenJiangUrbanGreen</string>
+    <string-array name="insepctTypeSpinner">
+        <item>保洁考核</item>
+        <item>管养考核</item>
+        <item>日常巡查</item>
+    </string-array>
+    <string-array name="maintainTypeSpinner">
+        <item>病虫害防治</item>
+        <item>浇水排水</item>
+        <item>松土除草</item>
+        <item>扶正支撑</item>
+        <item>绿地容貌</item>
+        <item>安全施工</item>
+        <item>施肥</item>
+        <item>修剪</item>
+        <item>补栽</item>
+    </string-array>
 </resources>

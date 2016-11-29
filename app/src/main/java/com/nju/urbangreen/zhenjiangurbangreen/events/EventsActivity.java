@@ -30,7 +30,7 @@ public class EventsActivity extends FragmentActivity {
 
     public class EventPagerAdapter extends FragmentPagerAdapter{
 
-        private final String[] TITLES = {"naruto","sakura","hinata"};
+        private final String[] TITLES = {"naruto","sakura","hinata","gara"};
         public EventPagerAdapter(FragmentManager fm){
             super(fm);
         }
