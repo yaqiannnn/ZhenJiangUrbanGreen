@@ -17,9 +17,9 @@ public class SearchResultHolder extends RecyclerView.ViewHolder{
     public SearchResultHolder(View itemView) {
         super(itemView);
         mCardView=(CardView) itemView.findViewById(R.id.cardView_searchResult);
-        AppCompatButton maintainRecord_button=(AppCompatButton)mCardView.findViewById(R.id.recyclerItem_button_maintainRecord);
-        AppCompatButton event_button=(AppCompatButton)mCardView.findViewById(R.id.recyclerItem_button_event);
-        AppCompatButton inspectRecord_button=(AppCompatButton)mCardView.findViewById(R.id.recyclerItem_button_inspectRecord);
+        AppCompatButton maintainRecord_button=(AppCompatButton)mCardView.findViewById(R.id.recyclerItem_btn_toMaintainRecord);
+        AppCompatButton event_button=(AppCompatButton)mCardView.findViewById(R.id.recyclerItem_btn_toEvent);
+        AppCompatButton inspectRecord_button=(AppCompatButton)mCardView.findViewById(R.id.recyclerItem_btn_toInspectRecord);
         maintainRecord_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

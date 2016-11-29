@@ -43,6 +43,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         getMenuInflater().inflate(R.menu.menu_toolbar_search,menu);
         MenuItem search_menuItem=menu.findItem(R.id.menu_toolbar_item_search);
         searchView=(SearchView) MenuItemCompat.getActionView(search_menuItem);
+        searchView.onActionViewExpanded();
         searchView.setOnQueryTextListener(this);
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
