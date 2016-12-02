@@ -26,8 +26,9 @@ import com.nju.urbangreen.zhenjiangurbangreen.R;
 import java.util.Locale;
 
 /**
- * Created by HCQIN on 2016/11/23.
+ * Created by Liwei on 2016/11/23.
  */
+//此文件中内容为直接复用网上代码
 public class PagerSlidingTabStrip extends HorizontalScrollView{
     public interface IconTabProvider {
         public int getPageIconResId(int position);

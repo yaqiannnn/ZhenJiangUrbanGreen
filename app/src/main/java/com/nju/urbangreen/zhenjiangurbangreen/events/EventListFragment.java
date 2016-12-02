@@ -29,10 +29,10 @@ import java.util.List;
  */
 public class EventListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private SwipeRefreshLayout refreshLayout;
-    private ListView lvEventList;
+    private SwipeRefreshLayout refreshLayout;//刷新布局
+    private ListView lvEventList;//事件记录列表布局
     private static final String ARG_POSITION = "position";
-    private int position;
+    private int position;//记录当前所在页面的位置
 
     private List<OneEvent> eventList = new ArrayList<OneEvent>();
     private EventAdapter eventAdapter;
@@ -43,6 +43,7 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
     private ArrayList<String> eventArrayList = new ArrayList<String>();
     private ArrayAdapter<String> mAdapter;
 
+    //用以获得一个时间列表碎片的实例
     public static EventListFragment newInstance(int position){
         EventListFragment f = new EventListFragment();
         Bundle b = new Bundle();
@@ -51,6 +52,7 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
         return f;
     }
 
+    //在创建碎片的时候，获取position的值
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,22 +75,7 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
                 android.R.color.holo_orange_light,android.R.color.holo_red_light);
         refreshLayout.setOnRefreshListener(this);
         return view;
-//        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-//
-//        FrameLayout lyFrm = new FrameLayout(getActivity());
-//
-//        lyFrm.setLayoutParams(params);
-//        final int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,8, getResources().getDisplayMetrics());
-//
-//        TextView v = new TextView(getActivity());
-//        params.setMargins(margin,margin,margin,margin);
-//        v.setLayoutParams(params);
-//        v.setGravity(Gravity.CENTER);
-//        v.setBackgroundResource(R.drawable.background_tab);
-//        v.setText("CARD " + (position + 1));
-//        lyFrm.addView(v);
-//
-//        return lyFrm;
+
     }
 
     @Override
@@ -96,12 +83,10 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
         OneEvent oneEvent = new OneEvent("月黑风高","李白","长安","701年");
         eventList.add(oneEvent);
         eventAdapter.notifyDataSetChanged();
-        //eventArrayList.add("card x");
-        //mAdapter.notifyDataSetChanged();
-
         refreshLayout.setRefreshing(false);
     }
 
+    //可以根据position可以相应的获取不同的事件列表
     private ArrayList<String> getData(int position){
         eventArrayList.add("card " + position);
         return eventArrayList;

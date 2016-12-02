@@ -6,11 +6,11 @@
 
 
     <Button
-        android:layout_marginLeft="5dp"
-        android:layout_centerVertical="true"
         android:id="@+id/btn_title_back"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
         android:background="@drawable/ic_title_back" />
 
 
@@ -20,9 +20,17 @@
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:gravity="center"
-
         android:textColor="#fff"
         android:textSize="24sp" />
+
+    <Button
+        android:background="@null"
+        android:id="@+id/btn_title_self_def"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp" />
 
 
 </RelativeLayout>

@@ -1,8 +1,9 @@
 package com.nju.urbangreen.zhenjiangurbangreen.events;
 
 /**
- * Created by HCQIN on 2016/11/25.
+ * Created by Liwei on 2016/11/25.
  */
+//事件记录类
 public class OneEvent {
 
     public String name;

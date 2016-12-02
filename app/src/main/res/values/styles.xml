@@ -16,6 +16,31 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">@color/colorBackground</item>
     </style>
-    <!-- map -->
+
+
+
+    <!-- Events Register-->
+    <style name="EventItem">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+
+    <style name="EventItemTitle">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="EventItemContent">
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_height">40dp</item>
+    </style>
+
+
+    <!-- Events Records-->
+    <style name="EventRecord">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>

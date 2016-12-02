@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<com.nju.urbangreen.zhenjiangurbangreen.widget.DropListView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/lv_dropdown_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bkg_dropdownlist">
+
+</com.nju.urbangreen.zhenjiangurbangreen.widget.DropListView>
+
