@@ -22,8 +22,6 @@
         <activity android:name=".settings.SettingsActivity" />
         <activity
             android:name=".startup.WelcomeActivity"
-            android:theme="@style/TranslucentTheme" />
-        <activity android:name=".startup.LoginActivity"
             android:theme="@style/TranslucentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,21 +29,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".startup.LoginActivity" />
 
         <service
             android:name=".util.DownloadNewApkService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".inspectRecord.InspectListActivity">
+        <activity android:name=".inspectRecord.InspectListActivity" >
 
         </activity>
-        <activity android:name=".inspectRecord.InspectInfoActivity"></activity>
-        <activity android:name=".maintainRecord.MaintainInfoActivity"></activity>
-        <activity android:name=".maintainRecord.MaintainListActivity">
-            
+        <activity android:name=".inspectRecord.InspectInfoActivity" />
+        <activity android:name=".maintainRecord.MaintainInfoActivity" />
+        <activity android:name=".maintainRecord.MaintainListActivity" />
+        <activity android:name=".events.EventsActivity" />
+        <activity
+            android:name=".events.EventRegisterActivity"
+            android:windowSoftInputMode="stateHidden">
+
         </activity>
-        <activity android:name=".events.EventsActivity"></activity>
+        <activity android:name=".attachments.AttachmentListActivity" />
     </application>
 
 </manifest>

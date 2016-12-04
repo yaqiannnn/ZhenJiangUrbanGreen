@@ -45,10 +45,10 @@ public class EventAdapter extends ArrayAdapter<OneEvent>{
         }
 
 
-        viewHolder.eventName.setText(oneEvent.name);
-        viewHolder.eventRegistrar.setText(oneEvent.registrar);
-        viewHolder.eventLocation.setText(oneEvent.location);
-        viewHolder.eventDT.setText(oneEvent.date_time);
+        viewHolder.eventName.setText("事件名称: " + oneEvent.name);
+        viewHolder.eventRegistrar.setText("登记人员: " + oneEvent.registrar);
+        viewHolder.eventLocation.setText("事件位置: " + oneEvent.location);
+        viewHolder.eventDT.setText("发生时间: " + oneEvent.date_time);
         return view;
     }
 

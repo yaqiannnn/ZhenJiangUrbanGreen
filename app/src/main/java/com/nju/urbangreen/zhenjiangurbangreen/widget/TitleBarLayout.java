@@ -13,16 +13,19 @@ import android.widget.TextView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
 /**
- * Created by HCQIN on 2016/11/4.
+ * Created by Liwei on 2016/11/4.
  */
 public class TitleBarLayout extends LinearLayout {
     private Button btnBack;
     private TextView tvTitle;
+    private Button btnSelfDef;//自定义功能按钮，可以根据需求设置功能
+
     public TitleBarLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.title_bar,this);
         btnBack = (Button) findViewById(R.id.btn_title_back);
         tvTitle = (TextView) findViewById(R.id.tv_title_text);
+        btnSelfDef = (Button) findViewById(R.id.btn_title_self_def);
 
         btnBack.setOnClickListener(new OnClickListener() {
             @Override
@@ -32,7 +35,22 @@ public class TitleBarLayout extends LinearLayout {
         });
     }
 
+    /**
+     * 以下为标题栏布局暴露的接口，提供给使用者
+     */
+
+    //设置标题名称
     public void setTitleText(String title){
         tvTitle.setText(title);
+    }
+
+    //设置右侧按钮背景
+    public void setBtnSelfDefBkg(int resId){
+        btnSelfDef.setBackgroundResource(resId);
+    }
+
+    //设置右侧按钮点击事件
+    public void setBtnSelfDefClickListener(OnClickListener listener){
+        btnSelfDef.setOnClickListener(listener);
     }
 }
