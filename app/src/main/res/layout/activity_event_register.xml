@@ -10,7 +10,9 @@
         android:id="@+id/ly_events_register_title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"></com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
+        android:background="@color/colorPrimary">
+
+    </com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
 
     <ScrollView
         android:id="@+id/ly_events_register_scroll"
@@ -21,242 +23,246 @@
             android:id="@+id/ly_events_register_table"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:orientation="vertical"
-            android:shrinkColumns="1"
-            android:stretchColumns="1"
+            android:layout_marginTop="5dp"
             android:divider="@drawable/table_divder_line"
-            android:showDividers="middle">
+            android:orientation="vertical"
+            android:showDividers="middle"
+            android:shrinkColumns="1"
+            android:stretchColumns="1">
 
-            <TableRow
-                style="@style/EventItem">
+            <TableRow style="@style/EventItem">
 
                 <TextView
+                    android:id="@+id/tv_event_register_code"
                     style="@style/EventItemTitle"
-                    android:id="@+id/tv_event_register_id"
                     android:text="事件编号" />
 
                 <EditText
+                    android:id="@+id/edit_event_register_code"
                     style="@style/EventItemContent"
-                    android:id="@+id/edit_event_register_id"
-                    android:background="@drawable/bkg_edittext"/>
+                    android:background="@drawable/bkg_edittext" />
             </TableRow>
 
-            <TableRow
-                style="@style/EventItem">
+            <TableRow style="@style/EventItem">
 
                 <TextView
-                    style="@style/EventItemTitle"
                     android:id="@+id/tv_event_register_name"
+                    style="@style/EventItemTitle"
                     android:text="事件名称" />
 
                 <EditText
-                    style="@style/EventItemContent"
                     android:id="@+id/edit_event_register_name"
-                    android:background="@drawable/bkg_edittext"/>
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
             </TableRow>
 
-            <TableRow
-                style="@style/EventItem">
+            <TableRow style="@style/EventItem">
 
                 <TextView
-                    style="@style/EventItemTitle"
                     android:id="@+id/tv_event_register_type"
+                    style="@style/EventItemTitle"
                     android:text="事件类型" />
 
-                <!--<EditText-->
-                    <!--style="@style/EventItemContent"-->
-                    <!--android:id="@+id/edit_event_register_type"-->
-                    <!--android:background="@drawable/bkg_edittext"/>-->
                 <com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText
-                    android:layout_marginLeft="10dp"
                     android:id="@+id/droplist_register_type"
-                    android:layout_width="wrap_content">
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp">
 
                 </com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText>
             </TableRow>
 
-            <TableRow
-                style="@style/EventItem">
+            <TableRow style="@style/EventItem">
 
                 <TextView
-                    style="@style/EventItemTitle"
                     android:id="@+id/tv_event_register_location"
+                    style="@style/EventItemTitle"
                     android:text="事件地点" />
 
                 <EditText
-                    style="@style/EventItemContent"
                     android:id="@+id/edit_event_register_location"
-                    android:background="@drawable/bkg_edittext"/>
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
             </TableRow>
 
-            <TableRow
-                style="@style/EventItem">
+            <TableRow style="@style/EventItem">
 
                 <TextView
-                    style="@style/EventItemTitle"
                     android:id="@+id/tv_event_register_time"
+                    style="@style/EventItemTitle"
                     android:text="事件时间" />
 
                 <EditText
-                    android:gravity="center"
+                    android:id="@+id/edit_event_register_time"
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext"
                     android:clickable="true"
                     android:focusable="false"
-                    style="@style/EventItemContent"
-                    android:id="@+id/edit_event_register_time"
-                    android:background="@drawable/bkg_edittext"/>
+                    android:gravity="center" />
             </TableRow>
 
-            <TableRow
-                style="@style/EventItem">
+            <TableRow style="@style/EventItem">
 
                 <TextView
-                    style="@style/EventItemTitle"
                     android:id="@+id/tv_event_register_damage_degree"
+                    style="@style/EventItemTitle"
                     android:text="伤害程度" />
 
                 <EditText
-                    style="@style/EventItemContent"
                     android:id="@+id/edit_event_register_damage_degree"
-                    android:background="@drawable/bkg_edittext"/>
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
             </TableRow>
 
-            <TableRow
-                style="@style/EventItem">
+            <TableRow style="@style/EventItem">
 
                 <TextView
-                    style="@style/EventItemTitle"
                     android:id="@+id/tv_event_register_lost_fee"
-                    android:text="损失总价" />
+                    style="@style/EventItemTitle"
+                    android:text="损失总价(元)" />
 
                 <EditText
-                    style="@style/EventItemContent"
                     android:id="@+id/edit_event_register_lost_fee"
-                    android:background="@drawable/bkg_edittext"/>
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
             </TableRow>
 
-            <TableRow
-                style="@style/EventItem">
+            <TableRow style="@style/EventItem">
 
                 <TextView
-                    style="@style/EventItemTitle"
                     android:id="@+id/tv_event_register_compensation"
-                    android:text="实际赔偿" />
+                    style="@style/EventItemTitle"
+                    android:text="实际赔偿(元)" />
 
                 <EditText
-                    style="@style/EventItemContent"
                     android:id="@+id/edit_event_register_compensation"
-                    android:background="@drawable/bkg_edittext"/>
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
             </TableRow>
-            <TableRow
-                style="@style/EventItem">
+
+            <TableRow style="@style/EventItem">
+
                 <TextView
-                    style="@style/EventItemTitle"
                     android:id="@+id/tv_event_register_relevant_person"
-                    android:text="事件相关方"/>
+                    style="@style/EventItemTitle"
+                    android:text="事件相关方" />
+
                 <EditText
-                    style="@style/EventItemContent"
                     android:id="@+id/edit_event_register_relevant_person"
-                    android:background="@drawable/bkg_edittext"/>
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
             </TableRow>
 
-            <TableRow
-                style="@style/EventItem">
+            <TableRow style="@style/EventItem">
+
                 <TextView
-                    style="@style/EventItemTitle"
                     android:id="@+id/tv_event_register_relevant_license_plate"
-                    android:text="相关方车牌号"/>
+                    style="@style/EventItemTitle"
+                    android:text="相关方车牌号" />
+
                 <EditText
-                    style="@style/EventItemContent"
                     android:id="@+id/edit_event_register_relevant_license_plate"
-                    android:background="@drawable/bkg_edittext"/>
-            </TableRow>
-            <TableRow
-                style="@style/EventItem">
-                <TextView
-                    style="@style/EventItemTitle"
-                    android:id="@+id/tv_event_register_relevant_company"
-                    android:text="相关方所属单位"/>
-                <EditText
                     style="@style/EventItemContent"
-                    android:id="@+id/edit_event_register_relevant_company"
-                    android:background="@drawable/bkg_edittext"/>
-            </TableRow>
-            <TableRow
-                style="@style/EventItem">
-                <TextView
-                    style="@style/EventItemTitle"
-                    android:id="@+id/tv_event_register_relevant_contact"
-                    android:text="相关方联系方式"/>
-                <EditText
-                    style="@style/EventItemContent"
-                    android:id="@+id/edit_event_register_relevant_contact"
-                    android:background="@drawable/bkg_edittext"/>
+                    android:background="@drawable/bkg_edittext" />
             </TableRow>
 
-            <TableRow
-                style="@style/EventItem">
+            <TableRow style="@style/EventItem">
+
                 <TextView
+                    android:id="@+id/tv_event_register_relevant_company"
                     style="@style/EventItemTitle"
+                    android:text="相关方所属单位" />
+
+                <EditText
+                    android:id="@+id/edit_event_register_relevant_company"
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
+            </TableRow>
+
+            <TableRow style="@style/EventItem">
+
+                <TextView
+                    android:id="@+id/tv_event_register_relevant_contact"
+                    style="@style/EventItemTitle"
+                    android:text="相关方联系方式" />
+
+                <EditText
+                    android:id="@+id/edit_event_register_relevant_contact"
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
+            </TableRow>
+
+            <TableRow style="@style/EventItem">
+
+                <TextView
                     android:id="@+id/tv_event_register_relevant_address"
-                    android:text="相关方通讯地址"/>
+                    style="@style/EventItemTitle"
+                    android:text="相关方通讯地址" />
+
                 <EditText
-                    style="@style/EventItemContent"
                     android:id="@+id/edit_event_register_relevant_address"
-                    android:background="@drawable/bkg_edittext"/>
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
             </TableRow>
-            <TableRow
-                style="@style/EventItem">
+
+            <TableRow style="@style/EventItem">
+
                 <TextView
-                    style="@style/EventItemTitle"
                     android:id="@+id/tv_event_register_description"
-                    android:text="事件描述"/>
+                    style="@style/EventItemTitle"
+                    android:text="事件描述" />
+
                 <EditText
-                    style="@style/EventItemContent"
                     android:id="@+id/edit_event_register_description"
-                    android:background="@drawable/bkg_edittext"/>
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
             </TableRow>
-            <TableRow
-                style="@style/EventItem">
+
+            <TableRow style="@style/EventItem">
+
                 <TextView
-                    style="@style/EventItemTitle"
                     android:id="@+id/tv_event_register_reason"
-                    android:text="事件原因"/>
-                <EditText
-                    style="@style/EventItemContent"
-                    android:id="@+id/edit_event_register_reason"
-                    android:background="@drawable/bkg_edittext"/>
-            </TableRow>
-            <TableRow
-                style="@style/EventItem">
-                <TextView
                     style="@style/EventItemTitle"
-                    android:id="@+id/tv_event_register_relevant_description"
-                    android:text="相关方其他说明"/>
+                    android:text="事件原因" />
+
                 <EditText
+                    android:id="@+id/edit_event_register_reason"
                     style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
+            </TableRow>
+
+            <TableRow style="@style/EventItem">
+
+                <TextView
+                    android:id="@+id/tv_event_register_relevant_description"
+                    style="@style/EventItemTitle"
+                    android:text="相关方其他说明" />
+
+                <EditText
                     android:id="@+id/edit_event_register_relevant_description"
-                    android:background="@drawable/bkg_edittext"/>
+                    style="@style/EventItemContent"
+                    android:background="@drawable/bkg_edittext" />
             </TableRow>
-            <TableRow
-                style="@style/EventItem">
+
+            <TableRow style="@style/EventItem">
+
                 <Button
-                    android:text="添加附件"
-                    android:layout_span="2"
                     android:id="@+id/btn_event_register_add_files"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_width="match_parent"/>
-            </TableRow>
-            <TableRow
-                style="@style/EventItem">
-                <Button
-                    android:text="添加相关养护对象"
                     android:layout_span="2"
+                    android:text="添加附件" />
+            </TableRow>
+
+            <TableRow style="@style/EventItem">
+
+                <Button
                     android:id="@+id/btn_event_register_add_ugo"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_width="match_parent"/>
+                    android:layout_span="2"
+                    android:text="添加相关养护对象" />
             </TableRow>
         </TableLayout>
 

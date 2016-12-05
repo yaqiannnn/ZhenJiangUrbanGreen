@@ -48,7 +48,9 @@
             android:windowSoftInputMode="stateHidden">
 
         </activity>
-        <activity android:name=".attachments.AttachmentListActivity" />
+        <activity android:name=".attachments.AttachmentListActivity">
+
+        </activity>
     </application>
 
 </manifest>

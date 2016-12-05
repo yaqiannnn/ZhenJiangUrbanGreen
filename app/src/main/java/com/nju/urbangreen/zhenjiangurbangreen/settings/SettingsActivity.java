@@ -179,6 +179,12 @@ public class SettingsActivity extends Activity {
     private void setTitleBar(){
         titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_settings_title_bar);
         titleBarLayout.setTitleText("设置");
+        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     public int getVersion() {

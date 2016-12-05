@@ -3,10 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+
     tools:context="com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity">
 
+    <com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout
+        android:id="@+id/ly_attachments_title_bar"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
+
+    <ListView
+        android:layout_below="@+id/ly_attachments_title_bar"
+        android:id="@+id/lv_attachments_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
 </RelativeLayout>

@@ -5,21 +5,16 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.TypedValue;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.UrbanGreenDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +38,7 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
     private ArrayList<String> eventArrayList = new ArrayList<String>();
     private ArrayAdapter<String> mAdapter;
 
-    //用以获得一个时间列表碎片的实例
+    //用以获得一个事件列表碎片的实例
     public static EventListFragment newInstance(int position){
         EventListFragment f = new EventListFragment();
         Bundle b = new Bundle();
@@ -57,18 +52,18 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         position = getArguments().getInt(ARG_POSITION);
-        initEventList();
+        getData(position);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_event_list,container,false);
+        View view = inflater.inflate(R.layout.event_fragment_event_list,container,false);
         lvEventList = (ListView) view.findViewById(R.id.lv_event_list);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.ly_refresh_events);
         //mAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,getData(position));
-
-        eventAdapter = new EventAdapter(getContext(),R.layout.event_list_item,eventList);
+        //eventList = getData(position);
+        eventAdapter = new EventAdapter(getContext(),R.layout.event_fragment_list_item,eventList);
 
         lvEventList.setAdapter(eventAdapter);
         refreshLayout.setColorSchemeResources(android.R.color.holo_blue_dark,android.R.color.holo_green_light,
@@ -80,16 +75,24 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
-        OneEvent oneEvent = new OneEvent("月黑风高","李白","长安","701年");
-        eventList.add(oneEvent);
+        UrbanGreenDB urbanGreenDB = UrbanGreenDB.getInstance(getContext());
+
+        //eventList = urbanGreenDB.loadEventsNotUpload(0);
+        //OneEvent oneEvent = new OneEvent("月黑风高","李白","长安","701年");
+        //eventList.add(oneEvent);
+        eventList = urbanGreenDB.loadEventsWithDiffState(0);
+        Log.i("碎片", "onRefresh: "+ eventList.get(1).getName());
         eventAdapter.notifyDataSetChanged();
         refreshLayout.setRefreshing(false);
     }
 
     //可以根据position可以相应的获取不同的事件列表
-    private ArrayList<String> getData(int position){
-        eventArrayList.add("card " + position);
-        return eventArrayList;
+    private void getData(int position){
+        UrbanGreenDB urbanGreenDB = UrbanGreenDB.getInstance(getContext());
+        eventList = urbanGreenDB.loadEventsWithDiffState(position);
+
+        //eventArrayList.add("card " + position);
+
     }
 
     private void initEventList(){
@@ -97,4 +100,27 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
         eventList.add(oneEvent);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.i("碎片","onActivityCreated");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.i("碎片","onActivityCreated");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("碎片","onDestroy");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("碎片","onPause");
+    }
 }
