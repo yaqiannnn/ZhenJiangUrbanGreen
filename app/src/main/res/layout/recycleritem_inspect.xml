@@ -2,16 +2,19 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:layout_width="330dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recyclerItem_inspectInfoCard"
         android:background="@color/colorBackground"
-        android:layout_margin="16dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         app:cardElevation="2dp"
         app:contentPaddingTop="4dp"
         app:contentPaddingBottom="0dp"
@@ -56,14 +59,35 @@
                         android:textSize="16sp"
                         android:id="@+id/recyclerItem_inspectScore"
                         android:text="巡查得分"/>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:id="@+id/recyclerItem_inspectTest"
+                        android:text="巡查得分"/>
                 </LinearLayout>
-                <android.support.v7.widget.AppCompatImageView
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="130dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:layout_marginRight="8dp"
-                    android:id="@+id/recyclerItem_image_map"
-                    android:src="@drawable/ic_card_map" />
+                    android:orientation="vertical">
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="90dp"
+                        android:id="@+id/iv_recyclerItemInspect_map"
+                        android:src="@drawable/ic_card_addressmap" />
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_inspectInfo_address"
+                        android:drawableLeft="@drawable/ic_curr_lcocation3"
+                        android:drawableTint="@color/colorPrimary"
+                        android:text="巡查对象位置"
+                        android:maxLines="2"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+
             </LinearLayout>
             <android.support.v7.widget.AppCompatButton
                 android:layout_width="match_parent"

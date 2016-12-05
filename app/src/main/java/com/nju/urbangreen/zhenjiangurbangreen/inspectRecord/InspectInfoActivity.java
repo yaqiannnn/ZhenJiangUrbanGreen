@@ -24,9 +24,12 @@ import java.util.Date;
 
 public class InspectInfoActivity extends AppCompatActivity {
 
+    private AppCompatTextView tvInspectID;
+    private AppCompatTextView tvInspectCode;
     private AppCompatTextView tvInspectDate;
     private AppCompatSpinner spnInspectType;
     private DatePickerDialog dtpckInspectDate;
+    private TextInputLayout etInspector;
     private TextInputLayout etInspectScore;
     private TextInputLayout etInspectContent;
     private TextInputLayout etEtInspectOpinion;
@@ -51,10 +54,16 @@ public class InspectInfoActivity extends AppCompatActivity {
             myObject=(InspectObject)intent.getSerializableExtra("InspectInfo");
 
         setContentView(R.layout.activity_inspect_info);
+        tvInspectID=(AppCompatTextView)findViewById(R.id.tv_inspectInfo_ID);
+        tvInspectID.setText(myObject.getID());
+        tvInspectCode=(AppCompatTextView)findViewById(R.id.tv_inspectInfo_Code);
+        tvInspectCode.setText(myObject.getCode());
         spnInspectType =(AppCompatSpinner)findViewById(R.id.spn_inspectInfo_type);
         initSpinner();
         tvInspectDate=(AppCompatTextView)findViewById(R.id.tv_inspectInfo_date);
         initDatePicker();
+        etInspector=(TextInputLayout)findViewById(R.id.et_inspectInfo_inspector);
+        etInspector.getEditText().setText(myObject.getInspector());
         etInspectScore=(TextInputLayout)findViewById(R.id.et_inspectInfo_score);
         etInspectScore.getEditText().setText(myObject.getScore());
         etInspectContent=(TextInputLayout)findViewById(R.id.et_inspectInfo_content);

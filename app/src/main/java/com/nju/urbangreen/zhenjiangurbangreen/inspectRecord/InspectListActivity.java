@@ -54,28 +54,39 @@ public class InspectListActivity extends AppCompatActivity
         MenuItem searchMenuItem=menu.findItem(R.id.menu_toolbar_item_search);
         searchView=(SearchView) MenuItemCompat.getActionView(searchMenuItem);
         searchView.onActionViewCollapsed();
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                ((InsepectListAdapter)recyclerInspectList.getAdapter()).getFilter().filter("");
+                return false;
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                ((InsepectListAdapter)recyclerInspectList.getAdapter()).getFilter().filter(query);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(newText.equals(""))
+                    ((InsepectListAdapter)recyclerInspectList.getAdapter()).getFilter().filter("");
                 return true;
             }
         });
+        searchView.setIconified(true);
         return true;
     }
 
     private void initInspectList()
     {
         List<InspectObject> inspectList=new ArrayList<>();
-        inspectList.add(new InspectObject("00000001","00000003","日常巡查",new Date(116,10,7),"镇江养护公司（ID）",
+        inspectList.add(new InspectObject("00001","00000003","日常巡查",new Date(116,10,7),"镇江养护公司（ID）",
                 "张三","90","维护","好"));
-        inspectList.add(new InspectObject("00000002","00000013","管养考核",new Date(116,11,17),"镇江养护公司（ID）",
+        inspectList.add(new InspectObject("00002","00000013","管养考核",new Date(116,11,17),"镇江养护公司（ID）",
                 "张三","60","维护树木","不好"));
-        inspectList.add(new InspectObject("00000003","00000023","保洁考核",new Date(116,10,29),"镇江养护公司（ID）",
+        inspectList.add(new InspectObject("00003","00000023","保洁考核",new Date(116,10,29),"镇江养护公司（ID）",
                 "张三","75","打农药","不好"));
         recyclerInspectList.setLayoutManager(new LinearLayoutManager(this));
         recyclerInspectList.setAdapter(new InsepectListAdapter(inspectList));

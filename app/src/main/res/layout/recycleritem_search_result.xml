@@ -61,7 +61,7 @@
                     android:layout_height="130dp"
                     android:layout_marginRight="8dp"
                     android:layout_weight="2"
-                    android:id="@+id/recyclerItem_image_map"
+                    android:id="@+id/iv_recyclerItemInspect_map"
                     android:src="@drawable/ic_card_map" />
             </LinearLayout>
             <LinearLayout

@@ -51,29 +51,42 @@ public class MaintainListActivity extends AppCompatActivity {
         MenuItem searchMenuItem=menu.findItem(R.id.menu_toolbar_item_search);
         searchView=(SearchView) MenuItemCompat.getActionView(searchMenuItem);
         searchView.onActionViewCollapsed();
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter("");
+                return false;
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter(query);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(newText.equals(""))
+                    ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter("");
                 return true;
             }
         });
+        searchView.setIconified(true);
         return true;
     }
 
     private void initMaintainList()
     {
         List<MaintainObject> maintainList=new ArrayList<>();
-        maintainList.add(new MaintainObject("00000001","00000003","镇江养护公司（ID）","浇水排水","张三",
+        maintainList.add(new MaintainObject("82301","00000003","镇江养护公司（ID）","浇水排水","张三",
                 new Date(116,10,7), "维护"));
-        maintainList.add(new MaintainObject("00000002","00000013","镇江养护公司（ID）","安全施工","张三",
+        maintainList.add(new MaintainObject("07702","00000013","镇江养护公司（ID）","安全施工","张三",
                 new Date(116,9,3), "维护"));
-        maintainList.add(new MaintainObject("00000003","00000023","镇江养护公司（ID）","松土除草","张三",
+        maintainList.add(new MaintainObject("82453","00000023","镇江养护公司（ID）","松土除草","张三",
                 new Date(116,11,15), "维护"));
+        maintainList.add(new MaintainObject("82705","00000083","镇江养护公司（ID）","松土除草","张三",
+                new Date(115,10,25), "维护"));
         recyclerMaintainList.setLayoutManager(new LinearLayoutManager(this));
         recyclerMaintainList.setAdapter(new MaintainListAdapter(maintainList));
     }
