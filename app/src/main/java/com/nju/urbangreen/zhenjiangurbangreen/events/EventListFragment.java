@@ -77,11 +77,29 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
     public void onRefresh() {
         UrbanGreenDB urbanGreenDB = UrbanGreenDB.getInstance(getContext());
 
+        /**
+         * 选择数据库中最新的一条记录来更新，因为如果更改eventList的指向，更新就失效了，对比下面注释的代码
+         */
+        //OneEvent oneEvent;
+        int listSize = eventList.size();
+        List<OneEvent> tempList = urbanGreenDB.loadEventsWithDiffState(position);
+        for(int i = 0;i < listSize;i++){
+            eventList.remove(eventList.size()-1);
+
+        }
+        Log.i("碎片", "onRefresh: "+ tempList.size() + "eventlist size" + listSize);
+        //eventList.removeAll(eventList);
+        for(int i = 0;i < tempList.size();i++){
+            eventList.add(tempList.get(i));
+        }
+        //eventList.addAll(tempList);
+//        oneEvent = tempList.get(tempList.size()-1);
+//        eventList.add(oneEvent);
         //eventList = urbanGreenDB.loadEventsNotUpload(0);
-        //OneEvent oneEvent = new OneEvent("月黑风高","李白","长安","701年");
+        ////忽略这一行OneEvent oneEvent = new OneEvent("月黑风高","李白","长安","701年");
         //eventList.add(oneEvent);
-        eventList = urbanGreenDB.loadEventsWithDiffState(0);
-        Log.i("碎片", "onRefresh: "+ eventList.get(1).getName());
+        //eventList = urbanGreenDB.loadEventsWithDiffState(0);
+        //Log.i("碎片", "onRefresh: "+ eventList.get(1).getName());
         eventAdapter.notifyDataSetChanged();
         refreshLayout.setRefreshing(false);
     }

@@ -100,7 +100,7 @@ public class EventRegisterActivity extends AppCompatActivity {
         titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                state = 1;
             }
         });
 
