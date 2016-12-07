@@ -16,6 +16,9 @@ public class InspectObject implements Serializable{
     private String Score;
     private String Content;
     private String InspectOpinion;
+    private String LoggerPID;
+    private String LogTime;
+    private String LastEditorPID;
 
     public InspectObject(String id,String code)
     {
@@ -28,6 +31,9 @@ public class InspectObject implements Serializable{
         this.Score="";
         this.Content="";
         this.InspectOpinion="";
+        this.LoggerPID="";
+        this.LogTime="";
+        this.LastEditorPID="";
     }
     public InspectObject(String id,String code,String inspectType,Date inspectDate,String companyID,
                          String inspector,String score,String content,String inspectOpinion)
@@ -70,6 +76,15 @@ public class InspectObject implements Serializable{
     public String getInspectOpinion() {
         return InspectOpinion;
     }
+    public String getLoggerPID() {
+        return LoggerPID;
+    }
+    public String getLogTime() {
+        return LogTime;
+    }
+    public String getLastEditorPID() {
+        return LastEditorPID;
+    }
 
     public void setID(String ID) {
         this.ID = ID;
@@ -97,5 +112,14 @@ public class InspectObject implements Serializable{
     }
     public void setScore(String score) {
         Score = score;
+    }
+    public void setLoggerPID(String loggerPID) {
+        LoggerPID = loggerPID;
+    }
+    public void setLogTime(String logTime) {
+        LogTime = logTime;
+    }
+    public void setLastEditorPID(String lastEditorPID) {
+        LastEditorPID = lastEditorPID;
     }
 }

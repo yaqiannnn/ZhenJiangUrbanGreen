@@ -41,7 +41,9 @@
         </activity>
         <activity android:name=".inspectRecord.InspectInfoActivity" />
         <activity android:name=".maintainRecord.MaintainInfoActivity" />
-        <activity android:name=".maintainRecord.MaintainListActivity" />
+        <activity android:name=".maintainRecord.MaintainListActivity" >
+
+        </activity>
         <activity android:name=".events.EventsActivity" />
         <activity
             android:name=".events.EventRegisterActivity"

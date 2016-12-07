@@ -14,6 +14,9 @@ public class MaintainObject implements Serializable{
     private String MaintainStaff;
     private Date MaintainDate;
     private String Content;
+    private String LoggerPID;
+    private String LogTime;
+    private String LastEditorPID;
 
     public MaintainObject(String id,String code)
     {
@@ -24,6 +27,9 @@ public class MaintainObject implements Serializable{
         this.CompanyID="";
         this.MaintainStaff="";
         this.Content="";
+        this.LoggerPID="";
+        this.LogTime="";
+        this.LastEditorPID="";
     }
 
     public MaintainObject(String id,String code,String companyID,String maintainType
@@ -41,56 +47,62 @@ public class MaintainObject implements Serializable{
     public void setID(String ID) {
         this.ID = ID;
     }
-
     public void setCode(String code) {
         Code = code;
     }
-
     public void setContent(String content) {
         Content = content;
     }
-
     public void setCompanyID(String companyID) {
         CompanyID = companyID;
     }
-
     public void setMaintainDate(Date maintainDate) {
         MaintainDate = maintainDate;
     }
-
     public void setMaintainStaff(String maintainStaff) {
         MaintainStaff = maintainStaff;
     }
-
     public void setMaintainType(String maintainType) {
         MaintainType = maintainType;
+    }
+    public void setLoggerPID(String loggerPID) {
+        LoggerPID = loggerPID;
+    }
+    public void setLogTime(String logTime) {
+        LogTime = logTime;
+    }
+    public void setLastEditorPID(String lastEditorPID) {
+        LastEditorPID = lastEditorPID;
     }
 
     public String getID() {
         return ID;
     }
-
     public String getCode() {
         return Code;
     }
-
     public Date getMaintainDate() {
         return MaintainDate;
     }
-
     public String getCompanyID() {
         return CompanyID;
     }
-
     public String getContent() {
         return Content;
     }
-
     public String getMaintainStaff() {
         return MaintainStaff;
     }
-
     public String getMaintainType() {
         return MaintainType;
+    }
+    public String getLoggerPID() {
+        return LoggerPID;
+    }
+    public String getLogTime() {
+        return LogTime;
+    }
+    public String getLastEditorPID() {
+        return LastEditorPID;
     }
 }

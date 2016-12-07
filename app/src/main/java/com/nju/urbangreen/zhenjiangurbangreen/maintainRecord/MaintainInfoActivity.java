@@ -26,9 +26,13 @@ import java.util.Date;
 public class MaintainInfoActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    private AppCompatTextView tvMaintainID;
+    private AppCompatTextView tvMaintainCode;
     private AppCompatTextView tvMaintainDate;
     private AppCompatSpinner spnMaintainType;
     private DatePickerDialog dtpckMaintainDate;
+    private TextInputLayout etMaintainStaff;
+    private TextInputLayout etMaintainCompany;
     private TextInputLayout etMaintainContent;
 
     private String[] typeArray;
@@ -50,10 +54,18 @@ public class MaintainInfoActivity extends AppCompatActivity {
             myObject=(MaintainObject)intent.getSerializableExtra("MaintainInfo");
 
         setContentView(R.layout.activity_maintain_info);
+        tvMaintainID=(AppCompatTextView)findViewById(R.id.tv_maintainInfo_ID);
+        tvMaintainID.setText(myObject.getID());
+        tvMaintainCode=(AppCompatTextView)findViewById(R.id.tv_maintainInfo_Code);
+        tvMaintainCode.setText(myObject.getCode());
         spnMaintainType =(AppCompatSpinner)findViewById(R.id.spn_maintainInfo_type);
         initSpinner();
         tvMaintainDate=(AppCompatTextView)findViewById(R.id.tv_maintainInfo_date);
         initDatePicker();
+        etMaintainStaff=(TextInputLayout)findViewById(R.id.et_maintainInfo_staff);
+        etMaintainStaff.getEditText().setText(myObject.getMaintainStaff());
+        etMaintainCompany=(TextInputLayout)findViewById(R.id.et_maintainInfo_companyID);
+        etMaintainCompany.getEditText().setText(myObject.getCompanyID());
         etMaintainContent=(TextInputLayout)findViewById(R.id.et_maintainInfo_content);
         etMaintainContent.getEditText().setText(myObject.getContent());
         mToolbar=(Toolbar)findViewById(R.id.Toolbar);
