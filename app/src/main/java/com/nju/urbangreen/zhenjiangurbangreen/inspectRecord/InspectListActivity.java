@@ -97,6 +97,7 @@ public class InspectListActivity extends AppCompatActivity
         mToolbar.setTitle("巡查记录");
         mToolbar.setTitleTextColor(getResources().getColor(R.color.colorBackground));
         setSupportActionBar(mToolbar);
+        mToolbar.setMinimumHeight(50);
         mToolbar.setNavigationIcon(R.drawable.ic_toolbar_back);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
