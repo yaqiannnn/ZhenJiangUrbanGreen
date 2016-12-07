@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
@@ -36,6 +37,12 @@ public class EventsActivity extends FragmentActivity {
 
         titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_events_title_bar);
         titleBarLayout.setTitleText("事件记录");
+        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_add);
         titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +71,8 @@ public class EventsActivity extends FragmentActivity {
     //pager的适配器
     public class EventPagerAdapter extends FragmentPagerAdapter{
 
-        private final String[] TITLES = {"自然灾害","病虫灾害","交通事故","人为事故","其它"};
+        //private final String[] TITLES = {"自然灾害","病虫灾害","交通事故","人为事故","其它"};
+        private final String[] TITLES = {"待上传","已上传"};
         public EventPagerAdapter(FragmentManager fm){
             super(fm);
         }
@@ -83,5 +91,11 @@ public class EventsActivity extends FragmentActivity {
         public CharSequence getPageTitle(int position) {
             return TITLES[position];
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("事件活动","onDestroy");
     }
 }

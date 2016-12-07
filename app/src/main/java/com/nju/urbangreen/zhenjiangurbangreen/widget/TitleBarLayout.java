@@ -27,17 +27,27 @@ public class TitleBarLayout extends LinearLayout {
         tvTitle = (TextView) findViewById(R.id.tv_title_text);
         btnSelfDef = (Button) findViewById(R.id.btn_title_self_def);
 
-        btnBack.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((Activity)getContext()).finish();
-            }
-        });
+//        btnBack.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ((Activity)getContext()).finish();
+//            }
+//        });
     }
 
     /**
      * 以下为标题栏布局暴露的接口，提供给使用者
      */
+
+    //设置左侧返回按钮的点击事件,由于返回时可能除了销毁当前活动外，还要进行一些其他操作，因此这里改动一下
+
+    /**
+     * 如果只是想要实现返回的功能，则只需要finish()掉当前活动即可
+     * 如果要保存一些数据，可以根据需要进行修改
+     */
+    public void setBtnBackClickListener(OnClickListener listener){
+        btnBack.setOnClickListener(listener);
+    }
 
     //设置标题名称
     public void setTitleText(String title){

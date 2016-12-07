@@ -7,16 +7,23 @@
 
     tools:context="com.nju.urbangreen.zhenjiangurbangreen.navigation.NaviActivity">
 
-    <TextView
+    <com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout
+        android:id="@+id/ly_navi_title_bar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/colorPrimary"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
 
-        android:gravity="center"
-        android:paddingTop="5dp"
-        android:text="功能选择"
-        android:textColor="#fff"
-        android:textSize="30sp" />
+    </com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:background="@color/colorPrimary"-->
+
+        <!--android:gravity="center"-->
+        <!--android:paddingTop="5dp"-->
+        <!--android:text="功能选择"-->
+        <!--android:textColor="#fff"-->
+        <!--android:textSize="30sp" />-->
 
     <View
         android:layout_width="match_parent"
