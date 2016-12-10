@@ -66,6 +66,7 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
         eventAdapter = new EventAdapter(getContext(),R.layout.event_fragment_list_item,eventList);
 
         lvEventList.setAdapter(eventAdapter);
+//        lvEventList.getTextFilter();
         refreshLayout.setColorSchemeResources(android.R.color.holo_blue_dark,android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,android.R.color.holo_red_light);
         refreshLayout.setOnRefreshListener(this);

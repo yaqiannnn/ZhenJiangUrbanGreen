@@ -15,6 +15,7 @@ import android.view.View;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
 public class EventsActivity extends FragmentActivity {
 
@@ -43,15 +44,20 @@ public class EventsActivity extends FragmentActivity {
                 finish();
             }
         });
-        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_add);
+        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_search);
         titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(EventsActivity.this,EventRegisterActivity.class);
-                startActivity(intent);
+                titleBarLayout.setTsvSearchAvailable();
             }
         });
-
+        TitleSearchView searchView = titleBarLayout.getSearchView();
+        searchView.setOnCloseListener(new TitleSearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                return false;
+            }
+        });
         tabs = (PagerSlidingTabStrip) findViewById(R.id.psts_tabs);
 
         pager = (ViewPager) findViewById(R.id.vp_content);
@@ -97,5 +103,8 @@ public class EventsActivity extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i("事件活动","onDestroy");
+        if(titleBarLayout.recoverReceiver != null){
+            unregisterReceiver(titleBarLayout.recoverReceiver);
+        }
     }
 }

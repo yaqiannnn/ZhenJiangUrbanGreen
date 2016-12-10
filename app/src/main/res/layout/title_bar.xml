@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
 
@@ -23,14 +24,23 @@
         android:textColor="#fff"
         android:textSize="24sp" />
 
+    <com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView
+        android:layout_centerVertical="true"
+        android:layout_above="@+id/tv_title_text"
+        android:id="@+id/tsv_title_search"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+    </com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView>
+
     <Button
-        android:background="@null"
         android:id="@+id/btn_title_self_def"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:background="@null" />
 
 
 </RelativeLayout>
