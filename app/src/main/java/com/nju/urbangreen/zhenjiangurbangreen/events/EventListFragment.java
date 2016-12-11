@@ -32,6 +32,7 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
     private List<OneEvent> eventList = new ArrayList<OneEvent>();
     private EventAdapter eventAdapter;
 
+
     /**
      *下面两行是暂时用来测试listview的list数据
      */
@@ -60,6 +61,7 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.event_fragment_event_list,container,false);
         lvEventList = (ListView) view.findViewById(R.id.lv_event_list);
+        lvEventList.setTextFilterEnabled(true);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.ly_refresh_events);
         //mAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,getData(position));
         //eventList = getData(position);
@@ -141,5 +143,9 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
     public void onPause() {
         super.onPause();
         Log.i("碎片","onPause");
+    }
+
+    public ListView getLvEventList(){
+        return lvEventList;
     }
 }
