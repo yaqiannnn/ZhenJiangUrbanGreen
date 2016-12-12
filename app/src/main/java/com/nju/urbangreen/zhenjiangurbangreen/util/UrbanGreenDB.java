@@ -108,4 +108,12 @@ public class UrbanGreenDB {
         }
         return list;
     }
+
+    /**
+     * 将一条事件记录从数据库中删除
+     * @param code 根据事件编号来删除
+     */
+    public void deleteEvent(int code){
+
+    }
 }

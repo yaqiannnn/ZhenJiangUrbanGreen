@@ -28,7 +28,6 @@ public class EventsActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
-
         initViews();
 
     }
@@ -153,5 +152,9 @@ public class EventsActivity extends FragmentActivity {
         if(titleBarLayout.recoverReceiver != null){
             unregisterReceiver(titleBarLayout.recoverReceiver);
         }
+    }
+
+    public TitleSearchView getSearchView(){
+        return titleBarLayout.getSearchView();
     }
 }

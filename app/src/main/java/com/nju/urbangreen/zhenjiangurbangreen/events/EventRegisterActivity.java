@@ -145,7 +145,7 @@ public class EventRegisterActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //saveTempViewData();
+        saveTempViewData();
 
     }
 

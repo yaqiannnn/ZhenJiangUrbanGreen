@@ -78,6 +78,10 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
+        if(((EventsActivity)getActivity()).getSearchView().getVisibility() == View.VISIBLE){
+            refreshLayout.setRefreshing(false);
+            return;
+        }
         UrbanGreenDB urbanGreenDB = UrbanGreenDB.getInstance(getContext());
 
         /**
@@ -116,34 +120,7 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
 
     }
 
-    private void initEventList(){
-        OneEvent oneEvent = new OneEvent("暴走大事件","苏轼","眉山","1037年1月8号");
-        eventList.add(oneEvent);
-    }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.i("碎片","onActivityCreated");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.i("碎片","onActivityCreated");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i("碎片","onDestroy");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i("碎片","onPause");
-    }
 
     public ListView getLvEventList(){
         return lvEventList;
