@@ -25,6 +25,7 @@
         android:textSize="24sp" />
 
     <com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView
+        android:visibility="gone"
         android:layout_centerVertical="true"
         android:layout_above="@+id/tv_title_text"
         android:id="@+id/tsv_title_search"

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:paddingLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_one_event_name"
+                style="@style/EventRecord"
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_one_event_registrar"
+                style="@style/EventRecord"
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_one_event_location"
+                style="@style/EventRecord"
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_one_event_date_time"
+                style="@style/EventRecord"
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
+
+            </TextView>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="80dp"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/imgbtn_event_location"
+                android:background="@drawable/ic_btn_location"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp" />
+
+            <ImageButton
+                android:id="@+id/imgbtn_event_detail"
+                android:background="@drawable/ic_btn_detail"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp" />
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

@@ -71,10 +71,11 @@ public class EventsActivity extends FragmentActivity {
         searchView.setOnCloseListener(new TitleSearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
+                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
+                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
                 //EventListFragment fragment = ((EventPagerAdapter)(pager.getAdapter())).getCurrFragment();
                 //if(fragment.getLvEventList() != null)
-                ((EventAdapter)(fragment.getLvEventList().getAdapter())).getFilter().filter("");
+                ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
                 return false;
             }
         });
@@ -82,13 +83,14 @@ public class EventsActivity extends FragmentActivity {
         searchView.setOnQueryTextListener(new TitleSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
+                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
+                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
                 //EventListFragment fragment = ((EventPagerAdapter)(pager.getAdapter())).getCurrFragment();
                 //if(fragment.getLvEventList() != null)
                 if(query.equals(""))
-                    ((EventAdapter)(fragment.getLvEventList().getAdapter())).getFilter().filter("");
+                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
                 else
-                    ((EventAdapter)(fragment.getLvEventList().getAdapter())).getFilter().filter(query);
+                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter(query);
                     //fragment.getLvEventList().setFilterText(query);
                 Log.i("Nomad", "onQueryTextSubmit");
                 return false;
@@ -96,10 +98,11 @@ public class EventsActivity extends FragmentActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
+                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
+                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
                 //EventListFragment fragment = ((EventPagerAdapter)(pager.getAdapter())).getCurrFragment();
                 if(newText.equals(""))
-                    ((EventAdapter)(fragment.getLvEventList().getAdapter())).getFilter().filter("");
+                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
                     //fragment.getLvEventList().clearTextFilter();
                 Log.i("Nomad", "onQueryTextChange");
                 return false;
