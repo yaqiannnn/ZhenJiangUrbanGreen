@@ -59,6 +59,7 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
         super.onCreate(savedInstanceState);
         position = getArguments().getInt(ARG_POSITION);
         getData(position);
+
     }
 
     @Nullable

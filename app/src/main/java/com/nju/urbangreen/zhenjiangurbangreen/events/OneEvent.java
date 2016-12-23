@@ -1,10 +1,12 @@
 package com.nju.urbangreen.zhenjiangurbangreen.events;
 
+import java.io.Serializable;
+
 /**
  * Created by Liwei on 2016/11/25.
  */
 //事件记录类
-public class OneEvent {
+public class OneEvent implements Serializable{
 
     private String code;
     private String name;
@@ -12,8 +14,8 @@ public class OneEvent {
     private String location;
     private String date_time;
     private String damageDegree;
-    private float lostFee;//损失总价
-    private float compensation;//实际赔偿
+    private String lostFee;//损失总价
+    private String compensation;//实际赔偿
     private String relevantPerson;
     private String relevantLicensePlate;
     private String relevantContact;
@@ -21,6 +23,10 @@ public class OneEvent {
     private String relevantAddress;
     private String relevantDescription;
     private String registrar;
+    private String description;
+
+
+
     private String reason;
     private int state;//0 :未提交；1 :已提交
 
@@ -84,19 +90,19 @@ public class OneEvent {
         this.damageDegree = damageDegree;
     }
 
-    public float getLostFee() {
+    public String getLostFee() {
         return lostFee;
     }
 
-    public void setLostFee(float lostFee) {
+    public void setLostFee(String lostFee) {
         this.lostFee = lostFee;
     }
 
-    public float getCompensation() {
+    public String getCompensation() {
         return compensation;
     }
 
-    public void setCompensation(float compensation) {
+    public void setCompensation(String compensation) {
         this.compensation = compensation;
     }
 
@@ -154,6 +160,14 @@ public class OneEvent {
 
     public void setRegistrar(String registrar) {
         this.registrar = registrar;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getReason() {

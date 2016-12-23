@@ -115,6 +115,10 @@ public class DropdownEditText extends LinearLayout {
         return etContent.getText().toString();
     }
 
+    public void setText(String string){
+        etContent.setText(string);
+    }
+
     //下拉列表的适配器
     class DropDownListAdapter extends ArrayAdapter<String>{
 

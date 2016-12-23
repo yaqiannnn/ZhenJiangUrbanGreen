@@ -24,18 +24,18 @@ import com.nju.urbangreen.zhenjiangurbangreen.R;
 public class TitleSearchView extends LinearLayout{
 
     private EditText etSearch;
-    private ImageButton ivCancel;
+    private ImageButton imgbtnCancel;
     private Context mContext;
     public TitleSearchView(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.title_searchview,this);
         mContext = context;
         etSearch = (EditText) findViewById(R.id.et_title_searchview);
-        ivCancel = (ImageButton) findViewById(R.id.iv_title_searchview_cancel);
+        imgbtnCancel = (ImageButton) findViewById(R.id.imgbtn_title_searchview_cancel);
     }
 
     public void setOnCloseListener(final OnCloseListener listener){
-        ivCancel.setOnClickListener(new OnClickListener() {
+        imgbtnCancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onClose();

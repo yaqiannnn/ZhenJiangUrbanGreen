@@ -25,6 +25,7 @@
         app:pstsTabPaddingLeftRight="2dp"
         app:pstsUnderlineHeight="2dp"></com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip>
 
+
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_content"
         android:layout_width="match_parent"

@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.nju.urbangreen.zhenjiangurbangreen.events.OneEvent;
+import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectObject;
+import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +33,13 @@ public class UrbanGreenDB {
 
     private SQLiteDatabase db;
 
+
+
     /**
      *将构造方法私有化
      */
     private UrbanGreenDB(Context context){
+
         ZJUGDBOpenHelper dbOpenHelper = new ZJUGDBOpenHelper(context,DB_NAME,null,VERSION);
         db = dbOpenHelper.getWritableDatabase();
     }
@@ -50,7 +55,7 @@ public class UrbanGreenDB {
     }
 
     /**
-     * 将OneEvent实例存储到数据库
+     * 将一条事件记录存储到数据库
      */
     public void saveEvent(OneEvent oneEvent){
         if(oneEvent != null){
@@ -64,12 +69,15 @@ public class UrbanGreenDB {
             values.put("damageDegree",oneEvent.getDamageDegree());
             values.put("lostFee",oneEvent.getLostFee());
             values.put("compensation",oneEvent.getCompensation());
+            values.put("relevantPerson",oneEvent.getRelevantPerson());
             values.put("relevantLicensePlate",oneEvent.getRelevantLicensePlate());
             values.put("relevantContact",oneEvent.getRelevantContact());
             values.put("relevantCompany",oneEvent.getRelevantCompany());
             values.put("relevantAddress",oneEvent.getRelevantAddress());
             values.put("relevantDescription",oneEvent.getRelevantDescription());
+            values.put("description",oneEvent.getDescription());
             values.put("reason",oneEvent.getReason());
+            values.put("registrar",SPUtils.get(MyApplication.getContext(),"username","zhangliwei").toString());
             values.put("state",oneEvent.getState());
             db.insert("Event",null,values);
         }
@@ -93,15 +101,17 @@ public class UrbanGreenDB {
                 oneEvent.setLocation(cursor.getString(cursor.getColumnIndex("location")));
                 oneEvent.setDate_time(cursor.getString(cursor.getColumnIndex("date_time")));
                 oneEvent.setDamageDegree(cursor.getString(cursor.getColumnIndex("damageDegree")));
-                oneEvent.setLostFee(cursor.getFloat(cursor.getColumnIndex("lostFee")));
-                oneEvent.setCompensation(cursor.getFloat(cursor.getColumnIndex("compensation")));
+                oneEvent.setLostFee(String.valueOf(cursor.getFloat(cursor.getColumnIndex("lostFee"))));
+                oneEvent.setCompensation(String.valueOf(cursor.getFloat(cursor.getColumnIndex("compensation"))));
                 oneEvent.setRelevantPerson(cursor.getString(cursor.getColumnIndex("relevantPerson")));
                 oneEvent.setRelevantLicensePlate(cursor.getString(cursor.getColumnIndex("relevantLicensePlate")));
                 oneEvent.setRelevantContact(cursor.getString(cursor.getColumnIndex("relevantContact")));
                 oneEvent.setRelevantCompany(cursor.getString(cursor.getColumnIndex("relevantCompany")));
                 oneEvent.setRelevantAddress(cursor.getString(cursor.getColumnIndex("relevantAddress")));
                 oneEvent.setRelevantDescription(cursor.getString(cursor.getColumnIndex("relevantDescription")));
+                oneEvent.setDescription(cursor.getString(cursor.getColumnIndex("description")));
                 oneEvent.setReason(cursor.getString(cursor.getColumnIndex("reason")));
+                oneEvent.setRegistrar(cursor.getString(cursor.getColumnIndex("registrar")));
                 oneEvent.setState(state);
                 list.add(oneEvent);
             }while (cursor.moveToNext());
@@ -115,5 +125,45 @@ public class UrbanGreenDB {
      */
     public void deleteEvent(int code){
 
+    }
+
+    /**
+     * 将一条养护记录存储到数据库
+     */
+    public void saveMaintain(MaintainObject oneMaintain){
+        if(oneMaintain != null){
+            ContentValues values = new ContentValues();
+            values.put("code",oneMaintain.getCode());
+            values.put("company_id",oneMaintain.getCompanyID());
+            values.put("maintain_type",oneMaintain.getMaintainType());
+            values.put("maintain_staff",oneMaintain.getMaintainStaff());
+            values.put("maintain_date",oneMaintain.getMaintainDate().toString());
+            values.put("content",oneMaintain.getContent());
+            values.put("logger_pid",oneMaintain.getLoggerPID());
+            values.put("log_time",oneMaintain.getLogTime());
+            values.put("lasteditor_pid",oneMaintain.getLastEditorPID());
+            values.put("lastedit_time","");
+        }
+    }
+
+    /**
+     * 将一条巡查记录存储到数据库
+     */
+    public void saveInspect(InspectObject oneInspect){
+        if(oneInspect != null){
+            ContentValues values = new ContentValues();
+            values.put("code",oneInspect.getCode());
+            values.put("inspect_type",oneInspect.getInspectType());
+            values.put("inspect_date",oneInspect.getInspectDate().toString());
+            values.put("company_id",oneInspect.getCompanyID());
+            values.put("inspector",oneInspect.getInspector());
+            values.put("score",oneInspect.getScore());
+            values.put("content",oneInspect.getContent());
+            values.put("inspect_opinion",oneInspect.getInspectOpinion());
+            values.put("logger_pid",oneInspect.getLoggerPID());
+            values.put("log_time",oneInspect.getLogTime());
+            values.put("lasteditor_pid",oneInspect.getLastEditorPID());
+            values.put("lastedit_time","");
+        }
     }
 }

@@ -27,6 +27,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -50,6 +51,7 @@ import com.esri.core.symbol.PictureMarkerSymbol;
 import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.events.EventRegisterActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.DownloadNewApkService;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WGSTOZhenjiang;
 
@@ -149,6 +151,9 @@ public class MapActivity extends Activity {
 
         //设置显示周边按钮
         setNearbyButton();
+
+        //设置底部栏的按钮点击事件
+        setBottomBar();
 
         //设置mapView单次tap监听
         map.setOnSingleTapListener(onSingleTapListener);
@@ -759,5 +764,42 @@ public class MapActivity extends Activity {
         }
     }
 
+    /**
+     * 设置bootbar中按钮的点击事件
+     */
+    private void setBottomBar(){
+        Button btnAddEvent = (Button) findViewById(R.id.btn_map_add_event);
+        btnAddEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MapActivity.this, EventRegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button btnAddMaintain = (Button) findViewById(R.id.btn_map_add_maintain);
+        btnAddMaintain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        Button btnAddInspect = (Button) findViewById(R.id.btn_map_add_inspect);
+        btnAddInspect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        Button btnCheckBasic = (Button) findViewById(R.id.btn_map_check_basicInfo);
+        btnCheckBasic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+    }
 
 }

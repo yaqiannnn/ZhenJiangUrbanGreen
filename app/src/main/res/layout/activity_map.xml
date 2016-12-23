@@ -79,6 +79,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_map_add_maintain"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -91,6 +92,7 @@
                 android:layout_height="match_parent"/>
 
             <Button
+                android:id="@+id/btn_map_add_inspect"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -110,6 +112,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_map_add_event"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -122,6 +125,7 @@
                 android:layout_height="match_parent"/>
 
             <Button
+                android:id="@+id/btn_map_check_basicInfo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

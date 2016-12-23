@@ -92,7 +92,6 @@ public class TitleBarLayout extends LinearLayout {
         tsvSearch.setEtSearchOnFocus();
         recoverReceiver = new TitleRecoverReceiver();
         mContext.registerReceiver(recoverReceiver,new IntentFilter(ACTION_SHOW_TITLE_LAYOUT));
-
     }
 
     public TitleSearchView getSearchView(){
@@ -115,7 +114,6 @@ public class TitleBarLayout extends LinearLayout {
                 tsvSearch.setVisibility(GONE);
                 //mContext.unregisterReceiver(recoverReceiver);
             }
-
         }
     }
 }

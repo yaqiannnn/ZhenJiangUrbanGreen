@@ -34,23 +34,27 @@ public class EventsActivity extends FragmentActivity {
 
     //初始化控件
     public void initViews(){
-
-        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_events_title_bar);
-        titleBarLayout.setTitleText("事件记录");
-        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_search);
-        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                titleBarLayout.setTsvSearchAvailable();
-            }
-        });
-        TitleSearchView searchView = titleBarLayout.getSearchView();
+        setTitleBarLayout();
+//        //初始化TitleBarLayout
+//        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_events_title_bar);
+//        titleBarLayout.setTitleText("事件记录");
+//        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
+//        //右侧的自定义按钮此时为搜索按钮，点击是会显示出TitleSearchView
+//        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_search);
+//        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //显示出TitleSearchView
+//                titleBarLayout.setTsvSearchAvailable();
+//            }
+//        });
+//        //获取TitleSearchView
+//        TitleSearchView searchView = titleBarLayout.getSearchView();
 
         tabs = (PagerSlidingTabStrip) findViewById(R.id.psts_tabs);
 
@@ -67,47 +71,47 @@ public class EventsActivity extends FragmentActivity {
         pager.setAdapter(adapter);
 
         tabs.setViewPager(pager);
+        tabs.setTextSize(30);
 
-        searchView.setOnCloseListener(new TitleSearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
-                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
-                //EventListFragment fragment = ((EventPagerAdapter)(pager.getAdapter())).getCurrFragment();
-                //if(fragment.getLvEventList() != null)
-                ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
-                return false;
-            }
-        });
 
-        searchView.setOnQueryTextListener(new TitleSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
-                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
-                //EventListFragment fragment = ((EventPagerAdapter)(pager.getAdapter())).getCurrFragment();
-                //if(fragment.getLvEventList() != null)
-                if(query.equals(""))
-                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
-                else
-                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter(query);
-                    //fragment.getLvEventList().setFilterText(query);
-                Log.i("Nomad", "onQueryTextSubmit");
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
-                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
-                //EventListFragment fragment = ((EventPagerAdapter)(pager.getAdapter())).getCurrFragment();
-                if(newText.equals(""))
-                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
-                    //fragment.getLvEventList().clearTextFilter();
-                Log.i("Nomad", "onQueryTextChange");
-                return false;
-            }
-        });
+//        searchView.setOnCloseListener(new TitleSearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
+//                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
+//
+//                ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
+//                return false;
+//            }
+//        });
+//
+//        searchView.setOnQueryTextListener(new TitleSearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
+//                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
+//
+//                if(query.equals(""))
+//                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
+//                else
+//                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter(query);
+//
+//                Log.i("Nomad", "onQueryTextSubmit");
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
+//                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
+//
+//                if(newText.equals(""))
+//                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
+//
+//                Log.i("Nomad", "onQueryTextChange");
+//                return false;
+//            }
+//        });
     }
 
     //pager的适配器
@@ -155,6 +159,72 @@ public class EventsActivity extends FragmentActivity {
         if(titleBarLayout.recoverReceiver != null){
             unregisterReceiver(titleBarLayout.recoverReceiver);
         }
+    }
+
+    public void setTitleBarLayout(){
+        //初始化TitleBarLayout
+        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_events_title_bar);
+        titleBarLayout.setTitleText("事件记录");
+        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        //右侧的自定义按钮此时为搜索按钮，点击是会显示出TitleSearchView
+        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_search);
+        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //显示出TitleSearchView
+                titleBarLayout.setTsvSearchAvailable();
+            }
+        });
+        //获取TitleSearchView
+        TitleSearchView searchView = titleBarLayout.getSearchView();
+
+        //设置TitleSearchView的监听事件
+        searchView.setOnCloseListener(new TitleSearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                //获取当前的fragment
+                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
+                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
+
+                ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
+                return false;
+            }
+        });
+
+        searchView.setOnQueryTextListener(new TitleSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //获取当前的fragment
+                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
+                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
+
+                if(query.equals(""))
+                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
+                else
+                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter(query);
+
+                Log.i("Nomad", "onQueryTextSubmit");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //获取当前的fragment
+                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
+                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
+
+                if(newText.equals(""))
+                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
+
+                Log.i("Nomad", "onQueryTextChange");
+                return false;
+            }
+        });
     }
 
     public TitleSearchView getSearchView(){

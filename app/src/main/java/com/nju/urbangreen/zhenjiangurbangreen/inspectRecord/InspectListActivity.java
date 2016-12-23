@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +30,7 @@ public class InspectListActivity extends AppCompatActivity
     private RecyclerView recyclerInspectList;
     private SearchView searchView;
     private FloatingActionButton floatingbtnAddInspect;
+    private TitleBarLayout titleBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,8 @@ public class InspectListActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        initToolbar();
+        //initToolbar();
+        initTitleBarLayout();
         initInspectList();
     }
 
@@ -103,6 +107,46 @@ public class InspectListActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 InspectListActivity.this.finish();
+            }
+        });
+    }
+
+    private void initTitleBarLayout(){
+        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_inspectlist_title_bar);
+        titleBarLayout.setTitleText("现场巡查");
+        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_search);
+        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                titleBarLayout.setTsvSearchAvailable();
+            }
+        });
+        TitleSearchView searchView = titleBarLayout.getSearchView();
+        searchView.setOnCloseListener(new TitleSearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                ((InsepectListAdapter)recyclerInspectList.getAdapter()).getFilter().filter("");
+                return false;
+            }
+        });
+        searchView.setOnQueryTextListener(new TitleSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                ((InsepectListAdapter)recyclerInspectList.getAdapter()).getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.equals(""))
+                    ((InsepectListAdapter)recyclerInspectList.getAdapter()).getFilter().filter("");
+                return false;
             }
         });
     }
