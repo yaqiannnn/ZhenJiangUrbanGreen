@@ -5,12 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 
 import com.nju.urbangreen.zhenjiangurbangreen.events.OneEvent;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectObject;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class UrbanGreenDB {
     /**
      * 数据库名
      */
-    public static final String DB_NAME = "urban_green";
+    public static final String DB_NAME = Environment.getExternalStorageDirectory() + File.separator + "NARUTO/" + "urban_green";
 
     /**
      * 数据库版本

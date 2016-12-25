@@ -71,7 +71,7 @@ public class EventsActivity extends FragmentActivity {
         pager.setAdapter(adapter);
 
         tabs.setViewPager(pager);
-        tabs.setTextSize(30);
+        tabs.setTextSize(40);
 
 
 //        searchView.setOnCloseListener(new TitleSearchView.OnCloseListener() {
