@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -132,17 +133,30 @@ public class LoginActivity extends Activity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AsyncTask<Void,Void,Void>(){
+                username = etUserName.getText().toString();
+                password = etPassword.getText().toString();
+                SPUtils.put(MyApplication.getContext(),"username",username);
+                SPUtils.put(MyApplication.getContext(),"password",password);
+                new AsyncTask<Void,Void,Integer>(){
+
+                    @Override
+                    protected void onPostExecute(Integer integer) {
+                        super.onPostExecute(integer);
+                        if(integer == 0){
+                            Toast.makeText(LoginActivity.this,"用户名或密码有误，请重新输入~",Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
 
                     @Override
                     protected void onPreExecute() {
                         super.onPreExecute();
-                        username = etUserName.getText().toString();
-                        password = etPassword.getText().toString();
+
                     }
 
                     @Override
-                    protected Void doInBackground(Void... voids) {
+                    protected Integer doInBackground(Void... voids) {
                         try{
                             Thread.sleep(800);
                         }catch (Exception e){
@@ -152,6 +166,8 @@ public class LoginActivity extends Activity {
                         String[] errMsg = new String[1];
 
                         Map<String,Object> results = WebServiceUtils.login(username,password,errMsg);
+
+
                         if(results != null){
                             flag = true;
                             Map<String, Object> resultsUpdate = WebServiceUtils.checkUpdate(errMsg);
@@ -161,13 +177,31 @@ public class LoginActivity extends Activity {
                                 mainIntent.putExtra("apk_url", APK_URL);
                             }
                             startActivity(mainIntent);
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            //imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),0);
+                            if(imm.isActive()){
+                                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                            }
                             finish();
+                            return 1;
                         }
                         else{
-                            mainIntent = new Intent(LoginActivity.this,MapActivity.class);
-                            startActivity(mainIntent);
+//                            mainIntent = new Intent(LoginActivity.this,MapActivity.class);
+//                            startActivity(mainIntent);
+
+                            SPUtils.remove(MyApplication.getContext(),"username");
+                            SPUtils.remove(MyApplication.getContext(),"password");
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            //imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),0);
+                            if(imm.isActive()){
+                                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                            }
+//                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+//                            finish();
+                            return 0;
                         }
-                        return null;
+
                     }
 
 
@@ -184,6 +218,9 @@ public class LoginActivity extends Activity {
 //                }else {
 //                    Toast.makeText(LoginActivity.this,"用户名或密码有误~",Toast.LENGTH_SHORT).show();
 //                    Log.i("hehehe","用户名或密码有误");
+//                }
+//                if(!flag){
+//                    Toast.makeText(LoginActivity.this,"用户名或密码有误，请重新输入~",Toast.LENGTH_SHORT).show();
 //                }
                 Log.i("登录",flag.toString());
                 Log.i("登录",username.toString());

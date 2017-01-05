@@ -15,74 +15,85 @@ import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Liwei on 2016/12/5.
  */
 public class UrbanGreenDB {
 
-    /**
-     * 数据库名
-     */
+    //数据库名
     public static final String DB_NAME = Environment.getExternalStorageDirectory() + File.separator + "NARUTO/" + "urban_green";
 
-    /**
-     * 数据库版本
-     */
+    //数据库版本
     public static final int VERSION = 1;
 
-    private  static UrbanGreenDB urbanGreenDB;
+    private static UrbanGreenDB urbanGreenDB;
 
     private SQLiteDatabase db;
 
+    //将构造方法私有化
+    private UrbanGreenDB(Context context) {
 
-
-    /**
-     *将构造方法私有化
-     */
-    private UrbanGreenDB(Context context){
-
-        ZJUGDBOpenHelper dbOpenHelper = new ZJUGDBOpenHelper(context,DB_NAME,null,VERSION);
+        ZJUGDBOpenHelper dbOpenHelper = new ZJUGDBOpenHelper(context, DB_NAME, null, VERSION);
         db = dbOpenHelper.getWritableDatabase();
     }
 
-    /**
-     * 获取UrbanGreenDB的实例
-     */
-    public synchronized static UrbanGreenDB getInstance(Context context){
-        if(urbanGreenDB == null){
+    //获取UrbanGreenDB的实例
+    public synchronized static UrbanGreenDB getInstance(Context context) {
+        if (urbanGreenDB == null) {
             urbanGreenDB = new UrbanGreenDB(context);
         }
         return urbanGreenDB;
     }
 
-    /**
-     * 将一条事件记录存储到数据库
-     */
-    public void saveEvent(OneEvent oneEvent){
-        if(oneEvent != null){
-            Log.i("数据库","saveEvent");
-            ContentValues values = new ContentValues();
-            values.put("code",oneEvent.getCode());
-            values.put("name",oneEvent.getName());
-            values.put("type",oneEvent.getType());
-            values.put("location",oneEvent.getLocation());
-            values.put("date_time",oneEvent.getDate_time());
-            values.put("damageDegree",oneEvent.getDamageDegree());
-            values.put("lostFee",oneEvent.getLostFee());
-            values.put("compensation",oneEvent.getCompensation());
-            values.put("relevantPerson",oneEvent.getRelevantPerson());
-            values.put("relevantLicensePlate",oneEvent.getRelevantLicensePlate());
-            values.put("relevantContact",oneEvent.getRelevantContact());
-            values.put("relevantCompany",oneEvent.getRelevantCompany());
-            values.put("relevantAddress",oneEvent.getRelevantAddress());
-            values.put("relevantDescription",oneEvent.getRelevantDescription());
-            values.put("description",oneEvent.getDescription());
-            values.put("reason",oneEvent.getReason());
-            values.put("registrar",SPUtils.get(MyApplication.getContext(),"username","zhangliwei").toString());
-            values.put("state",oneEvent.getState());
-            db.insert("Event",null,values);
+    //更新养护对象基本信息,行道树除外
+    public boolean updateUGOInfoExceptST(Map<String, Object> ugos) {
+        db.beginTransaction();
+        try {
+            emptyTable("UGOInfo");
+            Map<String, Object> oneUGO;
+            for (Map.Entry<String, Object> entry : ugos.entrySet()) {
+                oneUGO = (Map<String, Object>) entry.getValue();
+                saveOneUGOInfo(oneUGO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            db.endTransaction();
         }
+
+        return true;
+    }
+
+    //将一个养护对象的基本信息保存到数据库中
+    public boolean saveOneUGOInfo(Map<String, Object> ugo) {
+        if (ugo != null) {
+            ContentValues values = new ContentValues();
+            values.put("code", ugo.get("UGO_ID").toString());
+            values.put("parent_id", ugo.get("UGO_ParentID").toString());
+            values.put("type_id", ugo.get("UGO_ClassType_ID").toString());
+            values.put("name", ugo.get("UGO_Name").toString());
+            values.put("location", ugo.get("UGO_Geo_Location").toString());
+            values.put("address", ugo.get("UGO_Address").toString());
+            values.put("spatial_description", ugo.get("UGO_SpatialDescription").toString());
+            values.put("description", ugo.get("UGO_Description").toString());
+            values.put("current_area", Float.parseFloat(ugo.get("UGO_CurrentArea").toString()));
+            values.put("current_owner", ugo.get("UGO_CurrentOwner").toString());
+            values.put("current_owner_type", ugo.get("UGO_CurrentOwnerType").toString());
+            values.put("is_destroyed", ugo.get("UGO_Destroyed").toString());
+            values.put("date_destroyed", ugo.get("UGO_DateOfDestroyed").toString());
+            values.put("date_register_destroyed", ugo.get("UGO_DateOfDestroyRecord").toString());
+            values.put("logger_pid_destroyed", ugo.get("UGO_LoggerPIDOfDestroyRecord").toString());
+            values.put("logger_pid", ugo.get("UGO_LoggerPID").toString());
+            values.put("log_time", ugo.get("UGO_LogTime").toString());
+            values.put("lasteditor_pid", ugo.get("UGO_LastEditorPID").toString());
+            values.put("lastedit_time", ugo.get("UGO_LastEditTime").toString());
+            db.insert("UGOInfo", null, values);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -90,11 +101,11 @@ public class UrbanGreenDB {
      * @param state 待上传(State = 0)或已上传(State = 1)
      * @return 返回相应状态的Event列表
      */
-    public List<OneEvent> loadEventsWithDiffState(int state){
-        Log.i("数据库","loadEventsWithDiffState");
+    public List<OneEvent> loadEventsWithDiffState(int state) {
+        Log.i("数据库", "loadEventsWithDiffState");
         List<OneEvent> list = new ArrayList<OneEvent>();
-        Cursor cursor = db.query("Event",null,"state = ?",new String[]{String.valueOf(state)},null,null,null);
-        if(cursor.moveToFirst()){
+        Cursor cursor = db.query("Event", null, "state = ?", new String[]{String.valueOf(state)}, null, null, null);
+        if (cursor.moveToFirst()) {
             do {
                 OneEvent oneEvent = new OneEvent();
                 oneEvent.setCode(cursor.getString(cursor.getColumnIndex("code")));
@@ -116,56 +127,90 @@ public class UrbanGreenDB {
                 oneEvent.setRegistrar(cursor.getString(cursor.getColumnIndex("registrar")));
                 oneEvent.setState(state);
                 list.add(oneEvent);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         return list;
     }
 
-    /**
-     * 将一条事件记录从数据库中删除
-     * @param code 根据事件编号来删除
-     */
-    public void deleteEvent(int code){
+    //将一条事件记录存储到数据库
+    public boolean saveEvent(OneEvent oneEvent) {
+        if (oneEvent != null) {
+            Log.i("数据库", "saveEvent");
+            ContentValues values = new ContentValues();
+            values.put("code", oneEvent.getCode());
+            values.put("name", oneEvent.getName());
+            values.put("type", oneEvent.getType());
+            values.put("location", oneEvent.getLocation());
+            values.put("date_time", oneEvent.getDate_time());
+            values.put("damageDegree", oneEvent.getDamageDegree());
+            values.put("lostFee", oneEvent.getLostFee());
+            values.put("compensation", oneEvent.getCompensation());
+            values.put("relevantPerson", oneEvent.getRelevantPerson());
+            values.put("relevantLicensePlate", oneEvent.getRelevantLicensePlate());
+            values.put("relevantContact", oneEvent.getRelevantContact());
+            values.put("relevantCompany", oneEvent.getRelevantCompany());
+            values.put("relevantAddress", oneEvent.getRelevantAddress());
+            values.put("relevantDescription", oneEvent.getRelevantDescription());
+            values.put("description", oneEvent.getDescription());
+            values.put("reason", oneEvent.getReason());
+            values.put("registrar", SPUtils.get(MyApplication.getContext(), "username", "xk").toString());
+            values.put("state", oneEvent.getState());
+            db.insert("Event", null, values);
+            return true;
+        }
+        return false;
+    }
+
+    //将一条养护记录存储到数据库
+    public boolean saveMaintain(MaintainObject oneMaintain) {
+        if (oneMaintain != null) {
+            ContentValues values = new ContentValues();
+            values.put("code", oneMaintain.getCode());
+            values.put("company_id", oneMaintain.getCompanyID());
+            values.put("maintain_type", oneMaintain.getMaintainType());
+            values.put("maintain_staff", oneMaintain.getMaintainStaff());
+            values.put("maintain_date", oneMaintain.getMaintainDate().toString());
+            values.put("content", oneMaintain.getContent());
+            values.put("logger_pid", oneMaintain.getLoggerPID());
+            values.put("log_time", oneMaintain.getLogTime());
+            values.put("lasteditor_pid", oneMaintain.getLastEditorPID());
+            values.put("lastedit_time", "");
+            db.insert("Maintain", null, values);
+            return true;
+        }
+        return false;
+    }
+
+    //将一条巡查记录存储到数据库
+    public boolean saveInspect(InspectObject oneInspect) {
+        if (oneInspect != null) {
+            ContentValues values = new ContentValues();
+            values.put("code", oneInspect.getCode());
+            values.put("inspect_type", oneInspect.getInspectType());
+            values.put("inspect_date", oneInspect.getInspectDate().toString());
+            values.put("company_id", oneInspect.getCompanyID());
+            values.put("inspector", oneInspect.getInspector());
+            values.put("score", oneInspect.getScore());
+            values.put("content", oneInspect.getContent());
+            values.put("inspect_opinion", oneInspect.getInspectOpinion());
+            values.put("logger_pid", oneInspect.getLoggerPID());
+            values.put("log_time", oneInspect.getLogTime());
+            values.put("lasteditor_pid", oneInspect.getLastEditorPID());
+            values.put("lastedit_time", "");
+            db.insert("Inspect", null, values);
+            return true;
+        }
+        return false;
+    }
+
+    //将一条事件记录从数据库中删除,根据事件编号来删除
+    public void deleteEvent(int code) {
 
     }
 
-    /**
-     * 将一条养护记录存储到数据库
-     */
-    public void saveMaintain(MaintainObject oneMaintain){
-        if(oneMaintain != null){
-            ContentValues values = new ContentValues();
-            values.put("code",oneMaintain.getCode());
-            values.put("company_id",oneMaintain.getCompanyID());
-            values.put("maintain_type",oneMaintain.getMaintainType());
-            values.put("maintain_staff",oneMaintain.getMaintainStaff());
-            values.put("maintain_date",oneMaintain.getMaintainDate().toString());
-            values.put("content",oneMaintain.getContent());
-            values.put("logger_pid",oneMaintain.getLoggerPID());
-            values.put("log_time",oneMaintain.getLogTime());
-            values.put("lasteditor_pid",oneMaintain.getLastEditorPID());
-            values.put("lastedit_time","");
-        }
-    }
-
-    /**
-     * 将一条巡查记录存储到数据库
-     */
-    public void saveInspect(InspectObject oneInspect){
-        if(oneInspect != null){
-            ContentValues values = new ContentValues();
-            values.put("code",oneInspect.getCode());
-            values.put("inspect_type",oneInspect.getInspectType());
-            values.put("inspect_date",oneInspect.getInspectDate().toString());
-            values.put("company_id",oneInspect.getCompanyID());
-            values.put("inspector",oneInspect.getInspector());
-            values.put("score",oneInspect.getScore());
-            values.put("content",oneInspect.getContent());
-            values.put("inspect_opinion",oneInspect.getInspectOpinion());
-            values.put("logger_pid",oneInspect.getLoggerPID());
-            values.put("log_time",oneInspect.getLogTime());
-            values.put("lasteditor_pid",oneInspect.getLastEditorPID());
-            values.put("lastedit_time","");
-        }
+    //清空某个表中的数据
+    public void emptyTable(String tableName) {
+        String sql = "delete from " + tableName + ";";
+        db.execSQL(sql);
     }
 }

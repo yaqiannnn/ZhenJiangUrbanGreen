@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -40,6 +41,7 @@ public class WebServiceUtils {
 
     public static final String CHECK_UPDATE = "CheckUpdate";
     public static final String LOGIN = "Login";
+    public static final String GET_UGO_INFO_EXCEPT_ST = "GetUGOInfoExceptST";//ST表示行道树
 
     public static final String KEY_REFLACT_OPERATION_NAME = "wmn";
     public static final String KEY_REFLACT_OPERATION_PARAM = "wmp";
@@ -100,15 +102,19 @@ public class WebServiceUtils {
         if (identify) {
             String userName = SPUtils.get(MyApplication.getContext(), "username", "").toString();
             String password = SPUtils.get(MyApplication.getContext(), "password", "").toString();
-            if(operationName.equals(LOGIN)){
+
+            if (operationName.equals(LOGIN)) {
                 userName = params.get(KEY_USERNAME).toString();
                 password = params.get(KEY_PASSWORD).toString();
-                params = null;
+                Log.i("callmethod", userName);
+                Log.i("callmethod", password);
+                //params = null;
             }
-            request = new SoapObject(WSDL_TARGET_NAMESPACE, OPERATION_NAME);
+
             requestProperty.put(KEY_REFLACT_OPERATION_NAME, operationName);
             requestProperty.put(KEY_USERNAME, userName);
             requestProperty.put(KEY_PASSWORD, password);
+            request = new SoapObject(WSDL_TARGET_NAMESPACE, OPERATION_NAME);
         } else {
             request = new SoapObject(WSDL_TARGET_NAMESPACE, OPERATION_NAME_WITHOUT_USERINFO);
             requestProperty.put(KEY_REFLACT_OPERATION_NAME, "NoUser_" + operationName);
@@ -116,8 +122,6 @@ public class WebServiceUtils {
 
 
         requestProperty.put(KEY_REFLACT_OPERATION_PARAM, params);
-
-
         request.addProperty(KEY_OPERATION_PARAM, ZipUtils.compress(gson.toJson(requestProperty)));
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER10);
@@ -128,7 +132,12 @@ public class WebServiceUtils {
         HttpTransportSE transport = new HttpTransportSE(SOAP_ADDRESS);
 
         try {
-            transport.call(WSDL_TARGET_NAMESPACE + OPERATION_NAME_WITHOUT_USERINFO, envelope);
+            if (identify) {
+                transport.call(WSDL_TARGET_NAMESPACE + OPERATION_NAME, envelope);
+            } else {
+                transport.call(WSDL_TARGET_NAMESPACE + OPERATION_NAME_WITHOUT_USERINFO, envelope);
+            }
+
             SoapPrimitive resultPrimitive = (SoapPrimitive) envelope.getResponse();
             String tmp = resultPrimitive.toString();
             String jsonString = ZipUtils.uncompress(tmp);
@@ -169,28 +178,47 @@ public class WebServiceUtils {
         Map<String, Object> results = callMethod(CHECK_UPDATE, params);
         if (Integer.parseInt(results.get("ok").toString()) == 100) {
             String jsonResults = results.get("ret").toString();
-            return gson.fromJson(jsonResults, new TypeToken<Map<String, Object>>() {}.getType());
+            return gson.fromJson(jsonResults, new TypeToken<Map<String, Object>>() {
+            }.getType());
         } else {
             if (errorMessage != null && results.get("msg") != null) {
                 errorMessage[0] = results.get("msg").toString();
+                Log.i("错误消息", "checkUpdate: " + errorMessage[0]);
             }
             return null;
         }
 
     }
 
-    public static Map<String, Object> login(String userName, String password, String[] errorMessage){
+    public static Map<String, Object> getUGOInfoExceptST(String[] errorMessage) {
+        Map<String, Object> results = callMethod(GET_UGO_INFO_EXCEPT_ST, null);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<Map<String, Object>>() {
+            }.getType());
+
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+            }
+            return null;
+        }
+    }
+
+    public static Map<String, Object> login(String userName, String password, String[] errorMessage) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(KEY_USERNAME, userName);
         params.put(KEY_PASSWORD, password);
         Map<String, Object> results = callMethod(LOGIN, params);
-        if(Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED){
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<Map<String, Object>>(){}.getType());
+            return gson.fromJson(jsonResults, new TypeToken<Map<String, Object>>() {
+            }.getType());
 
-        }else {
-            if(errorMessage != null && results.get(KEY_ERRMESSAGE) != null){
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "login: " + errorMessage[0]);
             }
             return null;
         }

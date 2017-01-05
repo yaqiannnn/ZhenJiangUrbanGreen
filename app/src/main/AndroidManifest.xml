@@ -16,7 +16,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/myAppTheme">
-        <activity android:name=".map.MapActivity" />
+        <activity android:name=".map.MapActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".search.SearchActivity" />
         <activity android:name=".navigation.NaviActivity" />
         <activity android:name=".settings.SettingsActivity" />

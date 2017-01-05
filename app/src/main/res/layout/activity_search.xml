@@ -13,6 +13,7 @@
         <include
             layout="@layout/toolbar"/>
     </FrameLayout>
+
     <FrameLayout
         android:layout_marginRight="0dp"
         android:paddingRight="0dp"

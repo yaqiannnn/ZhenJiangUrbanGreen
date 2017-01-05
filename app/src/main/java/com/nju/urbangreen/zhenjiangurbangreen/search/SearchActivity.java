@@ -30,10 +30,12 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     private List<String> suggestionList;
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         initViews();
         initSuggestionList();
         initSearchResultList();
+
     }
 
     @Override

@@ -48,7 +48,7 @@ public class MaintainInfoActivity extends AppCompatActivity {
         if(intent.getSerializableExtra("MaintainInfo")==null)
         {
             //todo add new Object
-            myObject=new MaintainObject("new ID","new Code");
+            myObject=new MaintainObject("","MR201701030002");
         }
         else
             myObject=(MaintainObject)intent.getSerializableExtra("MaintainInfo");

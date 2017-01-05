@@ -54,6 +54,7 @@
         android:background="@mipmap/ic_locate" />
 
     <com.nju.urbangreen.zhenjiangurbangreen.map.MapTopBarLayout
+
         android:id="@+id/topbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

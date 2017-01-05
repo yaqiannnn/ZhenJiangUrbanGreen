@@ -198,7 +198,8 @@ public class EventRegisterActivity extends AppCompatActivity {
         oneEvent.setRelevantDescription(etRelevantDescription.getText().toString());
         oneEvent.setDescription(etDescription.getText().toString());
         oneEvent.setReason(etReason.getText().toString());
-        oneEvent.setRegistrar(SPUtils.get(this,"username","zhangliwei").toString());
+        //oneEvent.setRegistrar(SPUtils.get(this,"username","xk").toString());
+        oneEvent.setRegistrar("xk");
         oneEvent.setState(state);
         UrbanGreenDB urbanGreenDB = UrbanGreenDB.getInstance(EventRegisterActivity.this);
         urbanGreenDB.saveEvent(oneEvent);

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.Gson;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
@@ -68,6 +69,8 @@ public class WelcomeActivity extends Activity {
                 }
 
                 Intent mainIntent;
+//                SPUtils.remove(MyApplication.getContext(),"username");
+//                SPUtils.remove(MyApplication.getContext(),"password");
                 if (SPUtils.contains(MyApplication.getContext(), "username") && SPUtils.contains(MyApplication.getContext(), "password")) {
                     String[] errMsg = new String[1];
                     //Map<String, Object> results = WebServiceUtils.demoOfMethod(errMsg);
@@ -79,6 +82,7 @@ public class WelcomeActivity extends Activity {
                     }
                     startActivity(mainIntent);
                 } else {
+
                     mainIntent = new Intent(WelcomeActivity.this,LoginActivity.class);
                     startActivity(mainIntent);
                 }
@@ -101,7 +105,8 @@ public class WelcomeActivity extends Activity {
 //                    Intent loginIntent = new Intent(WelcomeActivity.this, LoginActivity.class);
 //                    startActivity(loginIntent);
 //                }
-
+//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 finish();
             }
 
@@ -110,14 +115,14 @@ public class WelcomeActivity extends Activity {
 
     }
 
-    public int getVersion() {
-        try {
-            PackageManager manager = this.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
-            return info.versionCode;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
+//    public int getVersion() {
+//        try {
+//            PackageManager manager = this.getPackageManager();
+//            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+//            return info.versionCode;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return -1;
+//        }
+//    }
 }

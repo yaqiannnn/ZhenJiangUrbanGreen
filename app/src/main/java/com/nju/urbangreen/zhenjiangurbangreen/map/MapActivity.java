@@ -52,6 +52,8 @@ import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventRegisterActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectInfoActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainInfoActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.DownloadNewApkService;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WGSTOZhenjiang;
 
@@ -760,6 +762,7 @@ public class MapActivity extends Activity {
                     dialogInterface.dismiss();
                 }
             });
+            builder.setCancelable(false);
             builder.show();
         }
     }
@@ -781,7 +784,8 @@ public class MapActivity extends Activity {
         btnAddMaintain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(MapActivity.this, MaintainInfoActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -789,7 +793,8 @@ public class MapActivity extends Activity {
         btnAddInspect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(MapActivity.this, InspectInfoActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -70,6 +70,33 @@ public class ZJUGDBOpenHelper extends SQLiteOpenHelper {
             + "lastedit_time text)";
 
     /**
+     * 养护对象基本信息的建表语句
+     */
+    public static final String CREATE_GREEN_OBJECT = "create table UGOInfo ("
+            + "id integer primary key autoincrement,"
+            + "code text,"
+            + "parent_id text,"
+            + "type_id text,"
+            + "name text,"
+            + "location text,"
+            + "address text,"
+            + "spatial_description text,"
+            + "description text,"
+            + "current_area real,"
+            + "current_owner text,"
+            + "current_owner_type text,"
+            + "is_destroyed text,"
+            + "date_destroyed text,"
+            + "date_register_destroyed text,"
+            + "logger_pid_destroyed text,"
+            + "logger_pid text,"
+            + "log_time text,"
+            + "lasteditor_pid text,"
+            + "lastedit_time text)";
+
+
+
+    /**
      *
      * @param context
      * @param name
