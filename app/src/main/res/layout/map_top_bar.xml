@@ -6,10 +6,11 @@
 
 
     <ImageButton
+
         android:id="@+id/btn_map_menu"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:background="#EEE"
+        android:background="@drawable/search_shape_left"
         android:padding="2dp"
         android:scaleType="fitXY"
         android:src="@mipmap/ic_map_menu" />
@@ -22,11 +23,12 @@
         android:background="#999" />
 
     <EditText
+
         android:id="@+id/et_search"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_weight="1"
-        android:background="#EEE"
+        android:background="@drawable/search_shape_right"
         android:editable="false"
         android:hint="   在此输入要搜索的内容"
         android:maxLines="1" />

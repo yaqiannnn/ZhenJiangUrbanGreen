@@ -26,12 +26,14 @@
         android:orientation="vertical">
 
         <EditText
+            android:paddingLeft="5dp"
+            android:elevation="3dp"
             android:id="@+id/edit_username"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/edit_shape_up"
             android:gravity="center_vertical"
-            android:hint="请输入用户名:zlw" />
+            android:hint="请输入用户名:" />
 
         <View
 
@@ -40,23 +42,41 @@
             android:background="#444" />
 
         <EditText
+            android:inputType="textPassword"
+            android:paddingLeft="5dp"
+            android:elevation="3dp"
             android:id="@+id/edit_password"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/edit_shape_down"
             android:gravity="center_vertical"
-            android:hint="请输入密码:123" />
+            android:hint="请输入密码:" />
+
+        <!--<Button-->
+
+            <!--android:id="@+id/btn_login"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:background="@drawable/button_shape"-->
+            <!--android:elevation="8dp"-->
+            <!--android:gravity="center"-->
+            <!--android:shadowDx="0"-->
+            <!--android:shadowDy="8"-->
+            <!--android:shadowRadius="16"-->
+            <!--android:text="登录"-->
+            <!--android:textColor="#FFF" />-->
         <Button
             android:id="@+id/btn_login"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="登录"
-            android:textColor="#FFF"
-            android:background="@color/colorPrimary"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_shape"
+            android:text="登录"
+            android:textColor="#FFF" />
     </LinearLayout>
 
 </RelativeLayout>

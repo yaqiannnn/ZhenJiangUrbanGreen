@@ -28,8 +28,73 @@ public class ZJUGDBOpenHelper extends SQLiteOpenHelper {
             + "relevantCompany text,"
             + "relevantAddress text,"
             + "relevantDescription text,"
+            + "description text,"
             + "reason text,"
+            + "registrar text,"
+            + "logger_pid text,"
+            + "log_time text,"
+            + "lasteditor_pid text,"
+            + "lastedit_time text,"
             + "state integer)";
+    /**
+     * Inspect建表语句
+     */
+    public static final String CREATE_INSPECT = "create table Inspect ("
+            + "id integer primary key autoincrement,"
+            + "code text,"
+            + "inspect_type text,"
+            + "inspect_date text"
+            + "company_id text,"
+            + "inspector text,"
+            + "score text,"
+            + "content text,"
+            + "inspect_opinion text,"
+            + "logger_pid text,"
+            + "log_time text,"
+            + "lasteditor_pid text,"
+            + "lastedit_time text)";
+    /**
+     * Maintain建表语句
+     */
+    public static final String CREATE_MAINTAIN = "create table Maintain ("
+            + "id integer primary key autoincrement,"
+            + "code text,"
+            + "company_id text,"
+            + "maintain_type text,"
+            + "maintain_staff text,"
+            + "maintain_date text,"
+            + "content text,"
+            + "logger_pid text,"
+            + "log_time text,"
+            + "lasteditor_pid text,"
+            + "lastedit_time text)";
+
+    /**
+     * 养护对象基本信息的建表语句
+     */
+    public static final String CREATE_GREEN_OBJECT = "create table UGOInfo ("
+            + "id integer primary key autoincrement,"
+            + "code text,"
+            + "parent_id text,"
+            + "type_id text,"
+            + "name text,"
+            + "location text,"
+            + "address text,"
+            + "spatial_description text,"
+            + "description text,"
+            + "current_area real,"
+            + "current_owner text,"
+            + "current_owner_type text,"
+            + "is_destroyed text,"
+            + "date_destroyed text,"
+            + "date_register_destroyed text,"
+            + "logger_pid_destroyed text,"
+            + "logger_pid text,"
+            + "log_time text,"
+            + "lasteditor_pid text,"
+            + "lastedit_time text)";
+
+
 
     /**
      *
@@ -45,6 +110,8 @@ public class ZJUGDBOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_EVENT);
+        sqLiteDatabase.execSQL(CREATE_MAINTAIN);
+        sqLiteDatabase.execSQL(CREATE_INSPECT);
     }
 
     @Override

@@ -14,6 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,11 +28,14 @@ public class MaintainListActivity extends AppCompatActivity {
     private RecyclerView recyclerMaintainList;
     private SearchView searchView;
     private FloatingActionButton floatingbtnAddMaintain;
-
+    private TitleBarLayout titleBarLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ActivityCollector.addActivity(this);
         setContentView(R.layout.activity_maintain_list);
         super.onCreate(savedInstanceState);
+
         recyclerMaintainList=(RecyclerView)findViewById(R.id.recyclerView_maintain_list);
         mToolbar=(Toolbar)findViewById(R.id.Toolbar);
         floatingbtnAddMaintain=(FloatingActionButton)findViewById(R.id.floatingbtn_addMaintain);
@@ -40,8 +46,15 @@ public class MaintainListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        initToolbar();
+        //initToolbar();
+        initTitleBarLayout();
         initMaintainList();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     @Override
@@ -102,6 +115,47 @@ public class MaintainListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MaintainListActivity.this.finish();
+            }
+        });
+    }
+
+    private void initTitleBarLayout(){
+        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_maintainlist_title_bar);
+        titleBarLayout.setTitleText("管养记录");
+        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_search);
+        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                titleBarLayout.setTsvSearchAvailable();
+            }
+        });
+        TitleSearchView searchView = titleBarLayout.getSearchView();
+        searchView.setOnCloseListener(new TitleSearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter("");
+                return false;
+            }
+        });
+
+        searchView.setOnQueryTextListener(new TitleSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.equals(""))
+                    ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter("");
+                return false;
             }
         });
     }

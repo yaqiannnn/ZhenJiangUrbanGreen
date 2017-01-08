@@ -123,6 +123,8 @@
                     android:text="损失总价(元)" />
 
                 <EditText
+                    android:inputType="number"
+                    android:digits="0123456789."
                     android:id="@+id/edit_event_register_lost_fee"
                     style="@style/EventItemContent"
                     android:background="@drawable/bkg_edittext" />
@@ -136,6 +138,8 @@
                     android:text="实际赔偿(元)" />
 
                 <EditText
+                    android:inputType="number"
+                    android:digits="0123456789."
                     android:id="@+id/edit_event_register_compensation"
                     style="@style/EventItemContent"
                     android:background="@drawable/bkg_edittext" />
@@ -188,6 +192,7 @@
                     android:text="相关方联系方式" />
 
                 <EditText
+                    android:inputType="phone"
                     android:id="@+id/edit_event_register_relevant_contact"
                     style="@style/EventItemContent"
                     android:background="@drawable/bkg_edittext" />
@@ -247,22 +252,26 @@
 
             <TableRow style="@style/EventItem">
 
-                <Button
+                <android.support.v7.widget.AppCompatButton
+                    android:background="@drawable/button_shape"
                     android:id="@+id/btn_event_register_add_files"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_span="2"
-                    android:text="添加附件" />
+                    android:text="添加附件"
+                    android:textColor="#FFF"/>
             </TableRow>
 
             <TableRow style="@style/EventItem">
 
-                <Button
+                <android.support.v7.widget.AppCompatButton
+                    android:background="@drawable/button_shape"
                     android:id="@+id/btn_event_register_add_ugo"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_span="2"
-                    android:text="添加相关养护对象" />
+                    android:text="添加相关养护对象"
+                    android:textColor="#FFF"/>
             </TableRow>
         </TableLayout>
 

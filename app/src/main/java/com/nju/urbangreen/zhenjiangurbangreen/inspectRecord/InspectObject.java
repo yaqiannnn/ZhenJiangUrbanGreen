@@ -7,6 +7,7 @@ import java.util.Date;
  * Created by lxs on 2016/11/20.
  */
 public class InspectObject implements Serializable{
+
     private String ID;
     private String Code;
     private String InspectType;

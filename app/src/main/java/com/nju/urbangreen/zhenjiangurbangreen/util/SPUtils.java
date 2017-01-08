@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import java.util.Map;
 
 /**
- * Created by HCQIN on 2016/11/6.
+ * Created by Liwei on 2016/11/6.
  */
 public class SPUtils {
     /**

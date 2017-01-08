@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectObject;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -42,13 +43,15 @@ public class MaintainInfoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ActivityCollector.addActivity(this);
         super.onCreate(savedInstanceState);
 
         Intent intent=getIntent();
         if(intent.getSerializableExtra("MaintainInfo")==null)
         {
             //todo add new Object
-            myObject=new MaintainObject("new ID","new Code");
+            myObject=new MaintainObject("","MR201701030002");
         }
         else
             myObject=(MaintainObject)intent.getSerializableExtra("MaintainInfo");
@@ -70,6 +73,12 @@ public class MaintainInfoActivity extends AppCompatActivity {
         etMaintainContent.getEditText().setText(myObject.getContent());
         mToolbar=(Toolbar)findViewById(R.id.Toolbar);
         initToolbar();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     @Override

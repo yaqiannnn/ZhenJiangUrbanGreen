@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,7 +44,7 @@ public class InspectInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ActivityCollector.addActivity(this);
         Intent intent=getIntent();
         if(intent.getSerializableExtra("InspectInfo")==null)
         {
@@ -72,6 +73,12 @@ public class InspectInfoActivity extends AppCompatActivity {
         etEtInspectOpinion.getEditText().setText(myObject.getInspectOpinion());
         mToolbar=(Toolbar)findViewById(R.id.Toolbar);
         initToolbar();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     @Override

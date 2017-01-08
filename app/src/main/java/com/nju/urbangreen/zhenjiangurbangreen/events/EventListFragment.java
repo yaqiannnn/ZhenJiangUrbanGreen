@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +28,15 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
 
     private SwipeRefreshLayout refreshLayout;//刷新布局
     private ListView lvEventList;//事件记录列表布局
+    private RecyclerView rcyvEventList;
     private static final String ARG_POSITION = "position";
     private int position;//记录当前所在页面的位置
 
     private List<OneEvent> eventList = new ArrayList<OneEvent>();
-    private EventAdapter eventAdapter;
+
+    //private EventAdapter eventAdapter;
+    private EventListAdapter eventListAdapter;
+
 
     /**
      *下面两行是暂时用来测试listview的list数据
@@ -53,19 +59,24 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
         super.onCreate(savedInstanceState);
         position = getArguments().getInt(ARG_POSITION);
         getData(position);
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.event_fragment_event_list,container,false);
-        lvEventList = (ListView) view.findViewById(R.id.lv_event_list);
+        //lvEventList = (ListView) view.findViewById(R.id.lv_event_list);
+        //lvEventList.setTextFilterEnabled(true);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.ly_refresh_events);
-        //mAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,getData(position));
-        //eventList = getData(position);
-        eventAdapter = new EventAdapter(getContext(),R.layout.event_fragment_list_item,eventList);
+        rcyvEventList = (RecyclerView) view.findViewById(R.id.rcyv_event_list);
+        //eventAdapter = new EventAdapter(getContext(),R.layout.event_fragment_list_item,eventList);
+        eventListAdapter = new EventListAdapter(getActivity(),position,eventList);
+        //lvEventList.setAdapter(eventAdapter);
 
-        lvEventList.setAdapter(eventAdapter);
+        rcyvEventList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rcyvEventList.setAdapter(eventListAdapter);
+
         refreshLayout.setColorSchemeResources(android.R.color.holo_blue_dark,android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,android.R.color.holo_red_light);
         refreshLayout.setOnRefreshListener(this);
@@ -75,12 +86,16 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
+        if(((EventsActivity)getActivity()).getSearchView().getVisibility() == View.VISIBLE){
+            refreshLayout.setRefreshing(false);
+            return;
+        }
         UrbanGreenDB urbanGreenDB = UrbanGreenDB.getInstance(getContext());
 
         /**
          * 选择数据库中最新的一条记录来更新，因为如果更改eventList的指向，更新就失效了，对比下面注释的代码
          */
-        //OneEvent oneEvent;
+
         int listSize = eventList.size();
         List<OneEvent> tempList = urbanGreenDB.loadEventsWithDiffState(position);
         for(int i = 0;i < listSize;i++){
@@ -88,19 +103,13 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
 
         }
         Log.i("碎片", "onRefresh: "+ tempList.size() + "eventlist size" + listSize);
-        //eventList.removeAll(eventList);
+
         for(int i = 0;i < tempList.size();i++){
             eventList.add(tempList.get(i));
         }
-        //eventList.addAll(tempList);
-//        oneEvent = tempList.get(tempList.size()-1);
-//        eventList.add(oneEvent);
-        //eventList = urbanGreenDB.loadEventsNotUpload(0);
-        ////忽略这一行OneEvent oneEvent = new OneEvent("月黑风高","李白","长安","701年");
-        //eventList.add(oneEvent);
-        //eventList = urbanGreenDB.loadEventsWithDiffState(0);
-        //Log.i("碎片", "onRefresh: "+ eventList.get(1).getName());
-        eventAdapter.notifyDataSetChanged();
+
+        //eventAdapter.notifyDataSetChanged();
+        eventListAdapter.notifyDataSetChanged();
         refreshLayout.setRefreshing(false);
     }
 
@@ -109,36 +118,15 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
         UrbanGreenDB urbanGreenDB = UrbanGreenDB.getInstance(getContext());
         eventList = urbanGreenDB.loadEventsWithDiffState(position);
 
-        //eventArrayList.add("card " + position);
+
 
     }
 
-    private void initEventList(){
-        OneEvent oneEvent = new OneEvent("暴走大事件","苏轼","眉山","1037年1月8号");
-        eventList.add(oneEvent);
+    public ListView getLvEventList(){
+        return lvEventList;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.i("碎片","onActivityCreated");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.i("碎片","onActivityCreated");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i("碎片","onDestroy");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i("碎片","onPause");
+    public RecyclerView getRcyvEventList(){
+        return rcyvEventList;
     }
 }

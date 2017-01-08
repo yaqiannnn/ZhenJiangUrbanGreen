@@ -16,7 +16,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/myAppTheme">
-        <activity android:name=".map.MapActivity" />
+        <activity android:name=".map.MapActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".search.SearchActivity" />
         <activity android:name=".navigation.NaviActivity" />
         <activity android:name=".settings.SettingsActivity" />
@@ -36,15 +37,17 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".inspectRecord.InspectListActivity" >
+        <activity android:name=".inspectRecord.InspectListActivity">
 
         </activity>
         <activity android:name=".inspectRecord.InspectInfoActivity" />
         <activity android:name=".maintainRecord.MaintainInfoActivity" />
-        <activity android:name=".maintainRecord.MaintainListActivity" >
+        <activity android:name=".maintainRecord.MaintainListActivity">
 
         </activity>
-        <activity android:name=".events.EventsActivity" />
+        <activity
+            android:name=".events.EventsActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".events.EventRegisterActivity"
             android:windowSoftInputMode="stateHidden">

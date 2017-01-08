@@ -1,16 +1,19 @@
 package com.nju.urbangreen.zhenjiangurbangreen.events;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,10 +22,18 @@ import java.util.List;
 public class EventAdapter extends ArrayAdapter<OneEvent>{
 
     public int resourceId;
+    private List<OneEvent> originData;
+    private List<OneEvent> returnData;
+    private List<OneEvent> backupData;
+    private EventsFilter eventsFilter;
 
     public EventAdapter(Context context, int resource, List<OneEvent> objects) {
         super(context, resource, objects);
         resourceId = resource;
+        originData = objects;
+        backupData = new ArrayList<OneEvent>(objects);
+        returnData = objects;
+
     }
 
 
@@ -70,6 +81,14 @@ public class EventAdapter extends ArrayAdapter<OneEvent>{
         return view;
     }
 
+    @Override
+    public Filter getFilter() {
+        if(eventsFilter == null){
+            eventsFilter = new EventsFilter();
+        }
+        return eventsFilter;
+    }
+
     class ViewHolder{
         TextView eventName;
         TextView eventRegistrar;
@@ -77,5 +96,55 @@ public class EventAdapter extends ArrayAdapter<OneEvent>{
         TextView eventDT;
         Button btnEventDetail;
         Button btnEventLocation;
+    }
+
+    class EventsFilter extends Filter{
+
+
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            int size = returnData.size();
+            for(int i = 0;i < size;i++){
+                originData.remove(returnData.size()-1);
+            }
+            for(int i = 0;i < backupData.size();i++){
+                originData.add(backupData.get(i));
+            }
+            FilterResults results = new FilterResults();
+            List<OneEvent> list;
+            if(TextUtils.isEmpty(charSequence)){
+                list = originData;
+            }else {
+                list = new ArrayList<OneEvent>();
+                for(OneEvent oneEvent:originData){
+                    if(oneEvent.getCode().contains(charSequence) || oneEvent.getName().contains(charSequence)){
+                        list.add(oneEvent);
+                    }
+                }
+            }
+            results.values = list;
+            results.count = list.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            //returnData.clear();
+            List<OneEvent> backupList = new ArrayList<OneEvent>((ArrayList<OneEvent>)(filterResults.values));
+            int size = returnData.size();
+            for(int i = 0;i < size;i++){
+                returnData.remove(returnData.size()-1);
+            }
+            for(int i = 0;i < backupList.size();i++){
+                returnData.add(backupList.get(i));
+            }
+            //returnData = (List<OneEvent>) (filterResults.values);
+            //returnData = ;
+            if(filterResults.count >= 0){
+                notifyDataSetChanged();
+            }else {
+                notifyDataSetInvalidated();
+            }
+        }
     }
 }

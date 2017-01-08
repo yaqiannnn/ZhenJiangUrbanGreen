@@ -14,6 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,9 +31,11 @@ public class InspectListActivity extends AppCompatActivity
     private RecyclerView recyclerInspectList;
     private SearchView searchView;
     private FloatingActionButton floatingbtnAddInspect;
+    private TitleBarLayout titleBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ActivityCollector.addActivity(this);
         setContentView(R.layout.activity_inspect_list);
         super.onCreate(savedInstanceState);
         recyclerInspectList=(RecyclerView)findViewById(R.id.recyclerView_inspect_list);
@@ -43,8 +48,15 @@ public class InspectListActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        initToolbar();
+        //initToolbar();
+        initTitleBarLayout();
         initInspectList();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     @Override
@@ -97,12 +109,52 @@ public class InspectListActivity extends AppCompatActivity
         mToolbar.setTitle("巡查记录");
         mToolbar.setTitleTextColor(getResources().getColor(R.color.colorBackground));
         setSupportActionBar(mToolbar);
-        mToolbar.setMinimumHeight(50);
+        //mToolbar.setMinimumHeight(50);
         mToolbar.setNavigationIcon(R.drawable.ic_toolbar_back);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 InspectListActivity.this.finish();
+            }
+        });
+    }
+
+    private void initTitleBarLayout(){
+        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_inspectlist_title_bar);
+        titleBarLayout.setTitleText("现场巡查");
+        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_search);
+        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                titleBarLayout.setTsvSearchAvailable();
+            }
+        });
+        TitleSearchView searchView = titleBarLayout.getSearchView();
+        searchView.setOnCloseListener(new TitleSearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                ((InsepectListAdapter)recyclerInspectList.getAdapter()).getFilter().filter("");
+                return false;
+            }
+        });
+        searchView.setOnQueryTextListener(new TitleSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                ((InsepectListAdapter)recyclerInspectList.getAdapter()).getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.equals(""))
+                    ((InsepectListAdapter)recyclerInspectList.getAdapter()).getFilter().filter("");
+                return false;
             }
         });
     }
