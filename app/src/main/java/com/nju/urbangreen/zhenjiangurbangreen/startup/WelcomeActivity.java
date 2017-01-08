@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
@@ -56,6 +57,14 @@ public class WelcomeActivity extends Activity {
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
 
+        if (networkInfo == null || !networkInfo.isAvailable()) {
+            try {
+                Thread.sleep(800);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(this,"当前无网络连接，请检查网络设置~",Toast.LENGTH_SHORT).show();
+        }
         new AsyncTask<Void, Void, Void>() {
 
             @Override

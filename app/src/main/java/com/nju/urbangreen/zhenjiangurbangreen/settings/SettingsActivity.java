@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.startup.LoginActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.util.DownloadNewApkService;
 import com.nju.urbangreen.zhenjiangurbangreen.util.MyApplication;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
@@ -59,12 +60,19 @@ public class SettingsActivity extends Activity {
     private TitleBarLayout titleBarLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ActivityCollector.addActivity(this);
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_settings);
         setTitleBar();
         setHandUpdateButton();
         setLogoutButton();
+    }
+
+    @Override
+    protected void onDestroy() {
+        ActivityCollector.removeActivity(this);
+        super.onDestroy();
     }
 
     private void setHandUpdateButton(){
@@ -162,6 +170,7 @@ public class SettingsActivity extends Activity {
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        ActivityCollector.finishAll();
                         SPUtils.remove(MyApplication.getContext(),"username");
                         SPUtils.remove(MyApplication.getContext(),"password");
                         Intent intent1 = new Intent(SettingsActivity.this,LoginActivity.class);

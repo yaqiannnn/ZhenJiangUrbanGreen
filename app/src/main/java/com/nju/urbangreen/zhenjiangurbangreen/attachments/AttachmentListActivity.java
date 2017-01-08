@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ public class AttachmentListActivity extends AppCompatActivity {
     private ListView lvAttachmentRecords;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ActivityCollector.addActivity(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attachment_list);
 
@@ -45,5 +48,11 @@ public class AttachmentListActivity extends AppCompatActivity {
         list.add(new OneAttachmentRecord("what doesn't kill you","0kb"));
         AttachmentRecordAdapter adapter = new AttachmentRecordAdapter(this,R.layout.attachment_list_item,list);
         lvAttachmentRecords.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

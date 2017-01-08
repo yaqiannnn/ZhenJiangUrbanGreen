@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
@@ -34,6 +35,7 @@ public class InspectListActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ActivityCollector.addActivity(this);
         setContentView(R.layout.activity_inspect_list);
         super.onCreate(savedInstanceState);
         recyclerInspectList=(RecyclerView)findViewById(R.id.recyclerView_inspect_list);
@@ -49,6 +51,12 @@ public class InspectListActivity extends AppCompatActivity
         //initToolbar();
         initTitleBarLayout();
         initInspectList();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     @Override

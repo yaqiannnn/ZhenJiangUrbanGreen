@@ -54,6 +54,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventRegisterActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectInfoActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainInfoActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.util.DownloadNewApkService;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WGSTOZhenjiang;
 
@@ -123,6 +124,8 @@ public class MapActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ActivityCollector.addActivity(this);
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_map);
@@ -168,6 +171,12 @@ public class MapActivity extends Activity {
 
         openGPS();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     private void createLayers(){

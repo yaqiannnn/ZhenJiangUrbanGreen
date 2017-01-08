@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
@@ -30,6 +31,8 @@ public class MaintainListActivity extends AppCompatActivity {
     private TitleBarLayout titleBarLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ActivityCollector.addActivity(this);
         setContentView(R.layout.activity_maintain_list);
         super.onCreate(savedInstanceState);
 
@@ -46,6 +49,12 @@ public class MaintainListActivity extends AppCompatActivity {
         //initToolbar();
         initTitleBarLayout();
         initMaintainList();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     @Override

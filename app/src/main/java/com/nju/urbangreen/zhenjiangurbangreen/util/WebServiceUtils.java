@@ -87,6 +87,7 @@ public class WebServiceUtils {
         connectivityManager = (ConnectivityManager) MyApplication.getContext().
                 getSystemService(MyApplication.getContext().CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
+
         if (networkInfo == null || !networkInfo.isAvailable()) {
             try {
                 Thread.sleep(800);

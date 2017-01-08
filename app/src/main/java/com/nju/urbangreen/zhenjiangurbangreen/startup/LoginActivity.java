@@ -133,6 +133,18 @@ public class LoginActivity extends Activity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //判断网络是否可用
+                connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                networkInfo = connectivityManager.getActiveNetworkInfo();
+
+                if (networkInfo == null || !networkInfo.isAvailable()) {
+                    try {
+                        Thread.sleep(800);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(LoginActivity.this,"当前无网络连接，请检查网络设置~",Toast.LENGTH_SHORT).show();
+                }
                 username = etUserName.getText().toString();
                 password = etPassword.getText().toString();
                 SPUtils.put(MyApplication.getContext(),"username",username);
