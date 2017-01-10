@@ -59,12 +59,6 @@
                         android:textSize="16sp"
                         android:id="@+id/recyclerItem_inspectScore"
                         android:text="巡查得分"/>
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:id="@+id/recyclerItem_inspectTest"
-                        android:text="巡查得分"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="0dp"

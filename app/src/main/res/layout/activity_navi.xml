@@ -226,7 +226,7 @@
         android:weightSum="3"
         android:showDividers="middle"
         android:orientation="vertical"
-        android:divider="@drawable/table_divder_line"
+        android:divider="@drawable/table_divider_line"
         android:id="@+id/ly_func_navi"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

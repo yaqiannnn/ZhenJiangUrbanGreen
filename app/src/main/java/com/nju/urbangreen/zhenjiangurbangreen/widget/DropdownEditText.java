@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -53,7 +54,7 @@ public class DropdownEditText extends LinearLayout {
         ivShowDropdown.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                initPopupWindow(view);
+                initPopupWindow(etContent);
             }
         });
     }
@@ -83,6 +84,7 @@ public class DropdownEditText extends LinearLayout {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 etContent.setText(lvDropDownView.getAdapter().getItem(i).toString());
+                setCommonDrawable();
                 popupWindow.dismiss();
                 ivShowDropdown.setChecked(false);
             }
@@ -102,8 +104,7 @@ public class DropdownEditText extends LinearLayout {
 
         //设置PopupWindow的显示位置
         popupWindow.getContentView().measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED);
-        int i = etContent.getMeasuredWidth();//获取父控件的宽度
-        popupWindow.showAsDropDown(parent,-i,5);
+        popupWindow.showAsDropDown(parent,0,5);
     }
 
     //DropdownEditText暴露的接口，用以设置下拉列表中的列表项
@@ -117,6 +118,16 @@ public class DropdownEditText extends LinearLayout {
 
     public void setText(String string){
         etContent.setText(string);
+    }
+
+    public void setEmptyWarning()
+    {
+        etContent.setBackground(getResources().getDrawable(R.drawable.bkg_edittext_empty));
+    }
+
+    public void setCommonDrawable()
+    {
+        etContent.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));
     }
 
     //下拉列表的适配器

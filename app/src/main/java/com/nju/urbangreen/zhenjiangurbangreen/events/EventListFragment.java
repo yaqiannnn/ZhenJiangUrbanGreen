@@ -117,9 +117,6 @@ public class EventListFragment extends Fragment implements SwipeRefreshLayout.On
     private void getData(int position){
         UrbanGreenDB urbanGreenDB = UrbanGreenDB.getInstance(getContext());
         eventList = urbanGreenDB.loadEventsWithDiffState(position);
-
-
-
     }
 
     public ListView getLvEventList(){

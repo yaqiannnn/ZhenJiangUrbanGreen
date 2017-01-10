@@ -4,25 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/et_dropdown_content"
-        android:layout_height="40dp"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:background="@drawable/bkg_edittext" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_dropdown_content"
+            android:layout_width="match_parent"
+            style="@style/RecordItemContent"
+            android:background="@drawable/bkg_edittext" />
+        <CheckBox
+            android:id="@+id/cb_dropdown_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/ic_btn_dropdown"
+            android:button="@null" />
+    </FrameLayout>
 
-    <!--<ImageView-->
-        <!--android:id="@+id/iv_dropdown_btn"-->
-        <!--android:layout_width="40dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:scaleType="fitXY"-->
-        <!--android:paddingRight="2dp"-->
-        <!--android:background="@drawable/ic_dropdown" />-->
-    <CheckBox
-        android:id="@+id/cb_dropdown_btn"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
-        android:background="@drawable/ic_btn_dropdown"
-        android:button="@null" />
+
 </LinearLayout>

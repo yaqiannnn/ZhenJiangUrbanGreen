@@ -91,7 +91,7 @@ public class InspectInfoActivity extends AppCompatActivity {
 
     private void initSpinner()
     {
-        typeArray=getResources().getStringArray(R.array.insepctTypeSpinner);
+        typeArray=getResources().getStringArray(R.array.insepctTypeDropList);
         typeAdapter=new ArrayAdapter<>(this,R.layout.spinner_item,typeArray);
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnInspectType.setAdapter(typeAdapter);
@@ -119,7 +119,7 @@ public class InspectInfoActivity extends AppCompatActivity {
         dtpckInspectDate=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-               tvInspectDate.setText(year+"-"+month+"-"+dayOfMonth);
+               tvInspectDate.setText(year+"-"+(month+1)+"-"+dayOfMonth);
             }
         },year,month,day);
         tvInspectDate.setOnClickListener(new View.OnClickListener() {
