@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:orientation="vertical"
     tools:context="com.nju.urbangreen.zhenjiangurbangreen.events.EventsActivity">
 
     <com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout
-        android:id="@+id/ly_events_title_bar"
+        android:id="@+id/ly_events_list_title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
-
-    </com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
+        android:background="@color/colorPrimary"/>
 
     <com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip
-        android:layout_below="@+id/ly_events_title_bar"
-        android:id="@+id/psts_tabs"
+        android:id="@+id/pagetab_event"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:pstsIndicatorHeight="2dp"
@@ -25,21 +22,16 @@
         app:pstsTabPaddingLeftRight="2dp"
         app:pstsUnderlineHeight="2dp"/>
 
-
     <android.support.v4.view.ViewPager
-        android:id="@+id/vp_content"
+        android:id="@+id/pager_event_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/psts_tabs">
-
-    </android.support.v4.view.ViewPager>
+        android:layout_height="match_parent"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fbtn_add_event"
+        android:id="@+id/floatingbtn_add_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@drawable/ic_floatingbtn_add" />
-</RelativeLayout>
+</LinearLayout>

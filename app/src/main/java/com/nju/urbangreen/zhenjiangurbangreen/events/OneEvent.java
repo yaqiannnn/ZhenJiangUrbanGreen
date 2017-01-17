@@ -1,6 +1,7 @@
 package com.nju.urbangreen.zhenjiangurbangreen.events;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Liwei on 2016/11/25.
@@ -12,7 +13,7 @@ public class OneEvent implements Serializable{
     private String name;
     private String type;
     private String location;
-    private String date_time;
+    private Date date_time;
     private String damageDegree;
     private String lostFee;//损失总价
     private String compensation;//实际赔偿
@@ -32,7 +33,7 @@ public class OneEvent implements Serializable{
 
 
 
-    public OneEvent(String name, String registrar, String location, String date_time){
+    public OneEvent(String name, String registrar, String location, Date date_time){
         this.name = name;
         this.registrar = registrar;
         this.location = location;
@@ -74,11 +75,11 @@ public class OneEvent implements Serializable{
         this.location = location;
     }
 
-    public String getDate_time() {
+    public Date getDate_time() {
         return date_time;
     }
 
-    public void setDate_time(String date_time) {
+    public void setDate_time(Date date_time) {
         this.date_time = date_time;
     }
 

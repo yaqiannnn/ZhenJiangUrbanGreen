@@ -8,6 +8,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
  */
 public class MaintainListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private SwipeRefreshLayout refreshLayout;
+
     @Override
     public void onRefresh() {
 

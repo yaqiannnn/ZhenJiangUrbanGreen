@@ -54,7 +54,7 @@ public class InspectInfoActivity extends AppCompatActivity {
         else
             myObject=(InspectObject)intent.getSerializableExtra("InspectInfo");
 
-        setContentView(R.layout.activity_inspect_info);
+        setContentView(R.layout.activity_inspect_register);
         tvInspectID=(AppCompatTextView)findViewById(R.id.tv_inspectInfo_ID);
         tvInspectID.setText(myObject.getID());
         tvInspectCode=(AppCompatTextView)findViewById(R.id.tv_inspectInfo_Code);

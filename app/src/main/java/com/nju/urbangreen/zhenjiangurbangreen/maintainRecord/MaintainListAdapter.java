@@ -7,8 +7,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
-import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListHolder;
-import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,26 +14,25 @@ import java.util.List;
 /**
  * Created by lxs on 2016/11/28.
  */
-public class MaintainListAdapter extends RecyclerView.Adapter<MaintainListHolder> implements Filterable{
+public class MaintainListAdapter extends RecyclerView.Adapter<MaintainViewHolder> implements Filterable{
     private List<MaintainObject> maintainList;
     private MaintainFilter maintainFilter;
 
     public MaintainListAdapter(List<MaintainObject> list)
     {
         this.maintainList=list;
-        this.maintainFilter=new MaintainFilter(this,maintainList);
     }
 
     @Override
-    public MaintainListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MaintainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=View.inflate(parent.getContext(), R.layout.recycleritem_maintain,null);
-        MaintainListHolder holder=new MaintainListHolder(view);
+        MaintainViewHolder holder=new MaintainViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(MaintainListHolder holder, int position) {
-        holder.setMyObject(maintainList.get(position));
+    public void onBindViewHolder(MaintainViewHolder holder, int position) {
+        holder.setMaintainData(maintainList.get(position));
     }
 
     @Override
@@ -44,16 +41,32 @@ public class MaintainListAdapter extends RecyclerView.Adapter<MaintainListHolder
     }
 
     @Override
-    public Filter getFilter()
-    {
+    public Filter getFilter(){
+        if(this.maintainFilter == null){
+            this.maintainFilter = new MaintainFilter(this,maintainList);
+        }
         return this.maintainFilter;
     }
 
-    private static class MaintainFilter extends Filter
+    public void updateDataFromDB()
+    {
+        //从数据库查询得到最新的事件列表
+        List<OneEvent> updateList=new ArrayList<>(UrbanGreenDB.getInstance(MyApplication.getContext())
+                .loadEventsWithDiffState(position));
+        //更新源事件列表
+        this.eventsFilter.refreshOriginList(updateList);
+    }
+
+    public void updateDataFromWeb()
+    {
+        //todo get data from web
+    }
+
+    private class MaintainFilter extends Filter
     {
         private final MaintainListAdapter m_adapter;
-        private final List<MaintainObject> m_originList;
-        private final List<MaintainObject> m_filteredList;
+        private List<MaintainObject> m_originList;//源数据，所有的养护记录
+        private List<MaintainObject> m_filteredList;//过滤后返回的养护记录
 
         public MaintainFilter(MaintainListAdapter adapter,List<MaintainObject> originList)
         {
@@ -61,17 +74,25 @@ public class MaintainListAdapter extends RecyclerView.Adapter<MaintainListHolder
             this.m_originList=new ArrayList<>(originList);
             this.m_filteredList=new ArrayList<>();
         }
+        public void freshOriginList(List<MaintainObject> originList)
+        {
+            this.m_originList=new ArrayList<>(originList);
+        }
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            m_filteredList.clear();
+            //从本地数据库获得最新的养护记录列表
+            updateDataFromDB();
+
             String filterStr=constraint.toString().toLowerCase().trim();
             FilterResults results=new FilterResults();
-            if(filterStr.equals(""))
+            m_filteredList.clear();
+            if(TextUtils.isEmpty(filterStr))
                 m_filteredList.addAll(m_originList);
             else {
                 for(MaintainObject object:m_originList)
                 {
-                    if(object.getID().contains(filterStr))
+                    if(object.getID().contains(filterStr)
+                        || object.getCode().contains(filterStr))
                         m_filteredList.add(object);
                 }
             }

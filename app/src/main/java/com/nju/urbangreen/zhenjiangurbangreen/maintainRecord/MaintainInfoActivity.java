@@ -8,8 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
@@ -62,7 +60,7 @@ public class MaintainInfoActivity extends AppCompatActivity {
         else
             myObject=(MaintainObject)intent.getSerializableExtra("MaintainInfo");
 
-        setContentView(R.layout.activity_maintain_info);
+        setContentView(R.layout.activity_maintain_register);
         tvMaintainID=(TextView)findViewById(R.id.tv_maintainInfo_ID);
         tvMaintainID.setText(myObject.getID());
         tvMaintainCode=(TextView)findViewById(R.id.tv_maintainInfo_code);
@@ -143,7 +141,7 @@ public class MaintainInfoActivity extends AppCompatActivity {
         dtpckMaintainDate=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                etMaintainDate.setText(year+"-"+month+"-"+dayOfMonth);
+                etMaintainDate.setText(year+"-"+(month + 1)+"-"+dayOfMonth);
             }
         },year,month,day);
         etMaintainDate.setOnClickListener(new View.OnClickListener() {
@@ -152,16 +150,13 @@ public class MaintainInfoActivity extends AppCompatActivity {
                 dtpckMaintainDate.show();
             }
         });
-        Date objectDate=myObject.getMaintainDate();
-        if(objectDate.toString().equals(""))
-            etMaintainDate.setText(year+"-"+month+"-"+day);
-        else
-            etMaintainDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(objectDate));
+        etMaintainDate.setText(year+"-"+(month + 1)+"-"+day);
     }
 
     private void processBack()
     {
         int emptyStatus=0;
+        //个位数为1代表type为空，十位数为1代表staff为空
         if(dropdownMaintainType.getText().equals(""))
             emptyStatus+=1;
         if(etMaintainStaff.getText().toString().equals(""))

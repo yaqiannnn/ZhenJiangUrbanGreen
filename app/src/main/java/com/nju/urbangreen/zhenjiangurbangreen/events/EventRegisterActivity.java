@@ -123,12 +123,12 @@ public class EventRegisterActivity extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        etDateSelect.setText(year + "-" + month + "-" + dayOfMonth);
+                        etDateSelect.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
                     }
                 },year,month,day);
 
         etDateSelect = (EditText) findViewById(R.id.edit_event_register_time);
-        etDateSelect.setText(year + "-" + month + "-" + day);
+        etDateSelect.setText(year + "-" + (month + 1) + "-" + day);
         etDateSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
