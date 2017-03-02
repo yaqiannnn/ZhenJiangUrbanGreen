@@ -1,6 +1,8 @@
 package com.nju.urbangreen.zhenjiangurbangreen.events;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -81,6 +83,16 @@ public class OneEvent implements Serializable{
 
     public void setDate_time(Date date_time) {
         this.date_time = date_time;
+    }
+
+    public void setDate_time(String date_time_str){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try{
+            this.date_time = sdf.parse(date_time_str);
+        }catch (ParseException e){
+            this.date_time = new Date();
+        }
+
     }
 
     public String getDamageDegree() {

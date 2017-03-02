@@ -1,12 +1,16 @@
 package com.nju.urbangreen.zhenjiangurbangreen.maintainRecord;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.events.OneEvent;
+import com.nju.urbangreen.zhenjiangurbangreen.util.MyApplication;
+import com.nju.urbangreen.zhenjiangurbangreen.util.UrbanGreenDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +21,7 @@ import java.util.List;
 public class MaintainListAdapter extends RecyclerView.Adapter<MaintainViewHolder> implements Filterable{
     private List<MaintainObject> maintainList;
     private MaintainFilter maintainFilter;
+    private int position;//用来记录事件活动当前处在哪个fragment上
 
     public MaintainListAdapter(List<MaintainObject> list)
     {
@@ -51,10 +56,10 @@ public class MaintainListAdapter extends RecyclerView.Adapter<MaintainViewHolder
     public void updateDataFromDB()
     {
         //从数据库查询得到最新的事件列表
-        List<OneEvent> updateList=new ArrayList<>(UrbanGreenDB.getInstance(MyApplication.getContext())
-                .loadEventsWithDiffState(position));
-        //更新源事件列表
-        this.eventsFilter.refreshOriginList(updateList);
+//        List<MaintainObject> updateList=new ArrayList<>(UrbanGreenDB.getInstance(MyApplication.getContext())
+//                .loadEventsWithDiffState(this.position));
+//        //更新源事件列表
+//        this.maintainFilter.freshOriginList(updateList);
     }
 
     public void updateDataFromWeb()

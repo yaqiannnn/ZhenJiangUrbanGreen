@@ -26,6 +26,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 public class EventRegisterActivity extends AppCompatActivity {
 
@@ -197,7 +198,7 @@ public class EventRegisterActivity extends AppCompatActivity {
         etName.setText(oneEvent.getName());
         dropdownEditText.setText(oneEvent.getType());
         etLocation.setText(oneEvent.getLocation());
-        etDateSelect.setText(oneEvent.getDate_time());
+        etDateSelect.setText(oneEvent.getDate_time().toString());
         etDamageDegree.setText(oneEvent.getDamageDegree());
         etLostFee.setText(oneEvent.getLostFee());
         etCompensation.setText(oneEvent.getCompensation());

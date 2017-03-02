@@ -141,7 +141,7 @@ public class UrbanGreenDB {
             values.put("name", oneEvent.getName());
             values.put("type", oneEvent.getType());
             values.put("location", oneEvent.getLocation());
-            values.put("date_time", oneEvent.getDate_time());
+            values.put("date_time", oneEvent.getDate_time().toString());
             values.put("damageDegree", oneEvent.getDamageDegree());
             values.put("lostFee", oneEvent.getLostFee());
             values.put("compensation", oneEvent.getCompensation());
