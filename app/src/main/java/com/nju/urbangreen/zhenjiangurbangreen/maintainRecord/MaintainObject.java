@@ -18,6 +18,8 @@ public class MaintainObject implements Serializable{
     private String LogTime;
     private String LastEditorPID;
 
+    private int state;//0 :未提交；1 :已提交
+
     public MaintainObject(String id,String code)
     {
         this.ID=id;
@@ -74,6 +76,9 @@ public class MaintainObject implements Serializable{
     public void setLastEditorPID(String lastEditorPID) {
         LastEditorPID = lastEditorPID;
     }
+    public void setState(int state) {
+        this.state = state;
+    }
 
     public String getID() {
         return ID;
@@ -104,5 +109,8 @@ public class MaintainObject implements Serializable{
     }
     public String getLastEditorPID() {
         return LastEditorPID;
+    }
+    public int getState() {
+        return state;
     }
 }

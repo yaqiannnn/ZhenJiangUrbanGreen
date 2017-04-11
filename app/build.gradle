@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.1'
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "com.nju.urbangreen.zhenjiangurbangreen"
@@ -34,11 +34,7 @@ dependencies {
     compile 'com.esri.arcgis.android:arcgis-android:10.2.8-1'
     compile files('libs/ksoap2-android-assembly-3.3.0-jar-with-dependencies.jar')
     compile 'com.google.code.gson:gson:2.8.0'
-
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
-    compile 'com.android.support:design:24.1.1'
-
-
 }
 
 

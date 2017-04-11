@@ -15,10 +15,10 @@ import java.text.SimpleDateFormat;
 /**
  * Created by lxs on 2016/11/20.
  */
-public class InspectListHolder extends RecyclerView.ViewHolder{
+public class InspectViewHolder extends RecyclerView.ViewHolder{
     private CardView mCardView;
     private InspectObject myObject;
-    public InspectListHolder(final View itemView)
+    public InspectViewHolder(final View itemView)
     {
         super(itemView);
         mCardView=(CardView)itemView.findViewById(R.id.recyclerItem_inspectInfoCard);

@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">ZhenJiangUrbanGreen</string>
-    <string-array name="insepctTypeSpinner">
+    <string-array name="insepctTypeDropList">
         <item>保洁考核</item>
         <item>管养考核</item>
         <item>日常巡查</item>
     </string-array>
-    <string-array name="maintainTypeSpinner">
+    <string-array name="maintainTypeDropList">
         <item>病虫害防治</item>
         <item>浇水排水</item>
         <item>松土除草</item>
@@ -15,5 +15,11 @@
         <item>施肥</item>
         <item>修剪</item>
         <item>补栽</item>
+    </string-array>
+    <string-array name="eventTypeDropList">
+        <item>自然灾害</item>
+        <item>病虫灾害</item>
+        <item>人为事故</item>
+        <item>交通事故</item>
     </string-array>
 </resources>

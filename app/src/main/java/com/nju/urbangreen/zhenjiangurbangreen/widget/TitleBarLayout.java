@@ -78,9 +78,6 @@ public class TitleBarLayout extends LinearLayout {
 
     //设置右侧按钮点击事件
     public void setBtnSelfDefClickListener(OnClickListener listener){
-
-
-
         btnSelfDef.setOnClickListener(listener);
     }
 

@@ -2,22 +2,18 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recyclerItem_maintainInfoCard"
         android:background="@color/colorBackground"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         app:cardElevation="2dp"
-        app:contentPaddingTop="4dp"
-        app:contentPaddingBottom="0dp"
         app:cardCornerRadius="4dp">
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,31 +36,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:id="@+id/recyclerItem_maintainID"
+                        android:id="@+id/tv_recyclerItem_maintainID"
                         android:text="养护记录ID"/>
                     <android.support.v7.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:id="@+id/recyclerItem_maintainCompanyID"
-                        android:text="养护单位ID"/>
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:id="@+id/recyclerItem_maintainType"
+                        android:id="@+id/tv_recyclerItem_maintainType"
                         android:text="养护类型"/>
                     <android.support.v7.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:id="@+id/recyclerItem_maintainStaff"
+                        android:id="@+id/tv_recyclerItem_maintainStaff"
                         android:text="养护人员"/>
                     <android.support.v7.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:id="@+id/recyclerItem_maintainDate"
+                        android:id="@+id/tv_recyclerItem_maintainDate"
                         android:text="养护日期"/>
                 </LinearLayout>
                 <LinearLayout
@@ -77,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="90dp"
                         android:id="@+id/iv_recyclerItemMaintain_map"
-                        android:src="@drawable/ic_card_addressmap" />
+                        android:src="@drawable/ic_card_address_map" />
                     <android.support.v7.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -92,15 +82,15 @@
             <android.support.v7.widget.AppCompatButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recyclerItem_btn_maintainInfo"
+                android:id="@+id/btn_recyclerItem_maintainInfo"
                 android:background="@color/colorBackground"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
                 android:elevation="0dp"
                 android:text="养护记录"
                 android:textSize="20sp"
                 android:textColor="@color/colorPrimary"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
-
 </LinearLayout>
+
+
+

@@ -36,9 +36,9 @@ public class MaintainListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_maintain_list);
         super.onCreate(savedInstanceState);
 
-        recyclerMaintainList=(RecyclerView)findViewById(R.id.recyclerView_maintain_list);
+        recyclerMaintainList=(RecyclerView)findViewById(R.id.recycler_maintain_list);
         mToolbar=(Toolbar)findViewById(R.id.Toolbar);
-        floatingbtnAddMaintain=(FloatingActionButton)findViewById(R.id.floatingbtn_addMaintain);
+        floatingbtnAddMaintain=(FloatingActionButton)findViewById(R.id.floatingbtn_add_maintain);
         floatingbtnAddMaintain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +120,7 @@ public class MaintainListActivity extends AppCompatActivity {
     }
 
     private void initTitleBarLayout(){
-        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_maintainlist_title_bar);
+        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_maintain_list_title_bar);
         titleBarLayout.setTitleText("管养记录");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override

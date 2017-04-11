@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by lxs on 2016/11/20.
  */
-public class InsepectListAdapter extends RecyclerView.Adapter<InspectListHolder> implements Filterable{
+public class InsepectListAdapter extends RecyclerView.Adapter<InspectViewHolder> implements Filterable{
     private List<InspectObject> inspectList;
     private InspectFilter inspectFilter;
 
@@ -25,14 +25,14 @@ public class InsepectListAdapter extends RecyclerView.Adapter<InspectListHolder>
     }
 
     @Override
-    public InspectListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public InspectViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=View.inflate(parent.getContext(), R.layout.recycleritem_inspect,null);
-        InspectListHolder holder=new InspectListHolder(view);
+        InspectViewHolder holder=new InspectViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(InspectListHolder holder, int position) {
+    public void onBindViewHolder(InspectViewHolder holder, int position) {
         holder.setMyObject(inspectList.get(position));
     }
 

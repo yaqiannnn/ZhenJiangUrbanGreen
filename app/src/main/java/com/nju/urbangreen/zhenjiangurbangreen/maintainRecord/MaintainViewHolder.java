@@ -14,14 +14,14 @@ import java.text.SimpleDateFormat;
 /**
  * Created by lxs on 2016/11/28.
  */
-public class MaintainListHolder extends RecyclerView.ViewHolder{
+public class MaintainViewHolder extends RecyclerView.ViewHolder{
     private AppCompatButton btnMaintainInfo;
     private AppCompatTextView maintainID;
     private AppCompatTextView maintainType;
     private AppCompatTextView maintainDate;
     private AppCompatTextView maintainStaff;
     private MaintainObject myObject;
-    public MaintainListHolder(final View itemView)
+    public MaintainViewHolder(final View itemView)
     {
         super(itemView);
         maintainID =(AppCompatTextView) itemView.findViewById(R.id.tv_recyclerItem_maintainID);

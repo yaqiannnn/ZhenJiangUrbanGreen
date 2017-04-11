@@ -3,7 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorEmptyWarning">#f50057</color>
     <color name="colorBackground">#ffffff</color>
-    <color name="black">#ffffff</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="hint_text">#757575</color>
+    <color name="divider_color">#B6B6B6</color>
+    <color name="black">#000000</color>
 	<color name="background_tab_pressed">#6633B5E5</color>
 </resources>
