@@ -13,12 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
-public class EventsActivity extends FragmentActivity {
+public class EventListActivity extends FragmentActivity {
 
     private TitleBarLayout titleBarLayout;//标题栏
     private PagerSlidingTabStrip tabs;//顶部选项卡
@@ -39,26 +40,7 @@ public class EventsActivity extends FragmentActivity {
     //初始化控件
     public void initViews(){
         setTitleBarLayout();
-//        //初始化TitleBarLayout
-//        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_events_title_bar);
-//        titleBarLayout.setTitleText("事件记录");
-//        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
-//        //右侧的自定义按钮此时为搜索按钮，点击是会显示出TitleSearchView
-//        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_search);
-//        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //显示出TitleSearchView
-//                titleBarLayout.setTsvSearchAvailable();
-//            }
-//        });
-//        //获取TitleSearchView
-//        TitleSearchView searchView = titleBarLayout.getSearchView();
+
 
         tabs = (PagerSlidingTabStrip) findViewById(R.id.pagetab_event);
 
@@ -67,7 +49,7 @@ public class EventsActivity extends FragmentActivity {
         fbtnAddEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(EventsActivity.this,EventRegisterActivity.class);
+                Intent intent = new Intent(EventListActivity.this,EventRegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -77,45 +59,6 @@ public class EventsActivity extends FragmentActivity {
         tabs.setViewPager(pager);
         tabs.setTextSize(40);
 
-
-//        searchView.setOnCloseListener(new TitleSearchView.OnCloseListener() {
-//            @Override
-//            public boolean onClose() {
-//                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
-//                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
-//
-//                ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
-//                return false;
-//            }
-//        });
-//
-//        searchView.setOnQueryTextListener(new TitleSearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
-//                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
-//
-//                if(query.equals(""))
-//                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
-//                else
-//                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter(query);
-//
-//                Log.i("Nomad", "onQueryTextSubmit");
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
-//                        findFragmentByTag("android:switcher:" + R.id.vp_content + ":" + pager.getCurrentItem());
-//
-//                if(newText.equals(""))
-//                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
-//
-//                Log.i("Nomad", "onQueryTextChange");
-//                return false;
-//            }
-//        });
     }
 
     //pager的适配器
@@ -196,7 +139,7 @@ public class EventsActivity extends FragmentActivity {
                 EventListFragment fragment = (EventListFragment) getSupportFragmentManager().
                         findFragmentByTag("android:switcher:" + R.id.pager_event_content + ":" + pager.getCurrentItem());
 
-                ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
+                ((BaseListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
                 return false;
             }
         });
@@ -209,9 +152,9 @@ public class EventsActivity extends FragmentActivity {
                         findFragmentByTag("android:switcher:" + R.id.pager_event_content + ":" + pager.getCurrentItem());
 
                 if(query.equals(""))
-                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
+                    ((BaseListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
                 else
-                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter(query);
+                    ((BaseListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter(query);
 
                 Log.i("Nomad", "onQueryTextSubmit");
                 return false;
@@ -224,7 +167,7 @@ public class EventsActivity extends FragmentActivity {
                         findFragmentByTag("android:switcher:" + R.id.pager_event_content + ":" + pager.getCurrentItem());
 
                 if(newText.equals(""))
-                    ((EventListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
+                    ((BaseListAdapter)(fragment.getRcyvEventList().getAdapter())).getFilter().filter("");
 
                 Log.i("Nomad", "onQueryTextChange");
                 return false;

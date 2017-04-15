@@ -6,14 +6,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 
+import com.nju.urbangreen.zhenjiangurbangreen.events.OneEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Created by lxs on 2017/1/11.
+ * Created by lxs on 2017/1/11./////////////Fragment这一个层次不抽象出来
  */
 public class BaseListFragment extends Fragment {
     protected SwipeRefreshLayout refreshLayout;
     protected RecyclerView recyclerList;
     protected RecyclerView.Adapter<RecyclerView.ViewHolder> listAdapter;
     private int position;//当前页面位置
+    private List<OneEvent> baseRecordList = new ArrayList<>();
+    private BaseListAdapter baseListAdapter;
 
     public static BaseListFragment newInstance(int position)
     {

@@ -53,4 +53,18 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <!-- Inspects Records-->
+    <style name="InspectRecord">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Maintains Records-->
+    <style name="MaintainRecord">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

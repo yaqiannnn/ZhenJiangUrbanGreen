@@ -21,32 +21,32 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_one_event_name"
-                style="@style/EventRecord"
+                android:id="@+id/tv_one_maintain_name"
+                style="@style/MaintainRecord"
                 android:layout_width="match_parent"
                 android:layout_height="30dp">
 
             </TextView>
 
             <TextView
-                android:id="@+id/tv_one_event_registrar"
-                style="@style/EventRecord"
+                android:id="@+id/tv_one_maintain_registrar"
+                style="@style/MaintainRecord"
                 android:layout_width="match_parent"
                 android:layout_height="30dp">
 
             </TextView>
 
             <TextView
-                android:id="@+id/tv_one_event_location"
-                style="@style/EventRecord"
+                android:id="@+id/tv_one_maintain_location"
+                style="@style/MaintainRecord"
                 android:layout_width="match_parent"
                 android:layout_height="30dp">
 
             </TextView>
 
             <TextView
-                android:id="@+id/tv_one_event_date_time"
-                style="@style/EventRecord"
+                android:id="@+id/tv_one_maintain_date_time"
+                style="@style/MaintainRecord"
                 android:layout_width="match_parent"
                 android:layout_height="30dp">
 
@@ -58,9 +58,8 @@
             android:layout_height="match_parent">
 
             <ImageButton
+                android:id="@+id/imgbtn_maintain_location"
                 android:background="@drawable/ic_btn_location"
-                android:id="@+id/imgbtn_event_location"
-
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentTop="true"
@@ -68,7 +67,7 @@
                 android:layout_marginTop="5dp" />
 
             <ImageButton
-                android:id="@+id/imgbtn_event_detail"
+                android:id="@+id/imgbtn_maintain_detail"
                 android:background="@drawable/ic_btn_detail"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
