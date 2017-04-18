@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout
+        android:id="@+id/ly_baserecord_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary" />
+
+    <com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip
+        android:layout_below="@+id/ly_baserecord_title_bar"
+        android:id="@+id/psts_baserecord"
+        app:pstsIndicatorHeight="2dp"
+        app:pstsShouldExpand="true"
+        app:pstsTabPaddingLeftRight="2dp"
+        app:pstsUnderlineHeight="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <android.support.v4.view.ViewPager
+        android:layout_below="@+id/psts_baserecord"
+        android:id="@+id/vp_baserecord_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fltbtn_add_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_floatingbtn_add" />
+</RelativeLayout>

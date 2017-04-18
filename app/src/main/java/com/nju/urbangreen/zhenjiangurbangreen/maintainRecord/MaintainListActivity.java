@@ -2,124 +2,118 @@ package com.nju.urbangreen.zhenjiangurbangreen.maintainRecord;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
+import com.nju.urbangreen.zhenjiangurbangreen.events.EventListFragment;
+import com.nju.urbangreen.zhenjiangurbangreen.events.EventRegisterActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+public class MaintainListActivity extends FragmentActivity {
+    private TitleBarLayout titleBarLayout;//标题栏
+    private PagerSlidingTabStrip tabs;//顶部选项卡
+    private ViewPager pager;
+    public MaintainPagerAdapter adapter;
+    private FloatingActionButton fbtnAddMaintain;//悬浮按钮
 
-public class MaintainListActivity extends AppCompatActivity {
+    private String[] tabTitles = {"待上传", "已上传"};
 
-    private Toolbar mToolbar;
-    private RecyclerView recyclerMaintainList;
-    private SearchView searchView;
-    private FloatingActionButton floatingbtnAddMaintain;
-    private TitleBarLayout titleBarLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
         ActivityCollector.addActivity(this);
         setContentView(R.layout.activity_maintain_list);
-        super.onCreate(savedInstanceState);
-
-        recyclerMaintainList=(RecyclerView)findViewById(R.id.recycler_maintain_list);
-        mToolbar=(Toolbar)findViewById(R.id.Toolbar);
-        floatingbtnAddMaintain=(FloatingActionButton)findViewById(R.id.floatingbtn_add_maintain);
-        floatingbtnAddMaintain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(MaintainListActivity.this,MaintainInfoActivity.class);
-                startActivity(intent);
-            }
-        });
-        //initToolbar();
-        initTitleBarLayout();
-        initMaintainList();
+        initViews();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         ActivityCollector.removeActivity(this);
+        Log.i("管养活动", "onDestroy");
+        if (titleBarLayout.recoverReceiver != null) {
+            unregisterReceiver(titleBarLayout.recoverReceiver);
+        }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_toolbar_search,menu);
-        MenuItem searchMenuItem=menu.findItem(R.id.menu_toolbar_item_search);
-        searchView=(SearchView) MenuItemCompat.getActionView(searchMenuItem);
-        searchView.onActionViewCollapsed();
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+    //pager的适配器
+    public class MaintainPagerAdapter extends FragmentPagerAdapter {
+
+        private String[] TITLES;
+        private MaintainListFragment currFragment;
+
+        public MaintainPagerAdapter(FragmentManager fm, String[] tabTitles) {
+            super(fm);
+            this.TITLES = tabTitles;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return MaintainListFragment.newInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            return TITLES.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return TITLES[position];
+        }
+
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            super.setPrimaryItem(container, position, object);
+            currFragment = (MaintainListFragment) object;
+        }
+
+
+        public MaintainListFragment getCurrFragment() {
+            return currFragment;
+        }
+
+    }
+
+    //初始化控件
+    public void initViews() {
+        setTitleBarLayout();
+
+
+        tabs = (PagerSlidingTabStrip) findViewById(R.id.psts_maintain);
+
+        pager = (ViewPager) findViewById(R.id.vp_maintain_content);
+        fbtnAddMaintain = (FloatingActionButton) findViewById(R.id.floatingbtn_add_maintain);
+        fbtnAddMaintain.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onClose() {
-                ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter("");
-                return false;
+            public void onClick(View view) {
+                Intent intent = new Intent(MaintainListActivity.this, EventRegisterActivity.class);
+                startActivity(intent);
             }
         });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter(query);
-                return true;
-            }
+        adapter = new MaintainPagerAdapter(getSupportFragmentManager(), tabTitles);
+        pager.setAdapter(adapter);
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if(newText.equals(""))
-                    ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter("");
-                return true;
-            }
-        });
-        searchView.setIconified(true);
-        return true;
+        tabs.setViewPager(pager);
+        tabs.setTextSize(40);
+
     }
 
-    private void initMaintainList()
-    {
-        List<MaintainObject> maintainList=new ArrayList<>();
-        maintainList.add(new MaintainObject("82301","00000003","镇江养护公司（ID）","浇水排水","张三",
-                new Date(116,10,7), "维护"));
-        maintainList.add(new MaintainObject("07702","00000013","镇江养护公司（ID）","安全施工","张三",
-                new Date(116,9,3), "维护"));
-        maintainList.add(new MaintainObject("82453","00000023","镇江养护公司（ID）","松土除草","张三",
-                new Date(116,11,15), "维护"));
-        maintainList.add(new MaintainObject("82705","00000083","镇江养护公司（ID）","松土除草","张三",
-                new Date(115,10,25), "维护"));
-        recyclerMaintainList.setLayoutManager(new LinearLayoutManager(this));
-        recyclerMaintainList.setAdapter(new MaintainListAdapter(maintainList));
-    }
-
-    private void initToolbar()
-    {
-        mToolbar.setTitle("养护记录");
-        mToolbar.setTitleTextColor(getResources().getColor(R.color.colorBackground));
-        setSupportActionBar(mToolbar);
-        mToolbar.setMinimumHeight(50);
-        mToolbar.setNavigationIcon(R.drawable.ic_toolbar_back);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MaintainListActivity.this.finish();
-            }
-        });
-    }
-
-    private void initTitleBarLayout(){
+    public void setTitleBarLayout() {
+        //初始化TitleBarLayout
         titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_maintain_list_title_bar);
         titleBarLayout.setTitleText("管养记录");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
@@ -128,18 +122,27 @@ public class MaintainListActivity extends AppCompatActivity {
                 finish();
             }
         });
+        //右侧的自定义按钮此时为搜索按钮，点击是会显示出TitleSearchView
         titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_search);
         titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //显示出TitleSearchView
                 titleBarLayout.setTsvSearchAvailable();
             }
         });
+        //获取TitleSearchView
         TitleSearchView searchView = titleBarLayout.getSearchView();
+
+        //设置TitleSearchView的监听事件
         searchView.setOnCloseListener(new TitleSearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter("");
+                //获取当前的fragment
+                MaintainListFragment fragment = (MaintainListFragment) getSupportFragmentManager().
+                        findFragmentByTag("android:switcher:" + R.id.vp_maintain_content + ":" + pager.getCurrentItem());
+
+                ((BaseListAdapter) (fragment.getRcyvMaintainList().getAdapter())).getFilter().filter("");
                 return false;
             }
         });
@@ -147,16 +150,36 @@ public class MaintainListActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new TitleSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter(query);
+                //获取当前的fragment
+                MaintainListFragment fragment = (MaintainListFragment) getSupportFragmentManager().
+                        findFragmentByTag("android:switcher:" + R.id.vp_maintain_content + ":" + pager.getCurrentItem());
+
+                if (query.equals(""))
+                    ((BaseListAdapter) (fragment.getRcyvMaintainList().getAdapter())).getFilter().filter("");
+                else
+                    ((BaseListAdapter) (fragment.getRcyvMaintainList().getAdapter())).getFilter().filter(query);
+
+                Log.i("Nomad", "onQueryTextSubmit");
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText.equals(""))
-                    ((MaintainListAdapter)recyclerMaintainList.getAdapter()).getFilter().filter("");
+                //获取当前的fragment
+                MaintainListFragment fragment = (MaintainListFragment) getSupportFragmentManager().
+                        findFragmentByTag("android:switcher:" + R.id.vp_maintain_content + ":" + pager.getCurrentItem());
+
+                if (newText.equals(""))
+                    ((BaseListAdapter) (fragment.getRcyvMaintainList().getAdapter())).getFilter().filter("");
+
+                Log.i("Nomad", "onQueryTextChange");
                 return false;
             }
         });
     }
+
+    public TitleSearchView getSearchView() {
+        return titleBarLayout.getSearchView();
+    }
+
 }
