@@ -110,7 +110,7 @@ public class EventRegisterActivity extends AppCompatActivity {
         //初始化可编辑下拉框
         dropdownEditText = (DropdownEditText) findViewById(R.id.droplist_event_register_type);
         ArrayList<String> dropdownList = new ArrayList<>();
-        dropdownList.addAll(Arrays.asList(getResources().getStringArray(R.array.maintainTypeDropList)));
+        dropdownList.addAll(Arrays.asList(getResources().getStringArray(R.array.eventTypeDropList)));
         dropdownEditText.setDropdownList(dropdownList);
 
         //初始化日期选择框
@@ -217,31 +217,31 @@ public class EventRegisterActivity extends AppCompatActivity {
      */
     private void processBack(){
         //如果用户没有填写编号，就会弹框提示一下
-//        if(etCode.getText().toString().equals("")){
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("温馨提示");
-//            builder.setMessage("您没有填写事件编号，返回后相关信息不会保存");
-//            builder.setCancelable(false);
-//            builder.setPositiveButton("仍然退出", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//                    finish();
-//                }
-//            });
-//            builder.setNegativeButton("继续编辑", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//                    dialogInterface.dismiss();
-//                }
-//            });
-//            builder.show();
-//        }
-//        else{
-//            if(oneEvent == null){//oneEvent为null，说明不是从详情按钮过来的
-//                Toast.makeText(this,"事件登记成功~",Toast.LENGTH_SHORT).show();
-//                saveTempViewData();
-//            }
-//            finish();
-//        }
+        if(etCode.getText().toString().equals("")){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("温馨提示");
+            builder.setMessage("您没有填写事件编号，返回后相关信息不会保存");
+            builder.setCancelable(false);
+            builder.setPositiveButton("仍然退出", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            builder.setNegativeButton("继续编辑", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            builder.show();
+        }
+        else{
+            if(oneEvent == null){//oneEvent为null，说明不是从详情按钮过来的
+                Toast.makeText(this,"事件登记成功~",Toast.LENGTH_SHORT).show();
+                saveTempViewData();
+            }
+            finish();
+        }
     }
 }

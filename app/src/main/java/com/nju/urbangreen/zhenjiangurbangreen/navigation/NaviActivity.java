@@ -5,12 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
-import com.nju.urbangreen.zhenjiangurbangreen.events.EventsActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity2;
 import com.nju.urbangreen.zhenjiangurbangreen.settings.SettingsActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
@@ -68,7 +68,7 @@ public class NaviActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.imgbtn_events_record:
-                intent = new Intent(NaviActivity.this, EventsActivity.class);
+                intent = new Intent(NaviActivity.this, EventListActivity.class);
                 startActivity(intent);
                 break;
             case R.id.imgbtn_maintain_record:

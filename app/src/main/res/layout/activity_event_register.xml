@@ -39,9 +39,10 @@
                     <TextView
                         style="@style/RecordItemTitle"
                         android:text="事件编号" />
-                    <TextView
+                    <EditText
                         android:id="@+id/edit_event_register_code"
-                        style="@style/RecordItemText" />
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext"  />
                 </TableRow>
 
                 <TableRow style="@style/RecordItem">
