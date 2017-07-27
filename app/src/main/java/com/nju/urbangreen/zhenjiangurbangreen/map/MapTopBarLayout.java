@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import butterknife.BindView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.navigation.NaviActivity;
@@ -19,8 +20,12 @@ import com.nju.urbangreen.zhenjiangurbangreen.search.SearchActivity;
  * Created by HCQIN on 2016/9/29.
  */
 public class MapTopBarLayout extends LinearLayout {
-    private ImageButton imgBtnMenu;
-    private EditText etSearch;
+
+    @BindView(R.id.btn_map_menu)
+    public ImageButton imgBtnMenu;
+
+    @BindView(R.id.et_search)
+    public EditText etSearch;
     final Context mContext = null;
 
     public MapTopBarLayout(Context context, AttributeSet attrs) {
@@ -29,8 +34,8 @@ public class MapTopBarLayout extends LinearLayout {
         super(context, attrs);
         final Context mContext = context;
         View view = LayoutInflater.from(context).inflate(R.layout.map_top_bar,this);
-        imgBtnMenu = (ImageButton) findViewById(R.id.btn_map_menu);
-        etSearch = (EditText) findViewById(R.id.et_search);
+        // imgBtnMenu = (ImageButton) findViewById(R.id.btn_map_menu);
+        // etSearch = (EditText) findViewById(R.id.et_search);
         imgBtnMenu.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

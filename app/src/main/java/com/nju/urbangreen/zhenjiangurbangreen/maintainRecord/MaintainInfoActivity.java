@@ -14,6 +14,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import butterknife.BindView;
+
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
@@ -28,21 +30,43 @@ import java.util.Date;
 
 public class MaintainInfoActivity extends AppCompatActivity {
 
-    private TitleBarLayout titleBarLayout;//标题栏
-    private TextView tvMaintainID;
-    private TextView tvMaintainCode;
-    private EditText etMaintainDate;
-    private DropdownEditText dropdownMaintainType;
-    private DatePickerDialog dtpckMaintainDate;
-    private EditText etMaintainStaff;
-    private EditText etMaintainCompany;
-    private EditText etMaintainContent;
-    private TextView tvLoggerID;
-    private TextView tvLogTime;
-    private TextView tvLasEditorPID;
-    private AppCompatButton btnAttachment;
+    @BindView(R.id.ly_maintainInfo_title_bar)
+    public TitleBarLayout titleBarLayout;//标题栏
 
+    @BindView(R.id.tv_maintainInfo_ID)
+    public TextView tvMaintainID;
 
+    @BindView(R.id.tv_maintainInfo_code)
+    public TextView tvMaintainCode;
+
+    @BindView(R.id.et_maintainInfo_date)
+    public EditText etMaintainDate;
+
+    @BindView(R.id.droplist_maintainInfo_type)
+    public DropdownEditText dropdownMaintainType;
+
+    @BindView(R.id.et_maintainInfo_staff)
+    public EditText etMaintainStaff;
+
+    @BindView(R.id.et_maintainInfo_companyID)
+    public EditText etMaintainCompany;
+
+    @BindView(R.id.et_maintainInfo_content)
+    public EditText etMaintainContent;
+
+    @BindView(R.id.tv_maintainInfo_LoggerPID)
+    public TextView tvLoggerID;
+
+    @BindView(R.id.tv_maintainInfo_LogTime)
+    public TextView tvLogTime;
+
+    @BindView(R.id.tv_maintainInfo_LastEditorPID)
+    public TextView tvLasEditorPID;
+
+    @BindView(R.id.btn_maintainInfo_attachment)
+    public AppCompatButton btnAttachment;
+
+    public DatePickerDialog dtpckMaintainDate;
     private MaintainObject myObject;
     private int updateState;
     @Override
@@ -61,35 +85,35 @@ public class MaintainInfoActivity extends AppCompatActivity {
             myObject=(MaintainObject)intent.getSerializableExtra("MaintainInfo");
 
         setContentView(R.layout.activity_maintain_register);
-        tvMaintainID=(TextView)findViewById(R.id.tv_maintainInfo_ID);
+        // tvMaintainID=(TextView)findViewById(R.id.tv_maintainInfo_ID);
         tvMaintainID.setText(myObject.getID());
-        tvMaintainCode=(TextView)findViewById(R.id.tv_maintainInfo_code);
+        // tvMaintainCode=(TextView)findViewById(R.id.tv_maintainInfo_code);
         tvMaintainCode.setText(myObject.getCode());
 
-        dropdownMaintainType =(DropdownEditText)findViewById(R.id.droplist_maintainInfo_type);
+        // dropdownMaintainType =(DropdownEditText)findViewById(R.id.droplist_maintainInfo_type);
         ArrayList<String> dropdownList = new ArrayList<>();
         dropdownList.addAll(Arrays.asList(getResources().getStringArray(R.array.maintainTypeDropList)));
         dropdownMaintainType.setDropdownList(dropdownList);
         dropdownMaintainType.setText(myObject.getMaintainType());
 
-        etMaintainDate =(EditText)findViewById(R.id.et_maintainInfo_date);
+        // etMaintainDate =(EditText)findViewById(R.id.et_maintainInfo_date);
         initDatePicker();
-        etMaintainStaff=(EditText) findViewById(R.id.et_maintainInfo_staff);
+        // etMaintainStaff=(EditText) findViewById(R.id.et_maintainInfo_staff);
         etMaintainStaff.setText(myObject.getMaintainStaff());
         etMaintainStaff.addTextChangedListener(new myTextWatcher(etMaintainStaff));
-        etMaintainCompany=(EditText) findViewById(R.id.et_maintainInfo_companyID);
+        // etMaintainCompany=(EditText) findViewById(R.id.et_maintainInfo_companyID);
         etMaintainCompany.setText(myObject.getCompanyID());
-        etMaintainContent=(EditText) findViewById(R.id.et_maintainInfo_content);
+        // etMaintainContent=(EditText) findViewById(R.id.et_maintainInfo_content);
         etMaintainContent.setText(myObject.getContent());
-        tvLoggerID=(TextView)findViewById(R.id.tv_maintainInfo_LoggerPID);
+        // tvLoggerID=(TextView)findViewById(R.id.tv_maintainInfo_LoggerPID);
         tvLoggerID.setText(myObject.getLoggerPID());
-        tvLogTime=(TextView)findViewById(R.id.tv_maintainInfo_LogTime);
+        // tvLogTime=(TextView)findViewById(R.id.tv_maintainInfo_LogTime);
         tvLogTime.setText(myObject.getLogTime());
-        tvLasEditorPID=(TextView)findViewById(R.id.tv_maintainInfo_LastEditorPID);
+        // tvLasEditorPID=(TextView)findViewById(R.id.tv_maintainInfo_LastEditorPID);
         tvLasEditorPID.setText(myObject.getLastEditorPID());
 
         //初始化标题栏
-        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_maintainInfo_title_bar);
+        // titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_maintainInfo_title_bar);
         titleBarLayout.setTitleText("养护记录登记");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +132,7 @@ public class MaintainInfoActivity extends AppCompatActivity {
             }
         });
 
-        btnAttachment=(AppCompatButton)findViewById(R.id.btn_maintainInfo_attachment);
+        // btnAttachment=(AppCompatButton)findViewById(R.id.btn_maintainInfo_attachment);
         btnAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

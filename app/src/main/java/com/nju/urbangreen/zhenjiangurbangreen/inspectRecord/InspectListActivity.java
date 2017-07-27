@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.BindView;
+
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListFragment;
@@ -23,12 +25,19 @@ import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
 public class InspectListActivity extends AppCompatActivity {
 
-    private TitleBarLayout titleBarLayout;//标题栏
-    private PagerSlidingTabStrip tabs;//顶部选项卡
-    private ViewPager pager;
-    public InspectPagerAdapter adapter;
-    private FloatingActionButton fbtnAddInspect;//悬浮按钮
+    @BindView(R.id.ly_inspect_list_title_bar)
+    public TitleBarLayout titleBarLayout;//标题栏
 
+    @BindView(R.id.psts_inspect)
+    public PagerSlidingTabStrip tabs;//顶部选项卡
+
+    @BindView(R.id.vp_inspect_content)
+    public ViewPager pager;
+
+    @BindView(R.id.floatingbtn_add_inspect)
+    public FloatingActionButton fbtnAddInspect;//悬浮按钮
+
+    public InspectPagerAdapter adapter;
     private String[] tabTitles={"待上传","已上传"};
 
     @Override
@@ -92,10 +101,10 @@ public class InspectListActivity extends AppCompatActivity {
     public void initViews(){
         setTitleBarLayout();
 
-        tabs = (PagerSlidingTabStrip) findViewById(R.id.psts_inspect);
+        // tabs = (PagerSlidingTabStrip) findViewById(R.id.psts_inspect);
 
-        pager = (ViewPager) findViewById(R.id.vp_inspect_content);
-        fbtnAddInspect = (FloatingActionButton) findViewById(R.id.floatingbtn_add_inspect);
+        // pager = (ViewPager) findViewById(R.id.vp_inspect_content);
+        // fbtnAddInspect = (FloatingActionButton) findViewById(R.id.floatingbtn_add_inspect);
         fbtnAddInspect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +121,7 @@ public class InspectListActivity extends AppCompatActivity {
     }
     public void setTitleBarLayout(){
         //初始化TitleBarLayout
-        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_inspect_list_title_bar);
+        // titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_inspect_list_title_bar);
         titleBarLayout.setTitleText("巡查记录");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override

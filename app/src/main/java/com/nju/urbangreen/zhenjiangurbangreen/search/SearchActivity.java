@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ListView;
+import butterknife.BindView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
@@ -23,10 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
-    private Toolbar mToolbar;
-    private SearchView searchView;
-    private ListView suggestionList_listView;
-    private RecyclerView searchResult_recyclerView;
+    
+    @BindView(R.id.Toolbar)
+    public Toolbar mToolbar;
+    public SearchView searchView;
+
+    @BindView(R.id.listView_suggestionList)
+    public ListView suggestionList_listView;
+
+    @BindView(R.id.recyclerView_searchResult)
+    public RecyclerView searchResult_recyclerView;
     private List<String> suggestionList;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,9 +91,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     private void initViews()
     {
         setContentView(R.layout.activity_search);
-        mToolbar=(Toolbar)findViewById(R.id.Toolbar);
-        suggestionList_listView=(ListView)findViewById(R.id.listView_suggestionList);
-        searchResult_recyclerView=(RecyclerView)findViewById(R.id.recyclerView_searchResult);
+        // mToolbar=(Toolbar)findViewById(R.id.Toolbar);
+        // suggestionList_listView=(ListView)findViewById(R.id.listView_suggestionList);
+        // searchResult_recyclerView=(RecyclerView)findViewById(R.id.recyclerView_searchResult);
         initToolbar();
     }
     private void initToolbar()

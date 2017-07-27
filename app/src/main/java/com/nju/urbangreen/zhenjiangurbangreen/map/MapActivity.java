@@ -33,6 +33,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+import butterknife.BindView;
 
 import com.esri.android.map.Callout;
 import com.esri.android.map.GraphicsLayer;
@@ -65,7 +66,8 @@ import java.util.Map;
 
 public class MapActivity extends Activity {
 
-    private MapView map = null;
+    @BindView(R.id.map_main)
+    public MapView map = null;
 
     private double distance = 500.0;
 
@@ -98,21 +100,26 @@ public class MapActivity extends Activity {
     String tpkFileName = null;
 
     //定位按钮
-    private ImageButton imgBtnLocate;
+    @BindView(R.id.imgbtn_locate)
+    public ImageButton imgBtnLocate;
 
     //图层控制按钮
-    private ImageButton imgBtnLayerSwitch;
+    @BindView(R.id.imgbtn_layer_switch)
+    public ImageButton imgBtnLayerSwitch;
 
     //全局显示按钮
-    private ImageButton imgBtnGlobalView;
+    @BindView(R.id.imgbtn_global_view)
+    public ImageButton imgBtnGlobalView;
 
     //显示周边开关
-    private CheckBox chkBoxNearby;
+    @BindView(R.id.cb_nearby)
+    public CheckBox chkBoxNearby;
 
     //点击图层控制按钮后弹出的popup窗口
     LayerSwitchPopupWindow layerSwitchPopupWindow;
 
-    View bottomBar;
+    @BindView(R.id.bottombar)
+    public View bottomBar;
 
     GraphicsLayer greenTreeLayer;
     GraphicsLayer ancientTreeLayer;
@@ -130,10 +137,10 @@ public class MapActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_map);
 
-        bottomBar = findViewById(R.id.bottombar);
+        // bottomBar = findViewById(R.id.bottombar);
         ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
 
-        map = (MapView) findViewById(R.id.map_main);
+        // map = (MapView) findViewById(R.id.map_main);
         callout = map.getCallout();
 
         //新建一个离线地图图层并添加到mapview中
@@ -341,7 +348,7 @@ public class MapActivity extends Activity {
     * 设置全局显示按钮
     * */
     private void setGlobalViewButton(){
-        imgBtnGlobalView = (ImageButton) findViewById(R.id.imgbtn_global_view);
+        // imgBtnGlobalView = (ImageButton) findViewById(R.id.imgbtn_global_view);
         imgBtnGlobalView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -358,7 +365,7 @@ public class MapActivity extends Activity {
     * 设置定位按钮
     * */
     private void setLocateButton(){
-        imgBtnLocate = (ImageButton) findViewById(R.id.imgbtn_locate);
+        // imgBtnLocate = (ImageButton) findViewById(R.id.imgbtn_locate);
         imgBtnLocate.setOnClickListener(new LocateButtonListener());
         locationLayer = new GraphicsLayer();
 
@@ -385,7 +392,7 @@ public class MapActivity extends Activity {
 
             }
         });
-        imgBtnLayerSwitch = (ImageButton) findViewById(R.id.imgbtn_layer_switch);
+        // imgBtnLayerSwitch = (ImageButton) findViewById(R.id.imgbtn_layer_switch);
         imgBtnLayerSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -418,7 +425,7 @@ public class MapActivity extends Activity {
         nearbyLocListener = new NearbyLocListener();
         nearbyLocMag = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        chkBoxNearby = (CheckBox) findViewById(R.id.cb_nearby);
+        // chkBoxNearby = (CheckBox) findViewById(R.id.cb_nearby);
         chkBoxNearby.setChecked(false);
 
         chkBoxNearby.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

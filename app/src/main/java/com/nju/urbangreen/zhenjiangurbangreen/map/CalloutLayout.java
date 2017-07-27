@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import butterknife.BindView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
@@ -14,19 +15,26 @@ import com.nju.urbangreen.zhenjiangurbangreen.R;
  */
 public class CalloutLayout extends LinearLayout implements View.OnClickListener{
 
-    Button btnAddMaintainRecord;
-    Button btnAddInspectRecord;
-    Button btnAddEventRecord;
-    Button btnBasicInfo;
+    @BindView(R.id.btn_add_maintan_record)
+    public Button btnAddMaintainRecord;
+
+    @BindView(R.id.btn_add_inspect_record)
+    public Button btnAddInspectRecord;
+
+    @BindView(R.id.btn_add_event_record)
+    public Button btnAddEventRecord;
+
+    @BindView(R.id.btn_basic_info)
+    public Button btnBasicInfo;
 
     public CalloutLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.map_callout,this);
 
-        btnAddMaintainRecord = (Button) findViewById(R.id.btn_add_maintan_record);
-        btnAddInspectRecord = (Button) findViewById(R.id.btn_add_inspect_record);
-        btnAddEventRecord = (Button) findViewById(R.id.btn_add_event_record);
-        btnBasicInfo = (Button) findViewById(R.id.btn_basic_info);
+        // btnAddMaintainRecord = (Button) findViewById(R.id.btn_add_maintan_record);
+        // btnAddInspectRecord = (Button) findViewById(R.id.btn_add_inspect_record);
+        // btnAddEventRecord = (Button) findViewById(R.id.btn_add_event_record);
+        // btnBasicInfo = (Button) findViewById(R.id.btn_basic_info);
 
     }
 

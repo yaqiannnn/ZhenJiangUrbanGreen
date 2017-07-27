@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.BindView;
+
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListFragment;
@@ -23,12 +25,20 @@ import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
 public class MaintainListActivity extends FragmentActivity {
-    private TitleBarLayout titleBarLayout;//标题栏
-    private PagerSlidingTabStrip tabs;//顶部选项卡
-    private ViewPager pager;
-    public MaintainPagerAdapter adapter;
-    private FloatingActionButton fbtnAddMaintain;//悬浮按钮
 
+    @BindView(R.id.ly_maintain_list_title_bar)
+    public TitleBarLayout titleBarLayout;//标题栏
+
+    @BindView(R.id.psts_maintain)
+    public PagerSlidingTabStrip tabs;//顶部选项卡
+
+    @BindView(R.id.vp_maintain_content)
+    public ViewPager pager;
+
+    @BindView(R>id.floatingbtn_add_maintain)
+    public FloatingActionButton fbtnAddMaintain;//悬浮按钮
+
+    public MaintainPagerAdapter adapter;
     private String[] tabTitles = {"待上传", "已上传"};
 
     @Override
@@ -93,10 +103,10 @@ public class MaintainListActivity extends FragmentActivity {
         setTitleBarLayout();
 
 
-        tabs = (PagerSlidingTabStrip) findViewById(R.id.psts_maintain);
+        // tabs = (PagerSlidingTabStrip) findViewById(R.id.psts_maintain);
 
-        pager = (ViewPager) findViewById(R.id.vp_maintain_content);
-        fbtnAddMaintain = (FloatingActionButton) findViewById(R.id.floatingbtn_add_maintain);
+        // pager = (ViewPager) findViewById(R.id.vp_maintain_content);
+        // fbtnAddMaintain = (FloatingActionButton) findViewById(R.id.floatingbtn_add_maintain);
         fbtnAddMaintain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,7 +124,7 @@ public class MaintainListActivity extends FragmentActivity {
 
     public void setTitleBarLayout() {
         //初始化TitleBarLayout
-        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_maintain_list_title_bar);
+        // titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_maintain_list_title_bar);
         titleBarLayout.setTitleText("管养记录");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override

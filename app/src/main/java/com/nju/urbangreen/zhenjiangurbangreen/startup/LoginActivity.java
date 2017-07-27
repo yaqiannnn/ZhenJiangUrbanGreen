@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import butterknife.BindView;
 
 import com.google.gson.Gson;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
@@ -46,9 +47,16 @@ public class LoginActivity extends Activity {
     public static final String SOAP_ADDRESS = "http://192.168.0.106:82/WebService.asmx";
     ConnectivityManager connectivityManager;
     NetworkInfo networkInfo;
-    private EditText etUserName;
-    private EditText etPassword;
-    private Button btnLogin;
+
+    @BindView(R.id.edit_username)
+    public EditText etUserName;
+
+    @BindView(R.id.edit_password)
+    public EditText etPassword;
+
+    @BindView(R.id.btn_login)
+    public Button btnLogin;
+    
     private String username;
     private String password;
     private Boolean flag = false;
@@ -125,9 +133,9 @@ public class LoginActivity extends Activity {
 
     public void setLoginButton(){
 
-        etUserName = (EditText) findViewById(R.id.edit_username);
-        etPassword = (EditText) findViewById(R.id.edit_password);
-        btnLogin = (Button) findViewById(R.id.btn_login);
+        // etUserName = (EditText) findViewById(R.id.edit_username);
+        // etPassword = (EditText) findViewById(R.id.edit_password);
+        // btnLogin = (Button) findViewById(R.id.btn_login);
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {

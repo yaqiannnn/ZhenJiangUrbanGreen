@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
+import butterknife.BindView;
 
 import com.google.gson.Gson;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
@@ -55,9 +56,15 @@ public class SettingsActivity extends Activity {
             ((AlertDialog.Builder) msg.obj).show();
         }
     };
-    private Button btnHandUpdate;
-    private Button btnLogout;
-    private TitleBarLayout titleBarLayout;
+
+    @BindView(R.id.btn_check_update)
+    public Button btnHandUpdate;
+
+    @BindView(R.id.btn_logout)
+    public Button btnLogout;
+
+    @BindView(R.id.ly_settings_title_bar)
+    public TitleBarLayout titleBarLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ActivityCollector.addActivity(this);
@@ -76,7 +83,7 @@ public class SettingsActivity extends Activity {
     }
 
     private void setHandUpdateButton(){
-        btnHandUpdate = (Button) findViewById(R.id.btn_check_update);
+        // btnHandUpdate = (Button) findViewById(R.id.btn_check_update);
         btnHandUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,7 +167,7 @@ public class SettingsActivity extends Activity {
     }
 
     private void setLogoutButton(){
-        btnLogout = (Button) findViewById(R.id.btn_logout);
+        // btnLogout = (Button) findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -192,7 +199,7 @@ public class SettingsActivity extends Activity {
 
 
     private void setTitleBar(){
-        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_settings_title_bar);
+        // titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_settings_title_bar);
         titleBarLayout.setTitleText("设置");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override

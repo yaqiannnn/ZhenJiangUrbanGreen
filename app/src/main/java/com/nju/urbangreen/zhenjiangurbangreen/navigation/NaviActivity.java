@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import butterknife.BindView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
@@ -17,11 +18,20 @@ import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
 public class NaviActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private TitleBarLayout titleBarLayout;
-    private ImageButton imgBtnSettings;
-    private ImageButton imgBtnEvents;
-    private ImageButton imgBtnMaintain;
-    private ImageButton imgBtnInspect;
+    @BindView(R.id.ly_navi_title_bar)
+    public TitleBarLayout titleBarLayout;
+
+    @BindView(R.id.imgbtn_settings)
+    public ImageButton imgBtnSettings;
+
+    @BindView(R.id.imgbtn_events_record)
+    public ImageButton imgBtnEvents;
+
+    @BindView(R.id.imgbtn_maintain_record)
+    public ImageButton imgBtnMaintain;
+
+    @BindView(R.id.imgbtn_inspection_record)
+    public ImageButton imgBtnInspect;
 
     Intent intent = null;
     @Override
@@ -31,19 +41,19 @@ public class NaviActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navi);
 
-        imgBtnSettings = (ImageButton) findViewById(R.id.imgbtn_settings);
+        // imgBtnSettings = (ImageButton) findViewById(R.id.imgbtn_settings);
         imgBtnSettings.setOnClickListener(this);
 
-        imgBtnEvents = (ImageButton) findViewById(R.id.imgbtn_events_record);
+        // imgBtnEvents = (ImageButton) findViewById(R.id.imgbtn_events_record);
         imgBtnEvents.setOnClickListener(this);
 
-        imgBtnMaintain = (ImageButton) findViewById(R.id.imgbtn_maintain_record);
+        // imgBtnMaintain = (ImageButton) findViewById(R.id.imgbtn_maintain_record);
         imgBtnMaintain.setOnClickListener(this);
 
-        imgBtnInspect = (ImageButton) findViewById(R.id.imgbtn_inspection_record);
+        // imgBtnInspect = (ImageButton) findViewById(R.id.imgbtn_inspection_record);
         imgBtnInspect.setOnClickListener(this);
 
-        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_navi_title_bar);
+        // titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_navi_title_bar);
         titleBarLayout.setTitleText("功能选择");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override
