@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import butterknife.BindView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
@@ -32,8 +33,13 @@ import java.util.List;
 public class DropdownEditText extends LinearLayout {
 
     //DropdownEditText这个控件是由EditText，CheckBox共同构成的
-    private EditText etContent;
-    private CheckBox ivShowDropdown;//控制PopupWindow的弹出
+    @BindView(R.id.et_dropdown_content)
+    public EditText etContent;
+
+    @BindView(R.id.cb_dropdown_btn)
+    public CheckBox ivShowDropdown;//控制PopupWindow的弹出
+
+
     private PopupWindow popupWindow;
 
     private DropListView lvDropDownView = null;//PopupWindow的布局，是一个继承自ListView的列表
@@ -48,8 +54,8 @@ public class DropdownEditText extends LinearLayout {
 
         //初始化布局和控件
         lvDropDownView = (DropListView) LayoutInflater.from(context).inflate(R.layout.dropdown_popupwindow_list,null);
-        etContent = (EditText) findViewById(R.id.et_dropdown_content);
-        ivShowDropdown = (CheckBox) findViewById(R.id.cb_dropdown_btn);
+//        etContent = (EditText) findViewById(R.id.et_dropdown_content);
+//        ivShowDropdown = (CheckBox) findViewById(R.id.cb_dropdown_btn);
 
         ivShowDropdown.setOnClickListener(new OnClickListener() {
             @Override

@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.BindView;
+
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
@@ -21,11 +23,16 @@ import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
 public class EventListActivity extends FragmentActivity {
 
-    private TitleBarLayout titleBarLayout;//标题栏
-    private PagerSlidingTabStrip tabs;//顶部选项卡
-    private ViewPager pager;
+    @BindView(R.id.ly_events_list_title_bar)
+    public TitleBarLayout titleBarLayout;//标题栏
+    @BindView(R.id.pagetab_event)
+    public PagerSlidingTabStrip tabs;//顶部选项卡
+    @BindView(R.id.pager_event_content)
+    public ViewPager pager;
+    @BindView(R.id.floatingbtn_add_event)
+    public FloatingActionButton fbtnAddEvent;//悬浮按钮
+
     public EventPagerAdapter adapter;
-    private FloatingActionButton fbtnAddEvent;//悬浮按钮
 
     private String[] tabTitles={"待上传","已上传"};
     @Override
@@ -42,10 +49,10 @@ public class EventListActivity extends FragmentActivity {
         setTitleBarLayout();
 
 
-        tabs = (PagerSlidingTabStrip) findViewById(R.id.pagetab_event);
+//        tabs = (PagerSlidingTabStrip) findViewById(R.id.pagetab_event);
 
-        pager = (ViewPager) findViewById(R.id.pager_event_content);
-        fbtnAddEvent = (FloatingActionButton) findViewById(R.id.floatingbtn_add_event);
+//        pager = (ViewPager) findViewById(R.id.pager_event_content);
+//        fbtnAddEvent = (FloatingActionButton) findViewById(R.id.floatingbtn_add_event);
         fbtnAddEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,7 +118,7 @@ public class EventListActivity extends FragmentActivity {
 
     public void setTitleBarLayout(){
         //初始化TitleBarLayout
-        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_events_list_title_bar);
+//        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_events_list_title_bar);
         titleBarLayout.setTitleText("事件记录");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override

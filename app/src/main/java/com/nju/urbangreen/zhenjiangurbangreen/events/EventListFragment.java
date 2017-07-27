@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import butterknife.BindView;
+
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseRecordViewHolder;
@@ -24,8 +26,12 @@ import java.util.List;
  * Created by Liwei on 2017/4/13.
  */
 public class EventListFragment extends Fragment {
-    private SwipeRefreshLayout refreshLayout;//刷新布局
-    private RecyclerView rcyvEventList;
+
+    @BindView(R.id.recycler_event_list)
+    public RecyclerView rcyvEventList;
+    @BindView(R.id.ly_refresh_events)
+    public SwipeRefreshLayout refreshLayout;//刷新布局
+
     private static final String ARG_POSITION = "position";
     private int position;//记录当前所在页面的位置
 
@@ -61,7 +67,7 @@ public class EventListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_list,container,false);
-        rcyvEventList = (RecyclerView) view.findViewById(R.id.recycler_event_list);
+//        rcyvEventList = (RecyclerView) view.findViewById(R.id.recycler_event_list);
         eventListAdapter = new BaseListAdapter(getContext(),eventList,position) {
             @Override
             public int getItemLayoutId(int viewType) {
@@ -80,7 +86,7 @@ public class EventListFragment extends Fragment {
         rcyvEventList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcyvEventList.setAdapter(eventListAdapter);
 
-        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.ly_refresh_events);
+//        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.ly_refresh_events);
         refreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorEmptyWarning,
                 R.color.colorPrimaryDark,R.color.colorPrimary);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

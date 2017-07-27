@@ -18,20 +18,25 @@ import android.widget.TextView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
+import butterknife.BindView;
+
 /**
  * Created by Liwei on 2016/12/9.
  */
 public class TitleSearchView extends LinearLayout{
 
-    private EditText etSearch;
-    private ImageButton imgbtnCancel;
+    @BindView(R.id.et_title_searchview)
+    public EditText etSearch;
+    @BindView(R.id.imgbtn_title_searchview_cancel)
+    public ImageButton imgbtnCancel;
+
     private Context mContext;
     public TitleSearchView(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.title_searchview,this);
         mContext = context;
-        etSearch = (EditText) findViewById(R.id.et_title_searchview);
-        imgbtnCancel = (ImageButton) findViewById(R.id.imgbtn_title_searchview_cancel);
+//        etSearch = (EditText) findViewById(R.id.et_title_searchview);
+//        imgbtnCancel = (ImageButton) findViewById(R.id.imgbtn_title_searchview_cancel);
     }
 
     public void setOnCloseListener(final OnCloseListener listener){

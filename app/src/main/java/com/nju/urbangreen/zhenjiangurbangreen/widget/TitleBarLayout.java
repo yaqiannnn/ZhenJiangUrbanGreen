@@ -20,6 +20,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import butterknife.BindView;
+
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
 /**
@@ -28,10 +30,16 @@ import com.nju.urbangreen.zhenjiangurbangreen.R;
 public class TitleBarLayout extends LinearLayout {
     public static final String ACTION_SHOW_TITLE_LAYOUT = "com.nju.urbangreen.zhenjiangurbangreen." +
             "widget.TitleBarLayout.TitleRecoverReceiver";
-    private Button btnBack;
-    private TextView tvTitle;
-    private Button btnSelfDef;//自定义功能按钮，可以根据需求设置功能
-    private TitleSearchView tsvSearch;
+
+    @BindView(R.id.btn_title_back)
+    public Button btnBack;
+    @BindView(R.id.tv_title_text)
+    public TextView tvTitle;
+    @BindView(R.id.btn_title_self_def)
+    public Button btnSelfDef;//自定义功能按钮，可以根据需求设置功能
+    @BindView(R.id.tsv_title_search)
+    public TitleSearchView tsvSearch;
+
     private Context mContext;
     public TitleRecoverReceiver recoverReceiver;
 
@@ -39,10 +47,10 @@ public class TitleBarLayout extends LinearLayout {
         super(context, attrs);
         mContext = context;
         LayoutInflater.from(context).inflate(R.layout.title_bar,this);
-        btnBack = (Button) findViewById(R.id.btn_title_back);
-        tvTitle = (TextView) findViewById(R.id.tv_title_text);
-        btnSelfDef = (Button) findViewById(R.id.btn_title_self_def);
-        tsvSearch = (TitleSearchView) findViewById(R.id.tsv_title_search);
+//        btnBack = (Button) findViewById(R.id.btn_title_back);
+//        tvTitle = (TextView) findViewById(R.id.tv_title_text);
+//        btnSelfDef = (Button) findViewById(R.id.btn_title_self_def);
+//        tsvSearch = (TitleSearchView) findViewById(R.id.tsv_title_search);
 
         TitleRecoverReceiver recoverReceiver = new TitleRecoverReceiver();
         context.registerReceiver(recoverReceiver,new IntentFilter(ACTION_SHOW_TITLE_LAYOUT));

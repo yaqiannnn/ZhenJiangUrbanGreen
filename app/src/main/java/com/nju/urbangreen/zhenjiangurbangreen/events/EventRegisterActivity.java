@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.BindView;
+
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
@@ -28,30 +30,50 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import butterknife.BindView;
+
 public class EventRegisterActivity extends AppCompatActivity {
 
     private int state;
-    private TextView etCode;
-    private EditText etName;
-    private EditText etLocation;
-    private EditText etDamageDegree;
-    private EditText etLostFee;
-    private EditText etCompensation;
-    private EditText etRelevantPerson;
-    private EditText etRelevantLicensePlate;
-    private EditText etRelevantContact;
-    private EditText etRelevantCompany;
-    private EditText etRelevantAddress;
-    private EditText etDescription;
-    private EditText etReason;
-    private EditText etRelevantDescription;
 
+    @BindView(R.id.edit_event_register_code)
+    public TextView etCode;
+    @BindView(R.id.edit_event_register_name)
+    public EditText etName;
+    @BindView(R.id.edit_event_register_location)
+    public EditText etLocation;
+    @BindView(R.id.edit_event_register_damage_degree)
+    public EditText etDamageDegree;
+    @BindView(R.id.edit_event_register_lost_fee)
+    public EditText etLostFee;
+    @BindView(R.id.edit_event_register_compensation)
+    public EditText etCompensation;
+    @BindView(R.id.edit_event_register_relevant_person)
+    public EditText etRelevantPerson;
+    @BindView(R.id.edit_event_register_relevant_license_plate)
+    public EditText etRelevantLicensePlate;
+    @BindView(R.id.edit_event_register_relevant_contact)
+    public EditText etRelevantContact;
+    @BindView(R.id.edit_event_register_relevant_company)
+    public EditText etRelevantCompany;
+    @BindView(R.id.edit_event_register_relevant_address)
+    public EditText etRelevantAddress;
+    @BindView(R.id.edit_event_register_description)
+    public EditText etDescription;
+    @BindView(R.id.edit_event_register_reason)
+    public EditText etReason;
+    @BindView(R.id.edit_event_register_relevant_description)
+    public EditText etRelevantDescription;
 
-    private EditText etDateSelect;//日期选择编辑框
+    @BindView(R.id.edit_event_register_time)
+    public EditText etDateSelect;//日期选择编辑框
     private DatePickerDialog dtpckDateSelect;//日期选择dialog
-    private TitleBarLayout titleBarLayout;//标题栏
-    private DropdownEditText dropdownEditText;//事件类型选择的可编辑下拉列表，（已封装，可复用）
-    private Button btnAddAttachment;
+    @BindView(R.id.ly_events_register_title_bar)
+    public TitleBarLayout titleBarLayout;//标题栏
+    @BindView(R.id.droplist_event_register_type)
+    public DropdownEditText dropdownEditText;//事件类型选择的可编辑下拉列表，（已封装，可复用）
+    @BindView(R.id.btn_event_register_add_files)
+    public Button btnAddAttachment;
     private OneEvent oneEvent;//如果是从详情按钮启动的本活动，则需要获取一些事件的信息
 
     @Override
@@ -67,25 +89,24 @@ public class EventRegisterActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         oneEvent = (OneEvent) intent.getSerializableExtra("event");
-        //初始化一些简单的编辑框
-        etCode = (TextView) findViewById(R.id.edit_event_register_code);
-        etName = (EditText) findViewById(R.id.edit_event_register_name);
-        etLocation = (EditText) findViewById(R.id.edit_event_register_location);
-        etDamageDegree = (EditText) findViewById(R.id.edit_event_register_damage_degree);
-        etLostFee = (EditText) findViewById(R.id.edit_event_register_lost_fee);
-        etCompensation = (EditText) findViewById(R.id.edit_event_register_compensation);
-        etRelevantPerson = (EditText) findViewById(R.id.edit_event_register_relevant_person);
-        etRelevantLicensePlate = (EditText) findViewById(R.id.edit_event_register_relevant_license_plate);
-        etRelevantContact = (EditText) findViewById(R.id.edit_event_register_relevant_contact);
-        etRelevantCompany = (EditText) findViewById(R.id.edit_event_register_relevant_company);
-        etRelevantAddress = (EditText) findViewById(R.id.edit_event_register_relevant_address);
-        etDescription = (EditText) findViewById(R.id.edit_event_register_description);
-        etReason = (EditText) findViewById(R.id.edit_event_register_reason);
-        etRelevantDescription = (EditText) findViewById(R.id.edit_event_register_relevant_description);
+        //初始化一些简单的编辑框public//        etCode = (TextView) findViewById(R.id.edit_event_register_code);
+//        etName = (EditText) findViewById(R.id.edit_event_register_name);
+//        etLocation = (EditText) findViewById(R.id.edit_event_register_location);
+//        etDamageDegree = (EditText) findViewById(R.id.edit_event_register_damage_degree);
+//        etLostFee = (EditText) findViewById(R.id.edit_event_register_lost_fee);
+//        etCompensation = (EditText) findViewById(R.id.edit_event_register_compensation);
+//        etRelevantPerson = (EditText) findViewById(R.id.edit_event_register_relevant_person);
+//        etRelevantLicensePlate = (EditText) findViewById(R.id.edit_event_register_relevant_license_plate);
+//        etRelevantContact = (EditText) findViewById(R.id.edit_event_register_relevant_contact);
+//        etRelevantCompany = (EditText) findViewById(R.id.edit_event_register_relevant_company);
+//        etRelevantAddress = (EditText) findViewById(R.id.edit_event_register_relevant_address);
+//        etDescription = (EditText) findViewById(R.id.edit_event_register_description);
+//        etReason = (EditText) findViewById(R.id.edit_event_register_reason);
+//        etRelevantDescription = (EditText) findViewById(R.id.edit_event_register_relevant_description);
 
 
         //初始化标题栏
-        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_events_register_title_bar);
+//        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_events_register_title_bar);
         titleBarLayout.setTitleText("事件登记");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +129,7 @@ public class EventRegisterActivity extends AppCompatActivity {
         });
 
         //初始化可编辑下拉框
-        dropdownEditText = (DropdownEditText) findViewById(R.id.droplist_event_register_type);
+//        dropdownEditText = (DropdownEditText) findViewById(R.id.droplist_event_register_type);
         ArrayList<String> dropdownList = new ArrayList<>();
         dropdownList.addAll(Arrays.asList(getResources().getStringArray(R.array.eventTypeDropList)));
         dropdownEditText.setDropdownList(dropdownList);
@@ -128,7 +149,7 @@ public class EventRegisterActivity extends AppCompatActivity {
                     }
                 },year,month,day);
 
-        etDateSelect = (EditText) findViewById(R.id.edit_event_register_time);
+//        etDateSelect = (EditText) findViewById(R.id.edit_event_register_time);
         etDateSelect.setText(year + "-" + (month + 1) + "-" + day);
         etDateSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +161,7 @@ public class EventRegisterActivity extends AppCompatActivity {
             addDataToViews(oneEvent);
         }
         //初始化添加附件按钮
-        btnAddAttachment = (Button) findViewById(R.id.btn_event_register_add_files);
+//        btnAddAttachment = (Button) findViewById(R.id.btn_event_register_add_files);
         btnAddAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
