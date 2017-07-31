@@ -31,6 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class EventRegisterActivity extends AppCompatActivity {
 
@@ -89,24 +90,7 @@ public class EventRegisterActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         oneEvent = (OneEvent) intent.getSerializableExtra("event");
-        //初始化一些简单的编辑框public//        etCode = (TextView) findViewById(R.id.edit_event_register_code);
-//        etName = (EditText) findViewById(R.id.edit_event_register_name);
-//        etLocation = (EditText) findViewById(R.id.edit_event_register_location);
-//        etDamageDegree = (EditText) findViewById(R.id.edit_event_register_damage_degree);
-//        etLostFee = (EditText) findViewById(R.id.edit_event_register_lost_fee);
-//        etCompensation = (EditText) findViewById(R.id.edit_event_register_compensation);
-//        etRelevantPerson = (EditText) findViewById(R.id.edit_event_register_relevant_person);
-//        etRelevantLicensePlate = (EditText) findViewById(R.id.edit_event_register_relevant_license_plate);
-//        etRelevantContact = (EditText) findViewById(R.id.edit_event_register_relevant_contact);
-//        etRelevantCompany = (EditText) findViewById(R.id.edit_event_register_relevant_company);
-//        etRelevantAddress = (EditText) findViewById(R.id.edit_event_register_relevant_address);
-//        etDescription = (EditText) findViewById(R.id.edit_event_register_description);
-//        etReason = (EditText) findViewById(R.id.edit_event_register_reason);
-//        etRelevantDescription = (EditText) findViewById(R.id.edit_event_register_relevant_description);
-
-
-        //初始化标题栏
-//        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_events_register_title_bar);
+        ButterKnife.bind(this);
         titleBarLayout.setTitleText("事件登记");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +113,6 @@ public class EventRegisterActivity extends AppCompatActivity {
         });
 
         //初始化可编辑下拉框
-//        dropdownEditText = (DropdownEditText) findViewById(R.id.droplist_event_register_type);
         ArrayList<String> dropdownList = new ArrayList<>();
         dropdownList.addAll(Arrays.asList(getResources().getStringArray(R.array.eventTypeDropList)));
         dropdownEditText.setDropdownList(dropdownList);
@@ -149,7 +132,6 @@ public class EventRegisterActivity extends AppCompatActivity {
                     }
                 },year,month,day);
 
-//        etDateSelect = (EditText) findViewById(R.id.edit_event_register_time);
         etDateSelect.setText(year + "-" + (month + 1) + "-" + day);
         etDateSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,7 +143,6 @@ public class EventRegisterActivity extends AppCompatActivity {
             addDataToViews(oneEvent);
         }
         //初始化添加附件按钮
-//        btnAddAttachment = (Button) findViewById(R.id.btn_event_register_add_files);
         btnAddAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

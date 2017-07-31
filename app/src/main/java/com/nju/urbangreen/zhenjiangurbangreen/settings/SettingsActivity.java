@@ -19,6 +19,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.google.gson.Gson;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
@@ -71,6 +72,7 @@ public class SettingsActivity extends Activity {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_settings);
+        ButterKnife.bind(this);
         setTitleBar();
         setHandUpdateButton();
         setLogoutButton();
@@ -83,7 +85,6 @@ public class SettingsActivity extends Activity {
     }
 
     private void setHandUpdateButton(){
-        // btnHandUpdate = (Button) findViewById(R.id.btn_check_update);
         btnHandUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,7 +168,6 @@ public class SettingsActivity extends Activity {
     }
 
     private void setLogoutButton(){
-        // btnLogout = (Button) findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -199,7 +199,6 @@ public class SettingsActivity extends Activity {
 
 
     private void setTitleBar(){
-        // titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_settings_title_bar);
         titleBarLayout.setTitleText("设置");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override

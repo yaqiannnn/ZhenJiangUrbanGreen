@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.google.gson.Gson;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
@@ -66,6 +67,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
         //判断网络是否可用
         connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -132,12 +134,6 @@ public class LoginActivity extends Activity {
     }
 
     public void setLoginButton(){
-
-        // etUserName = (EditText) findViewById(R.id.edit_username);
-        // etPassword = (EditText) findViewById(R.id.edit_password);
-        // btnLogin = (Button) findViewById(R.id.btn_login);
-
-
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

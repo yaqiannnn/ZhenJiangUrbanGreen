@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
@@ -47,10 +48,7 @@ public class TitleBarLayout extends LinearLayout {
         super(context, attrs);
         mContext = context;
         LayoutInflater.from(context).inflate(R.layout.title_bar,this);
-//        btnBack = (Button) findViewById(R.id.btn_title_back);
-//        tvTitle = (TextView) findViewById(R.id.tv_title_text);
-//        btnSelfDef = (Button) findViewById(R.id.btn_title_self_def);
-//        tsvSearch = (TitleSearchView) findViewById(R.id.tsv_title_search);
+        ButterKnife.bind(this);
 
         TitleRecoverReceiver recoverReceiver = new TitleRecoverReceiver();
         context.registerReceiver(recoverReceiver,new IntentFilter(ACTION_SHOW_TITLE_LAYOUT));

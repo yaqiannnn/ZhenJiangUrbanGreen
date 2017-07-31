@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
@@ -30,6 +31,7 @@ public class CalloutLayout extends LinearLayout implements View.OnClickListener{
     public CalloutLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.map_callout,this);
+        ButterKnife.bind(this);
 
         // btnAddMaintainRecord = (Button) findViewById(R.id.btn_add_maintan_record);
         // btnAddInspectRecord = (Button) findViewById(R.id.btn_add_inspect_record);

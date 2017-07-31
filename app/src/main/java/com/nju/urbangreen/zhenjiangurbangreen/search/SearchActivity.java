@@ -17,6 +17,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ListView;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
@@ -91,9 +92,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     private void initViews()
     {
         setContentView(R.layout.activity_search);
-        // mToolbar=(Toolbar)findViewById(R.id.Toolbar);
-        // suggestionList_listView=(ListView)findViewById(R.id.listView_suggestionList);
-        // searchResult_recyclerView=(RecyclerView)findViewById(R.id.recyclerView_searchResult);
+        ButterKnife.bind(this);
         initToolbar();
     }
     private void initToolbar()

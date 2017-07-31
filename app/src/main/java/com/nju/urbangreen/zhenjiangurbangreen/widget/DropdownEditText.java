@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
@@ -54,8 +55,7 @@ public class DropdownEditText extends LinearLayout {
 
         //初始化布局和控件
         lvDropDownView = (DropListView) LayoutInflater.from(context).inflate(R.layout.dropdown_popupwindow_list,null);
-//        etContent = (EditText) findViewById(R.id.et_dropdown_content);
-//        ivShowDropdown = (CheckBox) findViewById(R.id.cb_dropdown_btn);
+        ButterKnife.bind(this);
 
         ivShowDropdown.setOnClickListener(new OnClickListener() {
             @Override

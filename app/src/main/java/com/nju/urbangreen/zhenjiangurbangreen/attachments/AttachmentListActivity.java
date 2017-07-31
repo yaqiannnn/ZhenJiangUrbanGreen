@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
@@ -27,7 +28,7 @@ public class AttachmentListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attachment_list);
 
-//        titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_attachments_title_bar);
+        ButterKnife.bind(this);
         titleBarLayout.setTitleText("附件列表");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +47,6 @@ public class AttachmentListActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent,"请选择待上传的文件"),1);
             }
         });
-//        lvAttachmentRecords = (ListView) findViewById(R.id.lv_attachments_list);
         //以下是用来测试附件列表的数据
         ArrayList<OneAttachmentRecord> list = new ArrayList<OneAttachmentRecord>();
         list.add(new OneAttachmentRecord("what doesn't kill you","0kb"));

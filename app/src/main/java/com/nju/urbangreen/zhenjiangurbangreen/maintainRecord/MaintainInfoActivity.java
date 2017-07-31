@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
@@ -84,36 +85,27 @@ public class MaintainInfoActivity extends AppCompatActivity {
         else
             myObject=(MaintainObject)intent.getSerializableExtra("MaintainInfo");
 
+        ButterKnife.bind(this);
+
         setContentView(R.layout.activity_maintain_register);
-        // tvMaintainID=(TextView)findViewById(R.id.tv_maintainInfo_ID);
         tvMaintainID.setText(myObject.getID());
-        // tvMaintainCode=(TextView)findViewById(R.id.tv_maintainInfo_code);
         tvMaintainCode.setText(myObject.getCode());
 
-        // dropdownMaintainType =(DropdownEditText)findViewById(R.id.droplist_maintainInfo_type);
         ArrayList<String> dropdownList = new ArrayList<>();
         dropdownList.addAll(Arrays.asList(getResources().getStringArray(R.array.maintainTypeDropList)));
         dropdownMaintainType.setDropdownList(dropdownList);
         dropdownMaintainType.setText(myObject.getMaintainType());
 
-        // etMaintainDate =(EditText)findViewById(R.id.et_maintainInfo_date);
         initDatePicker();
-        // etMaintainStaff=(EditText) findViewById(R.id.et_maintainInfo_staff);
         etMaintainStaff.setText(myObject.getMaintainStaff());
         etMaintainStaff.addTextChangedListener(new myTextWatcher(etMaintainStaff));
-        // etMaintainCompany=(EditText) findViewById(R.id.et_maintainInfo_companyID);
         etMaintainCompany.setText(myObject.getCompanyID());
-        // etMaintainContent=(EditText) findViewById(R.id.et_maintainInfo_content);
         etMaintainContent.setText(myObject.getContent());
-        // tvLoggerID=(TextView)findViewById(R.id.tv_maintainInfo_LoggerPID);
         tvLoggerID.setText(myObject.getLoggerPID());
-        // tvLogTime=(TextView)findViewById(R.id.tv_maintainInfo_LogTime);
         tvLogTime.setText(myObject.getLogTime());
-        // tvLasEditorPID=(TextView)findViewById(R.id.tv_maintainInfo_LastEditorPID);
         tvLasEditorPID.setText(myObject.getLastEditorPID());
 
         //初始化标题栏
-        // titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_maintainInfo_title_bar);
         titleBarLayout.setTitleText("养护记录登记");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +124,6 @@ public class MaintainInfoActivity extends AppCompatActivity {
             }
         });
 
-        // btnAttachment=(AppCompatButton)findViewById(R.id.btn_maintainInfo_attachment);
         btnAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

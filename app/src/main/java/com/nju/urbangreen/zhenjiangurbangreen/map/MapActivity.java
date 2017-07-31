@@ -34,6 +34,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.esri.android.map.Callout;
 import com.esri.android.map.GraphicsLayer;
@@ -137,10 +138,10 @@ public class MapActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_map);
 
-        // bottomBar = findViewById(R.id.bottombar);
+        ButterKnife.bind(this);
+
         ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
 
-        // map = (MapView) findViewById(R.id.map_main);
         callout = map.getCallout();
 
         //新建一个离线地图图层并添加到mapview中
@@ -348,7 +349,6 @@ public class MapActivity extends Activity {
     * 设置全局显示按钮
     * */
     private void setGlobalViewButton(){
-        // imgBtnGlobalView = (ImageButton) findViewById(R.id.imgbtn_global_view);
         imgBtnGlobalView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -365,7 +365,6 @@ public class MapActivity extends Activity {
     * 设置定位按钮
     * */
     private void setLocateButton(){
-        // imgBtnLocate = (ImageButton) findViewById(R.id.imgbtn_locate);
         imgBtnLocate.setOnClickListener(new LocateButtonListener());
         locationLayer = new GraphicsLayer();
 
@@ -392,7 +391,6 @@ public class MapActivity extends Activity {
 
             }
         });
-        // imgBtnLayerSwitch = (ImageButton) findViewById(R.id.imgbtn_layer_switch);
         imgBtnLayerSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -425,7 +423,6 @@ public class MapActivity extends Activity {
         nearbyLocListener = new NearbyLocListener();
         nearbyLocMag = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        // chkBoxNearby = (CheckBox) findViewById(R.id.cb_nearby);
         chkBoxNearby.setChecked(false);
 
         chkBoxNearby.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

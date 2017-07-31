@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Liwei on 2016/12/9.
@@ -35,8 +36,7 @@ public class TitleSearchView extends LinearLayout{
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.title_searchview,this);
         mContext = context;
-//        etSearch = (EditText) findViewById(R.id.et_title_searchview);
-//        imgbtnCancel = (ImageButton) findViewById(R.id.imgbtn_title_searchview_cancel);
+        ButterKnife.bind(this);
     }
 
     public void setOnCloseListener(final OnCloseListener listener){

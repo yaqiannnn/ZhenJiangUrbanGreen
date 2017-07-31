@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
@@ -72,25 +73,17 @@ public class InspectInfoActivity extends AppCompatActivity {
         }
         else
             myObject=(InspectObject)intent.getSerializableExtra("InspectInfo");
+        ButterKnife.bind(this);
 
         setContentView(R.layout.activity_inspect_register);
-        // tvInspectID=(AppCompatTextView)findViewById(R.id.tv_inspectInfo_ID);
         tvInspectID.setText(myObject.getID());
-        // tvInspectCode=(AppCompatTextView)findViewById(R.id.tv_inspectInfo_Code);
         tvInspectCode.setText(myObject.getCode());
-        // spnInspectType =(AppCompatSpinner)findViewById(R.id.spn_inspectInfo_type);
         initSpinner();
-        // tvInspectDate=(AppCompatTextView)findViewById(R.id.tv_inspectInfo_date);
         initDatePicker();
-        // etInspector=(TextInputLayout)findViewById(R.id.et_inspectInfo_inspector);
         etInspector.getEditText().setText(myObject.getInspector());
-        // etInspectScore=(TextInputLayout)findViewById(R.id.et_inspectInfo_score);
         etInspectScore.getEditText().setText(myObject.getScore());
-        // etInspectContent=(TextInputLayout)findViewById(R.id.et_inspectInfo_content);
         etInspectContent.getEditText().setText(myObject.getContent());
-        // etEtInspectOpinion=(TextInputLayout)findViewById(R.id.et_inspectInfo_opinion);
         etEtInspectOpinion.getEditText().setText(myObject.getInspectOpinion());
-        // mToolbar=(Toolbar)findViewById(R.id.Toolbar);
         initToolbar();
     }
 

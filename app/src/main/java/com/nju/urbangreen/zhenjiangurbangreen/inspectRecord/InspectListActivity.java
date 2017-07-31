@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
@@ -99,12 +100,8 @@ public class InspectListActivity extends AppCompatActivity {
 
     //初始化控件
     public void initViews(){
+        ButterKnife.bind(this);
         setTitleBarLayout();
-
-        // tabs = (PagerSlidingTabStrip) findViewById(R.id.psts_inspect);
-
-        // pager = (ViewPager) findViewById(R.id.vp_inspect_content);
-        // fbtnAddInspect = (FloatingActionButton) findViewById(R.id.floatingbtn_add_inspect);
         fbtnAddInspect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,7 +118,6 @@ public class InspectListActivity extends AppCompatActivity {
     }
     public void setTitleBarLayout(){
         //初始化TitleBarLayout
-        // titleBarLayout = (TitleBarLayout) findViewById(R.id.ly_inspect_list_title_bar);
         titleBarLayout.setTitleText("巡查记录");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override

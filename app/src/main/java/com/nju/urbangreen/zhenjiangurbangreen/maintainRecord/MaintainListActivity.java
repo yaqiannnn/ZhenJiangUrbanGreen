@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
@@ -35,7 +36,7 @@ public class MaintainListActivity extends FragmentActivity {
     @BindView(R.id.vp_maintain_content)
     public ViewPager pager;
 
-    @BindView(R>id.floatingbtn_add_maintain)
+    @BindView(R.id.floatingbtn_add_maintain)
     public FloatingActionButton fbtnAddMaintain;//悬浮按钮
 
     public MaintainPagerAdapter adapter;
@@ -100,13 +101,8 @@ public class MaintainListActivity extends FragmentActivity {
 
     //初始化控件
     public void initViews() {
+        ButterKnife.bind(this);
         setTitleBarLayout();
-
-
-        // tabs = (PagerSlidingTabStrip) findViewById(R.id.psts_maintain);
-
-        // pager = (ViewPager) findViewById(R.id.vp_maintain_content);
-        // fbtnAddMaintain = (FloatingActionButton) findViewById(R.id.floatingbtn_add_maintain);
         fbtnAddMaintain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.navigation.NaviActivity;
@@ -34,8 +35,7 @@ public class MapTopBarLayout extends LinearLayout {
         super(context, attrs);
         final Context mContext = context;
         View view = LayoutInflater.from(context).inflate(R.layout.map_top_bar,this);
-        // imgBtnMenu = (ImageButton) findViewById(R.id.btn_map_menu);
-        // etSearch = (EditText) findViewById(R.id.et_search);
+        ButterKnife.bind(this);
         imgBtnMenu.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
