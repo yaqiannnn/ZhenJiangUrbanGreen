@@ -80,7 +80,7 @@ public class WelcomeActivity extends Activity {
                 Intent mainIntent;
 //                SPUtils.remove(MyApplication.getContext(),"username");
 //                SPUtils.remove(MyApplication.getContext(),"password");
-                if (SPUtils.contains(MyApplication.getContext(), "username") && SPUtils.contains(MyApplication.getContext(), "password")) {
+                if (SPUtils.contains("username") && SPUtils.contains("password")) {
                     String[] errMsg = new String[1];
                     //Map<String, Object> results = WebServiceUtils.demoOfMethod(errMsg);
                     Map<String, Object> results = WebServiceUtils.checkUpdate(errMsg);

@@ -32,12 +32,6 @@ public class CalloutLayout extends LinearLayout implements View.OnClickListener{
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.map_callout,this);
         ButterKnife.bind(this);
-
-        // btnAddMaintainRecord = (Button) findViewById(R.id.btn_add_maintan_record);
-        // btnAddInspectRecord = (Button) findViewById(R.id.btn_add_inspect_record);
-        // btnAddEventRecord = (Button) findViewById(R.id.btn_add_event_record);
-        // btnBasicInfo = (Button) findViewById(R.id.btn_basic_info);
-
     }
 
     @Override

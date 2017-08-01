@@ -1,5 +1,6 @@
 package com.nju.urbangreen.zhenjiangurbangreen.util;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,7 +39,8 @@ public class WebServiceUtils {
     //public static final String OPERATION_NAME = "CheckUpdate";
     //public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
     public static final String WSDL_TARGET_NAMESPACE = "http://services.ui.webbos.sjf.org/";
-    public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand/EXT_GreenLand/Mobile/Services/GLService.asmx";
+    public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLService.asmx";
+    public static final int Timeout = 10000;
 
     public static final String CHECK_UPDATE = "CheckUpdate";
     public static final String LOGIN = "Login";
@@ -51,11 +54,11 @@ public class WebServiceUtils {
     /**
      * 登录名
      */
-    public static final String KEY_USERNAME = "ln";
+    public static final String KEY_USERNAME = "xk";
     /**
      * 密码
      */
-    public static final String KEY_PASSWORD = "lp";
+    public static final String KEY_PASSWORD = "@";
     /**
      * 是否成功
      */
@@ -76,49 +79,42 @@ public class WebServiceUtils {
     //static Map<String, Object> results = new HashMap<String, Object>();
 
     private static Gson gson = new GsonBuilder().serializeNulls().create();
+    private static ConnectivityManager connectivityManager = (ConnectivityManager) MyApplication.getContext()
+            .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    private static boolean is_offline() {
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return (networkInfo == null || !networkInfo.isAvailable());
+    }
 
     private static Map<String, Object> callMethod(String operationName, Map<String, Object> params) {
         return callMethod(operationName, params, true);
     }
 
-    private static Map<String, Object> callMethod(String operationName, Map<String, Object> params, Boolean identify) {
-        ConnectivityManager connectivityManager;
-        NetworkInfo networkInfo;
-        connectivityManager = (ConnectivityManager) MyApplication.getContext().
-                getSystemService(MyApplication.getContext().CONNECTIVITY_SERVICE);
-        networkInfo = connectivityManager.getActiveNetworkInfo();
+    private static Map<String, Object> callMethod(String methodName, Map<String, Object> params, Boolean identify) {
 
-        if (networkInfo == null || !networkInfo.isAvailable()) {
-            try {
-                Thread.sleep(800);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
         Map<String, Object> results = new HashMap<String, Object>();
         Map<String, Object> requestProperty = new HashMap<String, Object>();
 
         SoapObject request;
         if (identify) {
-            String userName = SPUtils.get(MyApplication.getContext(), "username", "").toString();
-            String password = SPUtils.get(MyApplication.getContext(), "password", "").toString();
+            String userName = SPUtils.get("username", KEY_USERNAME).toString();
+            String password = SPUtils.get("password", KEY_PASSWORD).toString();
 
-            if (operationName.equals(LOGIN)) {
+            if (methodName.equals(LOGIN)) {
                 userName = params.get(KEY_USERNAME).toString();
                 password = params.get(KEY_PASSWORD).toString();
-                Log.i("callmethod", userName);
-                Log.i("callmethod", password);
-                //params = null;
+                Log.i("Login username: ", userName);
+                Log.i("Login password: ", password);
             }
 
-            requestProperty.put(KEY_REFLACT_OPERATION_NAME, operationName);
             requestProperty.put(KEY_USERNAME, userName);
             requestProperty.put(KEY_PASSWORD, password);
             request = new SoapObject(WSDL_TARGET_NAMESPACE, OPERATION_NAME);
+            requestProperty.put(KEY_REFLACT_OPERATION_NAME, methodName);
         } else {
             request = new SoapObject(WSDL_TARGET_NAMESPACE, OPERATION_NAME_WITHOUT_USERINFO);
-            requestProperty.put(KEY_REFLACT_OPERATION_NAME, "NoUser_" + operationName);
+            requestProperty.put(KEY_REFLACT_OPERATION_NAME, "NoUser_" + methodName);
         }
 
 
@@ -130,7 +126,7 @@ public class WebServiceUtils {
         envelope.encodingStyle = SoapSerializationEnvelope.ENC;
         envelope.setOutputSoapObject(request);
 
-        HttpTransportSE transport = new HttpTransportSE(SOAP_ADDRESS);
+        HttpTransportSE transport = new HttpTransportSE(SOAP_ADDRESS, Timeout);
 
         try {
             if (identify) {
@@ -174,8 +170,12 @@ public class WebServiceUtils {
     }
 
     public static Map<String, Object> checkUpdate(String[] errorMessage) {
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("VersionCode", getVersion());
+        params.put("VersionCode", 1);
         Map<String, Object> results = callMethod(CHECK_UPDATE, params);
         if (Integer.parseInt(results.get("ok").toString()) == 100) {
             String jsonResults = results.get("ret").toString();

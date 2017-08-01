@@ -151,8 +151,8 @@ public class LoginActivity extends Activity {
                 }
                 username = etUserName.getText().toString();
                 password = etPassword.getText().toString();
-                SPUtils.put(MyApplication.getContext(),"username",username);
-                SPUtils.put(MyApplication.getContext(),"password",password);
+                SPUtils.put("username",username);
+                SPUtils.put("password",password);
                 new AsyncTask<Void,Void,Integer>(){
 
                     @Override
@@ -205,8 +205,8 @@ public class LoginActivity extends Activity {
 //                            mainIntent = new Intent(LoginActivity.this,MapActivity.class);
 //                            startActivity(mainIntent);
 
-                            SPUtils.remove(MyApplication.getContext(),"username");
-                            SPUtils.remove(MyApplication.getContext(),"password");
+                            SPUtils.remove("username");
+                            SPUtils.remove("password");
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             //imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),0);
                             if(imm.isActive()){

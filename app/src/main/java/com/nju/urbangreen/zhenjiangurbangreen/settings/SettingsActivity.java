@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -91,78 +92,47 @@ public class SettingsActivity extends Activity {
                 progressDialog = new ProgressDialog(SettingsActivity.this);
                 progressDialog.setMessage("正在检查更新...");
                 progressDialog.show();
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-                if (networkInfo != null && networkInfo.isAvailable()) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String[] errMsg = new String[1];
-                            Map<String, Object> resultsUpdate = WebServiceUtils.checkUpdate(errMsg);
-                            String APK_URL = resultsUpdate.get("url").toString();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String[] errMsg = new String[1];
+                        Map<String, Object> resultsUpdate = WebServiceUtils.checkUpdate(errMsg);
+                        progressDialog.dismiss();
 
-//                            SoapObject request = new SoapObject(WSDL_TARGET_NAMESPACE, OPERATION_NAME);
-//                            PropertyInfo pi = new PropertyInfo();
-//                            pi.setName("versionCode");
-//                            pi.setValue(getVersion());
-//                            pi.setType(Integer.class);
-//                            request.addProperty(pi);
-//
-//                            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-//                            envelope.dotNet = true;
-//                            envelope.encodingStyle = SoapSerializationEnvelope.ENC;
-//                            envelope.setOutputSoapObject(request);
-//                            HttpTransportSE transport = new HttpTransportSE(SOAP_ADDRESS);
-//                            Object response = null;
-//                            try {
-//                                transport.call(SOAP_ACTION, envelope);
-//                                response = envelope.getResponse();
-
-                                if (resultsUpdate != null) {
-//                                    Gson gson = new Gson();
-//                                    Map<String, Object> result = new HashMap<String, Object>();
-//                                    result = gson.fromJson(response.toString(), result.getClass());
-//                                    DOWNLOAD_URL = (String) result.get("url");
-//                                    NEW_Version = Integer.parseInt(result.get("version").toString());
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                                    builder.setTitle("更新提示");
-                                    builder.setMessage("检测到软件有更新，是否现在安装?");
-                                    builder.setCancelable(false);
-                                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            Intent intent1 = new Intent(SettingsActivity.this,DownloadNewApkService.class);
-                                            startService(intent1);
-
-                                        }
-                                    });
-                                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            dialogInterface.dismiss();
-                                        }
-                                    });
-                                    try{
-                                        Thread.sleep(800);
-                                    }catch (Exception e){
-                                        e.printStackTrace();
-                                    }
-                                    progressDialog.dismiss();
-                                    Message message = new Message();
-                                    message.obj = builder;
-                                    handler.sendMessage(message);
+                        if (resultsUpdate != null) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                            builder.setTitle("更新提示");
+                            builder.setMessage("检测到软件有更新，是否现在安装?");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent intent1 = new Intent(SettingsActivity.this, DownloadNewApkService.class);
+                                    startService(intent1);
 
                                 }
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-
+                            });
+                            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                            try {
+                                Thread.sleep(800);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            Message message = new Message();
+                            message.obj = builder;
+                            handler.sendMessage(message);
+                        } else if(errMsg[0] != null) {
+                            Looper.prepare();
+                            Toast.makeText(SettingsActivity.this, errMsg[0], Toast.LENGTH_LONG).show();
+                            Looper.loop();
                         }
-                    }).start();
-                }else {
-                    progressDialog.dismiss();
-                    Toast.makeText(SettingsActivity.this,"请检查网络设置~",Toast.LENGTH_SHORT).show();
-                }
+                    }
+                }).start();
             }
         });
     }
@@ -178,8 +148,8 @@ public class SettingsActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ActivityCollector.finishAll();
-                        SPUtils.remove(MyApplication.getContext(),"username");
-                        SPUtils.remove(MyApplication.getContext(),"password");
+                        SPUtils.remove("username");
+                        SPUtils.remove("password");
                         Intent intent1 = new Intent(SettingsActivity.this,LoginActivity.class);
                         startActivity(intent1);
                         finish();

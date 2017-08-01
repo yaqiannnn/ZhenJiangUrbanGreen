@@ -153,7 +153,7 @@ public class UrbanGreenDB {
             values.put("relevantDescription", oneEvent.getRelevantDescription());
             values.put("description", oneEvent.getDescription());
             values.put("reason", oneEvent.getReason());
-            values.put("registrar", SPUtils.get(MyApplication.getContext(), "username", "xk").toString());
+            values.put("registrar", SPUtils.get("username", "xk").toString());
             values.put("state", oneEvent.getState());
             db.insert("Event", null, values);
             return true;

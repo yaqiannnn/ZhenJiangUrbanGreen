@@ -43,7 +43,7 @@ tools:context="com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity">
     android:layout_margin="16dp"
 
 
-    android:backgroundTint="@color/black"
+    android:backgroundTint="@color/colorAccent"
     android:src="@drawable/ic_floatingbtn_add"
     app:borderWidth="0dp"
     app:elevation="8dp"

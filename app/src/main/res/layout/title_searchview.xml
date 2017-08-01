@@ -18,8 +18,8 @@
             android:background="@drawable/ic_search_logo"
 
             android:id="@+id/iv_search_logo"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:layout_width="18dp"
+            android:layout_height="18dp" />
     </LinearLayout>
 
     <EditText
@@ -43,8 +43,8 @@
         <ImageButton
 
             android:id="@+id/imgbtn_title_searchview_cancel"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:background="@drawable/ic_search_cancel"
             />
     </LinearLayout>
