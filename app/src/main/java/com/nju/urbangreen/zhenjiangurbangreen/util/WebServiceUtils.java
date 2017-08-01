@@ -98,20 +98,19 @@ public class WebServiceUtils {
 
         SoapObject request;
         if (identify) {
-            String userName = SPUtils.get("username", KEY_USERNAME).toString();
+            String username = SPUtils.get("username", KEY_USERNAME).toString();
             String password = SPUtils.get("password", KEY_PASSWORD).toString();
 
             if (methodName.equals(LOGIN)) {
-                userName = params.get(KEY_USERNAME).toString();
+                username = params.get(KEY_USERNAME).toString();
                 password = params.get(KEY_PASSWORD).toString();
-                Log.i("Login username: ", userName);
+                Log.i("Login username: ", username);
                 Log.i("Login password: ", password);
             }
-
-            requestProperty.put(KEY_USERNAME, userName);
+            requestProperty.put(KEY_REFLACT_OPERATION_NAME, methodName);
+            requestProperty.put(KEY_USERNAME, username);
             requestProperty.put(KEY_PASSWORD, password);
             request = new SoapObject(WSDL_TARGET_NAMESPACE, OPERATION_NAME);
-            requestProperty.put(KEY_REFLACT_OPERATION_NAME, methodName);
         } else {
             request = new SoapObject(WSDL_TARGET_NAMESPACE, OPERATION_NAME_WITHOUT_USERINFO);
             requestProperty.put(KEY_REFLACT_OPERATION_NAME, "NoUser_" + methodName);
@@ -175,9 +174,9 @@ public class WebServiceUtils {
             return null;
         }
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("VersionCode", 1);
+        params.put("VersionCode", getVersion());
         Map<String, Object> results = callMethod(CHECK_UPDATE, params);
-        if (Integer.parseInt(results.get("ok").toString()) == 100) {
+        if (Integer.parseInt(results.get("ok").toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get("ret").toString();
             return gson.fromJson(jsonResults, new TypeToken<Map<String, Object>>() {
             }.getType());
