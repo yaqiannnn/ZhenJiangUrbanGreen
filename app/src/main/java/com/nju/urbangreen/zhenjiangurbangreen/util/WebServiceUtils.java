@@ -54,11 +54,11 @@ public class WebServiceUtils {
     /**
      * 登录名
      */
-    public static final String KEY_USERNAME = "xk";
+    public static final String KEY_USERNAME = "ln";
     /**
      * 密码
      */
-    public static final String KEY_PASSWORD = "@";
+    public static final String KEY_PASSWORD = "lp";
     /**
      * 是否成功
      */
@@ -98,8 +98,8 @@ public class WebServiceUtils {
 
         SoapObject request;
         if (identify) {
-            String username = SPUtils.get("username", KEY_USERNAME).toString();
-            String password = SPUtils.get("password", KEY_PASSWORD).toString();
+            String username = SPUtils.get("username", "xk").toString();
+            String password = SPUtils.get("password", "@").toString();
 
             if (methodName.equals(LOGIN)) {
                 username = params.get(KEY_USERNAME).toString();
