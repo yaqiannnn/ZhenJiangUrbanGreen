@@ -1,0 +1,273 @@
+Param中带"*"的为一定包含的参数
+
+// 获取列表信息
+1.获取管养记录
+    Method: GetMaintainRecord
+    Param: {
+    *   int page,
+    *   int limit,
+        bool submit 是否提交,
+        bool assess 是否审核,
+        string UGO_ID 绿化对象ID
+    }
+    Return: List<{
+        MR_ID
+        MR_Code
+        MR_CompanyID
+        MR_MaintainType
+        MR_MaintainStaff
+        MR_MaintainDate
+        MR_MaintainContent
+        MR_AssessStatus
+        MR_AssessorPID
+        MR_AssessTime
+        MR_AssessDescription
+        MR_LoggerPID
+        MR_LogTime
+        MR_LastEditorPID
+        MR_LastEditTime
+        MR_SubmitStatus
+        MR_SubmitorPID
+        MR_SubmitTime
+    }>
+
+2.获取管养记录涉及绿化对象(所有种类，包括绿地、古树名木、行道树)
+    Method: GetMaintainRecordUGO
+    Param: {
+    *   string id 管养记录ID
+    }
+
+3.获取养护巡查记录
+    Method: GetInspectRecord
+    Param: {
+    *   int page,
+    *   int limit,
+        string type 类型,
+        string UGO_ID 绿化对象ID
+    }
+    Return: List<{
+        IR_ID
+        IR_Code
+        IR_Type
+        IR_InspectDate
+        IR_Location
+        IR_Inspector
+        IR_Score
+        IR_Content
+        IR_InspectOpinion
+        IR_LoggerPID
+        IR_LogTime
+        IR_LastEditorPID
+        IR_LastEditTime
+    }>
+
+4.获取事件记录
+    Method: GetEvent
+    Param: {
+    *   int page,
+    *   int limit,
+        bool is_activity 是否为活动
+        bool is_conclude 是否结案
+    }
+    Return: List<{
+        UGE_Code
+        UGE_DamageDegree
+        UGE_Name
+        UGE_EventOrActivity
+        UGE_Type
+        UGE_Description
+        UGE_Location
+        UGE_Time
+        UGE_Endtime
+        UGE_Reason
+        UGE_LoggerPID
+        UGE_LogTime
+        UGE_LastEditorPID
+        UGE_LastEditTime
+        UGE_IsConcluded
+        UGE_ConcludePID
+        UGE_ConcludeTime
+        UGE_ConcludeDescription
+        UGE_TotalFee
+        UGE_LostFee
+        UGE_Compensation
+        UGE_RelevantPerson
+        UGE_RelevantLicensePlate
+        UGE_RelevantContact
+        UGE_RelevantCompany
+        UGE_RelevantAddress
+        UGE_RelevantDescription
+        UGE_LastStateID
+    }>
+
+5.获取绿化对象(除行道树以外)
+    Method: GetUGOInfoExceptST
+    Param: {
+    *   int page,
+    *   int limit,
+        bool is_greenland 是否为绿地(总共有绿地和古树名木两种)
+    }
+    Return: List<{
+        UGO_ID
+        UGO_ClassType_ID
+        UGO_Name
+        UGO_Name_PinYinAbbrevation
+        UGO_Geo_Location
+        UGO_Address
+        UGO_CurrentArea
+        UGO_CurrentOwner
+        UGO_CurrentOwnerType
+        UGO_SpatialDescription
+        UGO_Description
+        UGO_LoggerPID
+        UGO_LogTime
+        UGO_LastEditorPID
+        UGO_LastEditTime
+        UGO_DirectManage
+        UGO_DirectManage_BeginDate
+        UGO_DirectManage_SrcOrganization
+        UGO_DirectManage_LoggerPID
+        UGO_DirectManage_LogTime
+        UGO_DirectManage_LogDescription
+        UGO_Destroyed
+        UGO_DateOfDestroyed
+        UGO_DateOfDestroyRecord
+        UGO_DescriptionOfDestroy
+        UGO_LoggerPIDOfDestroyRecord
+    }>
+
+6.获取行道树(某个点周围)
+    Method: GetNearStreetTree
+    Param: {
+    *   double pos_x,
+    *   double pos_y,
+    *   double radius 缓冲区半径(m),
+    }
+    Return: List<{
+        UGO_ID
+        UGO_ClassType_ID
+        UGO_Name
+        UGO_Name_PinYinAbbrevation
+        UGO_Geo_Location
+        UGO_Address
+    }>
+
+
+// 添加记录信息
+1.添加一条管养记录
+    Method: AddMaintainRecord
+    Param: {
+        *   string type 类型,
+        *   string date 管养时间,
+        *   string staff 参与人员,
+        *   string UGO_ID 涉及对象(一个或多个对象，用","隔开)
+            string content 内容说明 
+    }
+
+2.添加一条养护巡查记录
+    Method: AddInspectRecord
+    Param: {
+        *   string type 类型,
+        *   string date 巡查时间,
+        *   string UGO_ID 涉及对象(一个或多个对象，用","隔开),
+            string score 巡查得分,
+            string inspector 巡查人员,
+            string location 巡查地点,
+            string content 巡查内容,
+            string opinion 巡查意见
+    }
+
+3.添加一条事件记录
+    Method: AddEvent
+    Param: {
+    *   string title 标题,
+    *   string type 类型,
+    *   string location 地点,
+    *   string date 时间,
+        string damage_degree 伤害程度,
+        double lost_fee 损失总价(元),
+        double compensation 实际赔偿(元),
+        string desc 描述,
+        string reason 原因,
+        string rela_person 相关人员,
+        string rela_no 相关人员车牌号,
+        string rela_contact 相关人员联系方式,
+        string rela_company 相关人员所属单位,
+        string rela_address 相关人员地址,
+        string rela_desc 相关人员描述,
+    }
+
+4.添加一条活动记录
+    Method: AddActivity
+    Param: {
+    *   string title 标题,
+    *   string type 类型,
+    *   string location 地点,
+    *   string time 时间,
+        string end_time 结束时间,
+        string desc 活动描述,
+        string rela_person 活动负责人,
+        string rela_contact 负责人联系方式,
+        string rela_company 负责人单位,
+        string rela_address 负责人地址,
+    }
+
+
+// 修改记录信息
+1.修改管养记录
+    Method: UpdateMaintainRecord
+    Param: {
+        *   string type 类型,
+        *   string date 管养时间,
+        *   string staff 参与人员,
+        *   string UGO_ID 涉及对象(一个或多个对象，用","隔开)
+            string content 内容说明 
+    }
+
+2.修改养护巡查记录
+    Method: UpdateInspectRecord
+    Param: {
+        *   string type 类型,
+        *   string date 巡查时间,
+        *   string UGO_ID 涉及对象(一个或多个对象，用","隔开),
+            string score 巡查得分,
+            string inspector 巡查人员,
+            string location 巡查地点,
+            string content 巡查内容,
+            string opinion 巡查意见
+    }
+
+3.修改事件记录
+    Method: UpdateEvent
+    Param: {
+    *   string title 标题,
+    *   string type 类型,
+    *   string location 地点,
+    *   string date 时间,
+        string damage_degree 伤害程度,
+        double lost_fee 损失总价(元),
+        double compensation 实际赔偿(元),
+        string desc 描述,
+        string reason 原因,
+        string rela_person 相关人员,
+        string rela_no 相关人员车牌号,
+        string rela_contact 相关人员联系方式,
+        string rela_company 相关人员所属单位,
+        string rela_address 相关人员地址,
+        string rela_desc 相关人员描述,
+    }
+
+4.修改活动记录
+    Method: UpdateActivity
+    Param: {
+    *   string title 标题,
+    *   string type 类型,
+    *   string location 地点,
+    *   string time 时间,
+        string end_time 结束时间,
+        string desc 活动描述,
+        string rela_person 活动负责人,
+        string rela_contact 负责人联系方式,
+        string rela_company 负责人单位,
+        string rela_address 负责人地址,
+    }

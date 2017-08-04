@@ -4,13 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
 import com.nju.urbangreen.zhenjiangurbangreen.events.OneEvent;
-import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectObject;
-import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainObject;
+import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.Inspect;
+import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.Maintain;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -162,7 +161,7 @@ public class UrbanGreenDB {
     }
 
     //将一条养护记录存储到数据库
-    public boolean saveMaintain(MaintainObject oneMaintain) {
+    public boolean saveMaintain(Maintain oneMaintain) {
         if (oneMaintain != null) {
             ContentValues values = new ContentValues();
             values.put("code", oneMaintain.getCode());
@@ -182,7 +181,7 @@ public class UrbanGreenDB {
     }
 
     //将一条巡查记录存储到数据库
-    public boolean saveInspect(InspectObject oneInspect) {
+    public boolean saveInspect(Inspect oneInspect) {
         if (oneInspect != null) {
             ContentValues values = new ContentValues();
             values.put("code", oneInspect.getCode());

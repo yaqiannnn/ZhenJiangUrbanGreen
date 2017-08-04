@@ -20,7 +20,7 @@ public class MaintainViewHolder extends RecyclerView.ViewHolder{
     private AppCompatTextView maintainType;
     private AppCompatTextView maintainDate;
     private AppCompatTextView maintainStaff;
-    private MaintainObject myObject;
+    private Maintain myObject;
     public MaintainViewHolder(final View itemView)
     {
         super(itemView);
@@ -41,7 +41,7 @@ public class MaintainViewHolder extends RecyclerView.ViewHolder{
         });
     }
 
-    public void setMaintainData(MaintainObject maintainInfo)
+    public void setMaintainData(Maintain maintainInfo)
     {
         this.myObject=maintainInfo;
         maintainID.setText(myObject.getID());

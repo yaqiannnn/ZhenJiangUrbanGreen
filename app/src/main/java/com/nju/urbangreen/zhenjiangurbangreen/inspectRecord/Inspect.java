@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by lxs on 2016/11/20.
  */
-public class InspectObject implements Serializable{
+public class Inspect implements Serializable{
 
     private String ID;
     private String Code;
@@ -21,7 +21,7 @@ public class InspectObject implements Serializable{
     private String LogTime;
     private String LastEditorPID;
 
-    public InspectObject(String id,String code)
+    public Inspect(String id, String code)
     {
         this.ID=id;
         this.Code=code;
@@ -36,8 +36,8 @@ public class InspectObject implements Serializable{
         this.LogTime="";
         this.LastEditorPID="";
     }
-    public InspectObject(String id,String code,String inspectType,Date inspectDate,String companyID,
-                         String inspector,String score,String content,String inspectOpinion)
+    public Inspect(String id, String code, String inspectType, Date inspectDate, String companyID,
+                   String inspector, String score, String content, String inspectOpinion)
     {
         this.ID=id;
         this.Code=code;

@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by lxs on 2016/11/28.
  */
-public class MaintainObject implements Serializable{
+public class Maintain implements Serializable{
     private String ID;
     private String Code;
     private String CompanyID;
@@ -20,7 +20,7 @@ public class MaintainObject implements Serializable{
 
     private int state;//0 :未提交；1 :已提交
 
-    public MaintainObject(String id,String code)
+    public Maintain(String id, String code)
     {
         this.ID=id;
         this.Code=code;
@@ -34,8 +34,8 @@ public class MaintainObject implements Serializable{
         this.LastEditorPID="";
     }
 
-    public MaintainObject(String id,String code,String companyID,String maintainType
-                          ,String maintainStaff,Date maintainDate,String content)
+    public Maintain(String id, String code, String companyID, String maintainType
+                          , String maintainStaff, Date maintainDate, String content)
     {
         this.ID=id;
         this.Code=code;

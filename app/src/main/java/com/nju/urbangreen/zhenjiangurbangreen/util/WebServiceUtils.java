@@ -44,6 +44,7 @@ public class WebServiceUtils {
 
     public static final String CHECK_UPDATE = "CheckUpdate";
     public static final String LOGIN = "Login";
+    public static final String GET_MAINTAIN_RECORD = "GetMaintainRecord";
     public static final String GET_UGO_INFO_EXCEPT_ST = "GetUGOInfoExceptST";//ST表示行道树
 
     public static final String KEY_REFLACT_OPERATION_NAME = "wmn";
@@ -190,6 +191,10 @@ public class WebServiceUtils {
 
     }
 
+    public static Map<String, Object> getMaintainRecord(Map<String, Object> query) {
+        return null;
+    }
+
     public static Map<String, Object> getUGOInfoExceptST(String[] errorMessage) {
         Map<String, Object> results = callMethod(GET_UGO_INFO_EXCEPT_ST, null);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
@@ -205,9 +210,9 @@ public class WebServiceUtils {
         }
     }
 
-    public static Map<String, Object> login(String userName, String password, String[] errorMessage) {
+    public static Map<String, Object> login(String username, String password, String[] errorMessage) {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put(KEY_USERNAME, userName);
+        params.put(KEY_USERNAME, username);
         params.put(KEY_PASSWORD, password);
         Map<String, Object> results = callMethod(LOGIN, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {

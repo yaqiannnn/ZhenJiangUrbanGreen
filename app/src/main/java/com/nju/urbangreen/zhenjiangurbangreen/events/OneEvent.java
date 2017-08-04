@@ -17,6 +17,7 @@ public class OneEvent implements Serializable{
     private String location;
     private Date date_time;
     private String damageDegree;
+    private String totalFee;//总损失
     private String lostFee;//损失总价
     private String compensation;//实际赔偿
     private String relevantPerson;
@@ -101,6 +102,14 @@ public class OneEvent implements Serializable{
 
     public void setDamageDegree(String damageDegree) {
         this.damageDegree = damageDegree;
+    }
+
+    public String getTotalFee() {
+        return this.totalFee;
+    }
+
+    public void setTotalFee(String fee) {
+        this.totalFee = fee;
     }
 
     public String getLostFee() {

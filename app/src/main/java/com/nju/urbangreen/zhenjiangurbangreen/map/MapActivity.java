@@ -145,7 +145,7 @@ public class MapActivity extends Activity {
         callout = map.getCallout();
 
         //新建一个离线地图图层并添加到mapview中
-        tpkFileName = Environment.getExternalStorageDirectory().getPath() + File.separator + "nju_termitecontrol/tpk/vector.tpk";
+        tpkFileName = Environment.getExternalStorageDirectory().getPath() + File.separator + "nju_greenland/tpk/vector.tpk";
         localTPKLayer = new ArcGISLocalTiledLayer(tpkFileName);
         map.addLayer(localTPKLayer);
 

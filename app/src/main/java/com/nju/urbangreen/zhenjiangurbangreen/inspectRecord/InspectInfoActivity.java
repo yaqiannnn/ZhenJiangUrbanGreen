@@ -59,7 +59,7 @@ public class InspectInfoActivity extends AppCompatActivity {
     private String[] typeArray;
     private ArrayAdapter<String> typeAdapter;
 
-    private InspectObject myObject;
+    private Inspect myObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +69,10 @@ public class InspectInfoActivity extends AppCompatActivity {
         if(intent.getSerializableExtra("InspectInfo")==null)
         {
             //todo add new Object
-            myObject=new InspectObject("new ID","new Code");
+            myObject=new Inspect("new ID","new Code");
         }
         else
-            myObject=(InspectObject)intent.getSerializableExtra("InspectInfo");
+            myObject=(Inspect)intent.getSerializableExtra("InspectInfo");
         ButterKnife.bind(this);
 
         setContentView(R.layout.activity_inspect_register);

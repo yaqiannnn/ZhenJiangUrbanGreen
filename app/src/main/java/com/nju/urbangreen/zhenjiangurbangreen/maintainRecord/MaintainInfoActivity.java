@@ -23,11 +23,9 @@ import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 
 public class MaintainInfoActivity extends AppCompatActivity {
 
@@ -68,7 +66,7 @@ public class MaintainInfoActivity extends AppCompatActivity {
     public AppCompatButton btnAttachment;
 
     public DatePickerDialog dtpckMaintainDate;
-    private MaintainObject myObject;
+    private Maintain myObject;
     private int updateState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +78,10 @@ public class MaintainInfoActivity extends AppCompatActivity {
         if(intent.getSerializableExtra("MaintainInfo")==null)
         {
             //todo add new Object
-            myObject=new MaintainObject("保存时自动生成","MR201701030002");
+            myObject=new Maintain("保存时自动生成","MR201701030002");
         }
         else
-            myObject=(MaintainObject)intent.getSerializableExtra("MaintainInfo");
+            myObject=(Maintain)intent.getSerializableExtra("MaintainInfo");
 
         ButterKnife.bind(this);
 
