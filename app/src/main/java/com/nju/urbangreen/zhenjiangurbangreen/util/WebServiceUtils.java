@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjects;
 import com.nju.urbangreen.zhenjiangurbangreen.map.MapActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.startup.WelcomeActivity;
 
@@ -29,6 +30,7 @@ import java.io.EOFException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -195,11 +197,11 @@ public class WebServiceUtils {
         return null;
     }
 
-    public static Map<String, Object> getUGOInfoExceptST(String[] errorMessage) {
+    public static List<GreenObjects> getUGOInfoExceptST(String[] errorMessage) {
         Map<String, Object> results = callMethod(GET_UGO_INFO_EXCEPT_ST, null);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<Map<String, Object>>() {
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>() {
             }.getType());
 
         } else {

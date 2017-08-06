@@ -5,7 +5,6 @@ package com.nju.urbangreen.zhenjiangurbangreen.basisClass;
  */
 public class GreenObjects {
     public String UGO_ID;
-    public String ReferenceSrcObj_ID;
     public String UGO_UCode;
     public String UGO_ParentID;
     public String UGO_ClassType_ID;
@@ -25,4 +24,5 @@ public class GreenObjects {
     public String UGO_DateOfDestroyed;
     public String UGO_DateOfDestroyRecord;
     public String UGO_LoggerPIDOfDestroyRecord;
+
 }

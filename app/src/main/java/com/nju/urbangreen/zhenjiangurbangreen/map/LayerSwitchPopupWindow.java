@@ -51,8 +51,9 @@ public class LayerSwitchPopupWindow extends PopupWindow {
     }
 
     private class SwitchListAdapter extends BaseAdapter{
-        private String[] layerName = new String[]{"公园","风景区","绿化带","古树名木","行道树"};
-        private int[] iconId = new int[]{R.mipmap.ic_park,R.mipmap.ic_scene,R.mipmap.ic_greenbelt,R.mipmap.ic_ancienttree,R.mipmap.ic_roadtree};
+        private String[] layerName = new String[]{"绿地","古树名木","行道树"};
+        private int[] iconId = new int[]{
+                R.drawable.green_land, R.drawable.ancient_tree, R.drawable.street_tree};
         private boolean[] layerState;
         private Context mContext;
         public SwitchListAdapter(Context context){
