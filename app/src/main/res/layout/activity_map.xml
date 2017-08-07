@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context="com.nju.urbangreen.zhenjiangurbangreen.map.MapActivity">
 
     <com.esri.android.map.MapView
@@ -13,56 +14,91 @@
 
     </com.esri.android.map.MapView>
 
-    <ImageButton
-        android:id="@+id/imgbtn_global_view"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/topbar"
-        android:layout_margin="10dp"
-        android:background="@mipmap/ic_global_view" />
-
-    <ImageButton
-        android:id="@+id/imgbtn_layer_switch"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/imgbtn_global_view"
-        android:layout_margin="10dp"
-        android:background="@mipmap/ic_layer_switch" />
-
-    <CheckBox
-        android:id="@+id/cb_nearby"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/imgbtn_layer_switch"
-        android:layout_margin="10dp"
-        android:background="@mipmap/ic_nearby_unselected"
-        android:button="@null" />
-
-
-    <ImageButton
-
-        android:id="@+id/imgbtn_locate"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="100dp"
-        android:layout_marginLeft="10dp"
-        android:background="@mipmap/ic_locate" />
-
-    <com.nju.urbangreen.zhenjiangurbangreen.map.MapTopBarLayout
-
-        android:id="@+id/topbar"
+    <android.support.v7.widget.CardView
+        android:id="@+id/topbar_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="10dp">
+        android:elevation="12dp"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="4dp">
+        <com.nju.urbangreen.zhenjiangurbangreen.map.MapTopBarLayout
+            android:id="@+id/topbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp">
+        </com.nju.urbangreen.zhenjiangurbangreen.map.MapTopBarLayout>
+    </android.support.v7.widget.CardView>
 
-    </com.nju.urbangreen.zhenjiangurbangreen.map.MapTopBarLayout>
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_global_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/topbar_card"
+        android:elevation="12dp"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="4dp">
+        <ImageButton
+            android:id="@+id/imgbtn_global_view"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="12dp"
+            android:background="@mipmap/ic_global_view" />
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_layer_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/cv_global_view"
+        android:elevation="12dp"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="4dp">
+        <ImageButton
+            android:id="@+id/imgbtn_layer_switch"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="12dp"
+            android:background="@mipmap/ic_layer_switch" />
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_nearby"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/cv_layer_switch"
+        android:layout_margin="10dp">
+        <ImageButton
+            android:id="@+id/imgbtn_nearby"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/ic_nearby"
+            android:scaleX="1.7"
+            android:scaleY="1.7"/>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/cv_nearby"
+        android:layout_margin="10dp">
+        <ImageButton
+            android:id="@+id/imgbtn_locate"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/ic_locate"
+            android:scaleX="1.7"
+            android:scaleY="1.7"/>
+    </android.support.v7.widget.CardView>
+
+
 
     <LinearLayout
         android:id="@+id/bottombar"
@@ -72,7 +108,21 @@
         android:layout_centerHorizontal="true"
         android:background="@color/colorPrimary"
         android:orientation="vertical"
+        android:elevation="8dp"
         android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_map_UGO_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/colorBackground"
+                android:gravity="center"
+                android:maxLines="1"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,12 +130,12 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_map_add_maintain"
+                android:id="@+id/btn_map_maintain_record"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:text="添加管养记录"
+                android:text="查看管养记录"
                 android:textColor="#fff" />
             <View
                 android:background="#fff"
@@ -93,12 +143,12 @@
                 android:layout_height="match_parent"/>
 
             <Button
-                android:id="@+id/btn_map_add_inspect"
+                android:id="@+id/btn_map_inspect_record"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:text="添加巡查记录"
+                android:text="查看巡查记录"
                 android:textColor="#fff" />
         </LinearLayout>
 
@@ -113,12 +163,12 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_map_add_event"
+                android:id="@+id/btn_map_event_record"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:text="添加大事记"
+                android:text="查看事件记录"
                 android:textColor="#fff" />
             <View
                 android:background="#fff"
@@ -126,7 +176,7 @@
                 android:layout_height="match_parent"/>
 
             <Button
-                android:id="@+id/btn_map_check_basicInfo"
+                android:id="@+id/btn_map_UGO_basicInfo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -78,7 +78,7 @@ public class MaintainInfoActivity extends AppCompatActivity {
         if(intent.getSerializableExtra("MaintainInfo")==null)
         {
             //todo add new Object
-            myObject=new Maintain("保存时自动生成","MR201701030002");
+//            myObject=new Maintain("保存时自动生成","MR201701030002");
         }
         else
             myObject=(Maintain)intent.getSerializableExtra("MaintainInfo");
@@ -86,22 +86,22 @@ public class MaintainInfoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setContentView(R.layout.activity_maintain_register);
-        tvMaintainID.setText(myObject.getID());
-        tvMaintainCode.setText(myObject.getCode());
+//        tvMaintainID.setText(myObject.getID());
+//        tvMaintainCode.setText(myObject.getCode());
 
         ArrayList<String> dropdownList = new ArrayList<>();
         dropdownList.addAll(Arrays.asList(getResources().getStringArray(R.array.maintainTypeDropList)));
         dropdownMaintainType.setDropdownList(dropdownList);
-        dropdownMaintainType.setText(myObject.getMaintainType());
+//        dropdownMaintainType.setText(myObject.getMaintainType());
 
         initDatePicker();
-        etMaintainStaff.setText(myObject.getMaintainStaff());
-        etMaintainStaff.addTextChangedListener(new myTextWatcher(etMaintainStaff));
-        etMaintainCompany.setText(myObject.getCompanyID());
-        etMaintainContent.setText(myObject.getContent());
-        tvLoggerID.setText(myObject.getLoggerPID());
-        tvLogTime.setText(myObject.getLogTime());
-        tvLasEditorPID.setText(myObject.getLastEditorPID());
+//        etMaintainStaff.setText(myObject.getMaintainStaff());
+//        etMaintainStaff.addTextChangedListener(new myTextWatcher(etMaintainStaff));
+//        etMaintainCompany.setText(myObject.getCompanyID());
+//        etMaintainContent.setText(myObject.getContent());
+//        tvLoggerID.setText(myObject.getLoggerPID());
+//        tvLogTime.setText(myObject.getLogTime());
+//        tvLasEditorPID.setText(myObject.getLastEditorPID());
 
         //初始化标题栏
         titleBarLayout.setTitleText("养护记录登记");

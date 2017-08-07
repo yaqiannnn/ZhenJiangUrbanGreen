@@ -161,24 +161,24 @@ public class UrbanGreenDB {
     }
 
     //将一条养护记录存储到数据库
-    public boolean saveMaintain(Maintain oneMaintain) {
-        if (oneMaintain != null) {
-            ContentValues values = new ContentValues();
-            values.put("code", oneMaintain.getCode());
-            values.put("company_id", oneMaintain.getCompanyID());
-            values.put("maintain_type", oneMaintain.getMaintainType());
-            values.put("maintain_staff", oneMaintain.getMaintainStaff());
-            values.put("maintain_date", oneMaintain.getMaintainDate().toString());
-            values.put("content", oneMaintain.getContent());
-            values.put("logger_pid", oneMaintain.getLoggerPID());
-            values.put("log_time", oneMaintain.getLogTime());
-            values.put("lasteditor_pid", oneMaintain.getLastEditorPID());
-            values.put("lastedit_time", "");
-            db.insert("Maintain", null, values);
-            return true;
-        }
-        return false;
-    }
+//    public boolean saveMaintain(Maintain oneMaintain) {
+//        if (oneMaintain != null) {
+//            ContentValues values = new ContentValues();
+//            values.put("code", oneMaintain.MR_Code);
+//            values.put("company_id", oneMaintain.MR_CompanyID);
+//            values.put("maintain_type", oneMaintain.getMaintainType());
+//            values.put("maintain_staff", oneMaintain.getMaintainStaff());
+//            values.put("maintain_date", oneMaintain.getMaintainDate().toString());
+//            values.put("content", oneMaintain.getContent());
+//            values.put("logger_pid", oneMaintain.getLoggerPID());
+//            values.put("log_time", oneMaintain.getLogTime());
+//            values.put("lasteditor_pid", oneMaintain.getLastEditorPID());
+//            values.put("lastedit_time", "");
+//            db.insert("Maintain", null, values);
+//            return true;
+//        }
+//        return false;
+//    }
 
     //将一条巡查记录存储到数据库
     public boolean saveInspect(Inspect oneInspect) {

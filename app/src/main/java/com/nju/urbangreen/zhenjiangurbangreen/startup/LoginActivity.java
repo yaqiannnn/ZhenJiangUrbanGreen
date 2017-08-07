@@ -1,6 +1,7 @@
 package com.nju.urbangreen.zhenjiangurbangreen.startup;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -8,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,15 +42,6 @@ import java.util.Map;
 
 public class LoginActivity extends Activity {
 
-    public static String DOWNLOAD_URL = "";
-    public static int NEW_Version;
-    public static final String SOAP_ACTION = "http://tempuri.org/CheckUpdate";
-    public static final String OPERATION_NAME = "CheckUpdate";
-    public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
-    public static final String SOAP_ADDRESS = "http://192.168.0.106:82/WebService.asmx";
-    ConnectivityManager connectivityManager;
-    NetworkInfo networkInfo;
-
     @BindView(R.id.edit_username)
     public EditText etUserName;
 
@@ -57,6 +50,8 @@ public class LoginActivity extends Activity {
 
     @BindView(R.id.btn_login)
     public Button btnLogin;
+
+    private ProgressDialog progressDialog;
     
     private String username;
     private String password;
@@ -68,68 +63,8 @@ public class LoginActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        //判断网络是否可用
-        connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        networkInfo = connectivityManager.getActiveNetworkInfo();
-
-//        new AsyncTask<Void,Void,Void>(){
-//
-//            @Override
-//            protected Void doInBackground(Void... voids) {
-//
-//                //if(networkInfo == null || !networkInfo.isAvailable()){
-//                    try{
-//                        Thread.sleep(800);
-//                    }catch (Exception e){
-//                        e.printStackTrace();
-//                    }
-//                    //return null;
-//                //}
-//
-//                SoapObject request = new SoapObject(WSDL_TARGET_NAMESPACE,OPERATION_NAME);
-//                PropertyInfo pi = new PropertyInfo();
-//                pi.setName("versionCode");
-//                pi.setValue(getVersion());
-//                pi.setType(Integer.class);
-//                request.addProperty(pi);
-//
-//                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-//                envelope.dotNet = true;
-//                envelope.encodingStyle = SoapSerializationEnvelope.ENC;
-//                envelope.setOutputSoapObject(request);
-//                HttpTransportSE transport = new HttpTransportSE(SOAP_ADDRESS);
-//                Object response = null;
-//                try{
-//                    transport.call(SOAP_ACTION,envelope);
-//                    response = envelope.getResponse();
-//
-//                    if(response != null){
-//                        Gson gson = new Gson();
-//                        Map<String,Object> result = new HashMap<String, Object>();
-//                        result = gson.fromJson(response.toString(),result.getClass());
-//                        DOWNLOAD_URL = (String)result.get("url");
-//                        NEW_Version = Integer.parseInt(result.get("version").toString());
-//
-//                    }
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//                try{
-//                    Thread.sleep(800);
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void aVoid) {
-//                super.onPostExecute(aVoid);
-//
-//
-//            }
-//
-//        }.execute();
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage("登录中...");
         setLoginButton();
     }
 
@@ -137,125 +72,35 @@ public class LoginActivity extends Activity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //判断网络是否可用
-                connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                networkInfo = connectivityManager.getActiveNetworkInfo();
-
-                if (networkInfo == null || !networkInfo.isAvailable()) {
-                    try {
-                        Thread.sleep(800);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(LoginActivity.this,"当前无网络连接，请检查网络设置~",Toast.LENGTH_SHORT).show();
-                }
+                progressDialog.show();
                 username = etUserName.getText().toString();
                 password = etPassword.getText().toString();
-                SPUtils.put("username",username);
-                SPUtils.put("password",password);
-                new AsyncTask<Void,Void,Integer>(){
-
+                new Thread(new Runnable() {
                     @Override
-                    protected void onPostExecute(Integer integer) {
-                        super.onPostExecute(integer);
-                        if(integer == 0){
-                            Toast.makeText(LoginActivity.this,"用户名或密码有误，请重新输入~",Toast.LENGTH_SHORT).show();
-                        }
-
-
+                    public void run() {
+                        String errorMsg[] = new String[1];
+                        Map<String, Object> res = WebServiceUtils.login(username, password, errorMsg);
+                        progressDialog.dismiss();
+                       if(res != null) {
+                           SPUtils.put("username",username);
+                           SPUtils.put("password",password);
+                           Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+                           startActivity(intent);
+                       } else {
+                           Looper.prepare();
+                           if(errorMsg[0] != null) {
+                               Toast.makeText(LoginActivity.this, errorMsg[0], Toast.LENGTH_SHORT).show();
+                           } else {
+                               Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                           }
+                           Looper.loop();
+                       }
                     }
+                }).start();
 
-                    @Override
-                    protected void onPreExecute() {
-                        super.onPreExecute();
-
-                    }
-
-                    @Override
-                    protected Integer doInBackground(Void... voids) {
-                        try{
-                            Thread.sleep(800);
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                        Intent mainIntent;
-                        String[] errMsg = new String[1];
-
-                        Map<String,Object> results = WebServiceUtils.login(username,password,errMsg);
-
-
-                        if(results != null){
-                            flag = true;
-                            Map<String, Object> resultsUpdate = WebServiceUtils.checkUpdate(errMsg);
-                            String APK_URL = resultsUpdate.get("url").toString();
-                            mainIntent = new Intent(LoginActivity.this,MapActivity.class);
-                            if (APK_URL != null) {
-                                mainIntent.putExtra("apk_url", APK_URL);
-                            }
-                            startActivity(mainIntent);
-                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            //imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),0);
-                            if(imm.isActive()){
-                                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                            }
-                            finish();
-                            return 1;
-                        }
-                        else{
-//                            mainIntent = new Intent(LoginActivity.this,MapActivity.class);
-//                            startActivity(mainIntent);
-
-                            SPUtils.remove("username");
-                            SPUtils.remove("password");
-                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            //imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),0);
-                            if(imm.isActive()){
-                                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                            }
-//                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-//                            finish();
-                            return 0;
-                        }
-
-                    }
-
-
-                }.execute();
-//                if(etPassword.getText().toString().equals("123")  && etUserName.getText().toString().equals("zlw")){
-//                    SPUtils.put(MyApplication.getContext(),"username","zlw");
-//                    SPUtils.put(MyApplication.getContext(),"password","123");
-//                    Intent intent = new Intent(LoginActivity.this,MapActivity.class);
-//                    if(!DOWNLOAD_URL.equals("")){
-//                        intent.putExtra("apk_url",DOWNLOAD_URL);
-//                    }
-//                    startActivity(intent);
-//                    finish();
-//                }else {
-//                    Toast.makeText(LoginActivity.this,"用户名或密码有误~",Toast.LENGTH_SHORT).show();
-//                    Log.i("hehehe","用户名或密码有误");
-//                }
-//                if(!flag){
-//                    Toast.makeText(LoginActivity.this,"用户名或密码有误，请重新输入~",Toast.LENGTH_SHORT).show();
-//                }
-                Log.i("登录",flag.toString());
-                Log.i("登录",username.toString());
-                Log.i("登录",password.toString());
             }
         });
     }
-
-    public int getVersion(){
-        try{
-            PackageManager manager = this.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(this.getPackageName(),0);
-            return info.versionCode;
-        }catch (Exception e){
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
 
 
     @Override
