@@ -17,6 +17,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Environment;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -645,7 +646,7 @@ public class MapActivity extends Activity {
         greenLandList = new ArrayList<>();
         ancientTreeList = new ArrayList<>();
         streetTreeList = new ArrayList<>();
-        loadingDialog.setMessage("正在获取数据...");
+        loadingDialog.setMessage("正在加载数据...");
         loadingDialog.show();
         new Thread(new Runnable() {
             @Override

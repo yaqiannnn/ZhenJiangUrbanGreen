@@ -30,9 +30,12 @@ import org.ksoap2.transport.HttpTransportSE;
 import java.io.EOFException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.realm.Realm;
 
 /**
  * Created by Liwei on 2016/12/25.
@@ -212,22 +215,30 @@ public class WebServiceUtils {
     }
 
     public static List<GreenObjects> getUGOInfoExceptST(String[] errorMessage) {
-        if(is_offline()) {
-            errorMessage[0] = "网络连接断开，请稍后再试";
-            return null;
+        if(Boolean.parseBoolean(SPUtils.get("HasUGO", false).toString())) {
+            return RealmUtils.getUGOs();
         }
-        Map<String, Object> results = callMethod(GET_UGO_INFO_EXCEPT_ST, null);
-        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
-            String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>() {
-            }.getType());
-
-        } else {
-            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
-                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+        else {
+            if(is_offline()) {
+                errorMessage[0] = "网络连接断开，请稍后再试";
+                return null;
             }
-            return null;
+            Map<String, Object> results = callMethod(GET_UGO_INFO_EXCEPT_ST, null);
+            if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+                String jsonResults = results.get(KEY_RESULT).toString();
+                List<GreenObjects> objs = new ArrayList<>();
+                objs = gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>(){}.getType());
+                RealmUtils.insertUGOs(objs);
+                return objs;
+//                return gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>(){}.getType());
+            } else {
+                if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                    errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                }
+                return null;
+            }
         }
+
     }
 
     public static Map<String, Object> login(String username, String password, String[] errorMessage) {

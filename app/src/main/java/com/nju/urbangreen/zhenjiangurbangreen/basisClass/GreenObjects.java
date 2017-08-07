@@ -1,10 +1,15 @@
 package com.nju.urbangreen.zhenjiangurbangreen.basisClass;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by Liwei on 2017/4/13.
  */
-public class GreenObjects {
+public class GreenObjects extends RealmObject {
+    @PrimaryKey
     public String UGO_ID;
+
     public String UGO_UCode;
     public String UGO_ParentID;
     public String UGO_ClassType_ID;
