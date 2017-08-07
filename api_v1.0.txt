@@ -139,8 +139,7 @@ Param中带"*"的为一定包含的参数
 6.获取行道树(某个点周围)
     Method: GetNearStreetTree
     Param: {
-    *   double pos_x,
-    *   double pos_y,
+    *   string pos_json_str,
     *   double radius 缓冲区半径(m),
     }
     Return: List<{

@@ -18,6 +18,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Environment;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
@@ -154,6 +155,7 @@ public class MapActivity extends Activity {
 
         ActivityCollector.addActivity(this);
         super.onCreate(savedInstanceState);
+        checkStoragePermission();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_map);
 
@@ -696,6 +698,15 @@ public class MapActivity extends Activity {
                     streetTreeLayer.addGraphic(graphic);
                 }
             }
+        }
+    }
+
+    /**
+     * Android6.0以上运行时请求读取内存权限
+     */
+    private void checkStoragePermission(){
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         }
     }
 }
