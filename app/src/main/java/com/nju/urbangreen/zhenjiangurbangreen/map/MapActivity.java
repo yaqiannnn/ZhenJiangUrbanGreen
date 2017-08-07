@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
@@ -24,8 +23,6 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,20 +37,14 @@ import com.esri.android.map.event.OnSingleTapListener;
 import com.esri.android.runtime.ArcGISRuntime;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Geometry;
-import com.esri.core.geometry.Line;
 import com.esri.core.geometry.Point;
-import com.esri.core.geometry.Polygon;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.PictureFillSymbol;
 import com.esri.core.symbol.PictureMarkerSymbol;
-import com.esri.core.symbol.SimpleFillSymbol;
-import com.esri.core.symbol.SimpleMarkerSymbol;
+import com.esri.core.symbol.Symbol;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.events.EventRegisterActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectInfoActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainInfoActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.util.GeoJsonUtil;
@@ -72,7 +63,7 @@ public class MapActivity extends Activity {
     private double distance = 500.0;
 
     private static final String GreenLandType = "000", AncientTreeType = "001", StreetTreeType = "002";
-    private static Map<String, Bitmap> texMap;
+    private static Map<String, Symbol> symbolMap;
 
     //TPK文件名称
     String tpkFileName = null;
@@ -106,19 +97,19 @@ public class MapActivity extends Activity {
 
     //定位按钮
     @BindView(R.id.imgbtn_locate)
-    public CardView imgBtnLocate;
+    public ImageButton imgBtnLocate;
 
     //图层控制按钮
     @BindView(R.id.imgbtn_layer_switch)
-    public CardView imgBtnLayerSwitch;
+    public ImageButton imgBtnLayerSwitch;
 
     //全局显示按钮
     @BindView(R.id.imgbtn_global_view)
-    public CardView imgBtnGlobalView;
+    public ImageButton imgBtnGlobalView;
 
     //显示周边开关
-    @BindView(R.id.cb_nearby)
-    public CardView chkBoxNearby;
+    @BindView(R.id.imgbtn_nearby)
+    public ImageButton imgBtnNearby;
 
     //点击图层控制按钮后弹出的popup窗口
     LayerSwitchPopupWindow layerSwitchPopupWindow;
@@ -229,7 +220,6 @@ public class MapActivity extends Activity {
     private void setLocateButton(){
         imgBtnLocate.setOnClickListener(new LocateButtonListener());
         locationLayer = new GraphicsLayer();
-
         locationManager = (LocationManager)MapActivity.this.getSystemService(Context.LOCATION_SERVICE);
     }
 
@@ -284,15 +274,15 @@ public class MapActivity extends Activity {
         nearbyLocListener = new NearbyLocListener();
         nearbyLocMag = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-//        chkBoxNearby.setChecked(false);
+//        imgBtnNearby.setChecked(false);
 //
-//        chkBoxNearby.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//        imgBtnNearby.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 //                //若按钮开启，则设置位置监听，搜索附近的行道树
 //                if(b){
 //                    isGreenTreeLayerVisible = streetTreeLayer.isVisible();
-//                    chkBoxNearby.setBackgroundResource(R.mipmap.ic_nearby_selected);
+//                    imgBtnNearby.setBackgroundResource(R.mipmap.ic_nearby_selected);
 //
 ////                    if(nearbyLocMag.getProvider(LocationManager.NETWORK_PROVIDER) != null){
 ////                        if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
@@ -311,7 +301,7 @@ public class MapActivity extends Activity {
 //                //否则，移除位置监听，恢复行道树图层的初始状态
 //                else {
 //                    //isGreenTreeLayerVisible = streetTreeLayer.isVisible();
-//                    chkBoxNearby.setBackgroundResource(R.mipmap.ic_nearby_unselected);
+//                    imgBtnNearby.setBackgroundResource(R.mipmap.ic_nearby_unselected);
 //
 //                    if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
 //                            ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -661,10 +651,13 @@ public class MapActivity extends Activity {
     }
 
     private void createUGOLayers(List<GreenObjects> list) {
-        texMap = new HashMap<>();
-        texMap.put(GreenLandType, BitmapFactory.decodeResource(getResources(), R.drawable.green_land));
-        texMap.put(AncientTreeType, BitmapFactory.decodeResource(getResources(), R.drawable.ancient_tree));
-        texMap.put(StreetTreeType, BitmapFactory.decodeResource(getResources(), R.drawable.street_tree));
+        symbolMap = new HashMap<>();
+        symbolMap.put(GreenLandType, new PictureFillSymbol(new BitmapDrawable(
+                BitmapFactory.decodeResource(getResources(), R.drawable.green_land))));
+        symbolMap.put(AncientTreeType, new PictureMarkerSymbol(new BitmapDrawable(
+                BitmapFactory.decodeResource(getResources(), R.drawable.ancient_tree))));
+        symbolMap.put(StreetTreeType, new PictureMarkerSymbol(new BitmapDrawable(
+                BitmapFactory.decodeResource(getResources(), R.drawable.street_tree))));
 
         for(GreenObjects obj : list) {
             Geometry geometry = GeoJsonUtil.String2Geometry(obj.UGO_Geo_Location);
@@ -674,24 +667,21 @@ public class MapActivity extends Activity {
                     greenLandList.add(obj);
                     greenObj.put("UGO_ID", obj.UGO_ID);
                     greenObj.put("GraphicType", 0);
-                    Graphic graphic = new Graphic(geometry, new PictureFillSymbol(
-                            new BitmapDrawable(texMap.get(GreenLandType))), greenObj);
+                    Graphic graphic = new Graphic(geometry, symbolMap.get(GreenLandType), greenObj);
                     greenLandLayer.addGraphic(graphic);
                 }
                 else if (obj.UGO_ClassType_ID.equals(AncientTreeType)) {
                     ancientTreeList.add(obj);
                     greenObj.put("UGO_ID", obj.UGO_ID);
                     greenObj.put("GraphicType", 1);
-                    Graphic graphic = new Graphic(geometry, new PictureMarkerSymbol(
-                            new BitmapDrawable(texMap.get(AncientTreeType))), greenObj);
+                    Graphic graphic = new Graphic(geometry, symbolMap.get(AncientTreeType), greenObj);
                     ancientTreeLayer.addGraphic(graphic);
                 }
                 else if (obj.UGO_ClassType_ID.equals(StreetTreeType)){
                     streetTreeList.add(obj);
                     greenObj.put("UGO_ID", obj.UGO_ID);
                     greenObj.put("GraphicType", 2);
-                    Graphic graphic = new Graphic(geometry, new PictureMarkerSymbol(
-                            new BitmapDrawable(texMap.get(StreetTreeType))), greenObj);
+                    Graphic graphic = new Graphic(geometry, symbolMap.get(StreetTreeType), greenObj);
                     streetTreeLayer.addGraphic(graphic);
                 }
             }
