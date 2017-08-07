@@ -20,12 +20,14 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,25 +103,41 @@ public class MapActivity extends Activity {
 
     //定位按钮
     @BindView(R.id.imgbtn_locate)
-    public ImageButton imgBtnLocate;
+    public CardView imgBtnLocate;
 
     //图层控制按钮
     @BindView(R.id.imgbtn_layer_switch)
-    public ImageButton imgBtnLayerSwitch;
+    public CardView imgBtnLayerSwitch;
 
     //全局显示按钮
     @BindView(R.id.imgbtn_global_view)
-    public ImageButton imgBtnGlobalView;
+    public CardView imgBtnGlobalView;
 
     //显示周边开关
     @BindView(R.id.cb_nearby)
-    public CheckBox chkBoxNearby;
+    public CardView chkBoxNearby;
 
     //点击图层控制按钮后弹出的popup窗口
     LayerSwitchPopupWindow layerSwitchPopupWindow;
 
     @BindView(R.id.bottombar)
     public View bottomBar;
+
+    @BindView(R.id.tv_map_UGO_info)
+    public TextView tvUGOInfo;
+    public String curUGOID;
+
+    @BindView(R.id.btn_map_maintain_record)
+    public Button btnMaintainRecord;
+
+    @BindView(R.id.btn_map_inspect_record)
+    public Button btnInspectRecord;
+
+    @BindView(R.id.btn_map_event_record)
+    public Button btnEventRecord;
+
+    @BindView(R.id.btn_map_UGO_basicInfo)
+    public Button btnUGOInfo;
 
     @BindView(R.id.map_main)
     public MapView map = null;
@@ -238,7 +256,6 @@ public class MapActivity extends Activity {
                 int[] location = new int[2];
                 view.getLocationOnScreen(location);
                 layerSwitchPopupWindow.show(view);
-                //layerSwitchPopupWindow.showAtLocation(view, Gravity.LEFT,0,0);
             }
         });
     }
@@ -264,43 +281,43 @@ public class MapActivity extends Activity {
         nearbyLocListener = new NearbyLocListener();
         nearbyLocMag = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        chkBoxNearby.setChecked(false);
-
-        chkBoxNearby.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                //若按钮开启，则设置位置监听，搜索附近的行道树
-                if(b){
-                    isGreenTreeLayerVisible = streetTreeLayer.isVisible();
-                    chkBoxNearby.setBackgroundResource(R.mipmap.ic_nearby_selected);
-
-//                    if(nearbyLocMag.getProvider(LocationManager.NETWORK_PROVIDER) != null){
-//                        if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-//                                ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-//                            nearbyLocMag.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,5,nearbyLocListener);
-//                        }
+//        chkBoxNearby.setChecked(false);
 //
-//                    }else if(nearbyLocMag.getProvider(LocationManager.GPS_PROVIDER) != null) {
-//                        if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-//                                ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//                            nearbyLocMag.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, nearbyLocListener);
-//                        }
+//        chkBoxNearby.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                //若按钮开启，则设置位置监听，搜索附近的行道树
+//                if(b){
+//                    isGreenTreeLayerVisible = streetTreeLayer.isVisible();
+//                    chkBoxNearby.setBackgroundResource(R.mipmap.ic_nearby_selected);
+//
+////                    if(nearbyLocMag.getProvider(LocationManager.NETWORK_PROVIDER) != null){
+////                        if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+////                                ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+////                            nearbyLocMag.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,5,nearbyLocListener);
+////                        }
+////
+////                    }else if(nearbyLocMag.getProvider(LocationManager.GPS_PROVIDER) != null) {
+////                        if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+////                                ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+////                            nearbyLocMag.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, nearbyLocListener);
+////                        }
+////                    }
+//                    searchNearbyTrees(new Point(491060.0,3558790.0));
+//                }
+//                //否则，移除位置监听，恢复行道树图层的初始状态
+//                else {
+//                    //isGreenTreeLayerVisible = streetTreeLayer.isVisible();
+//                    chkBoxNearby.setBackgroundResource(R.mipmap.ic_nearby_unselected);
+//
+//                    if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+//                            ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+//                        nearbyLocMag.removeUpdates(nearbyLocListener);
 //                    }
-                    searchNearbyTrees(new Point(491060.0,3558790.0));
-                }
-                //否则，移除位置监听，恢复行道树图层的初始状态
-                else {
-                    //isGreenTreeLayerVisible = streetTreeLayer.isVisible();
-                    chkBoxNearby.setBackgroundResource(R.mipmap.ic_nearby_unselected);
-
-                    if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                            ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                        nearbyLocMag.removeUpdates(nearbyLocListener);
-                    }
-                    recoverGreenTreeLayer();
-                }
-            }
-        });
+//                    recoverGreenTreeLayer();
+//                }
+//            }
+//        });
     }
 
     /*
@@ -465,12 +482,16 @@ public class MapActivity extends Activity {
     private void highlightGraphic(Graphic graphic){
         int[] ids = new int[]{(int)graphic.getId()};
         int graphicType = (Integer)graphic.getAttributeValue("GraphicType");
+        curUGOID = (String)graphic.getAttributeValue("UGO_ID");
         if(graphicType == 0){
-            greenLandLayer.setSelectedGraphics(ids,true);
+            greenLandLayer.setSelectedGraphics(ids, true);
+            tvUGOInfo.setText("绿地: " + curUGOID);
         }else if(graphicType == 1){
-            ancientTreeLayer.setSelectedGraphics(ids,true);
+            ancientTreeLayer.setSelectedGraphics(ids, true);
+            tvUGOInfo.setText("古树名木: " + curUGOID);
         }else if(graphicType == 2){
-            streetTreeLayer.setSelectedGraphics(ids,true);
+            streetTreeLayer.setSelectedGraphics(ids, true);
+            tvUGOInfo.setText("行道树: " + curUGOID);
         }
     }
 
@@ -492,7 +513,7 @@ public class MapActivity extends Activity {
             Integer graphicID = null;
             int layerIndex = 0;
 
-            //在每个图层中搜索被点击的“绿地”标识
+            //在每个图层中搜索被点击的Graphics
             for(;layerIndex < layers.length;layerIndex++){
                 GraphicsLayer graphicsLayer = layers[layerIndex];
                 if(graphicsLayer == null){
@@ -512,24 +533,9 @@ public class MapActivity extends Activity {
                 bottomBar.setVisibility(View.GONE);
                 return;
             }
-            bottomBar.setVisibility(View.VISIBLE);
             Graphic graphic = layers[layerIndex].getGraphic(graphicID);
             highlightGraphic(graphic);
-//            View view = LayoutInflater.from(MapActivity.this).inflate(R.layout.map_callout,null);
-//
-//
-//            callout.setContent(view);
-//            callout.setOffset(0,-15);
-//            callout.setStyle(R.xml.callout_style);
-//
-//            //在点击的地方显示出callout
-//            if(graphic.getGeometry().getType() == Geometry.Type.POINT){
-//                callout.show((Point)graphic.getGeometry());
-//            }else {
-//                Point showAt;
-//                showAt = map.toMapPoint(v,v1);
-//                callout.show(showAt);
-//            }
+            bottomBar.setVisibility(View.VISIBLE);
         }
     };
 
@@ -590,11 +596,10 @@ public class MapActivity extends Activity {
     }
 
     /**
-     * 设置bootbar中按钮的点击事件
+     * 设置bottom bar中按钮的点击事件
      */
     private void setBottomBar(){
-        Button btnAddEvent = (Button) findViewById(R.id.btn_map_add_event);
-        btnAddEvent.setOnClickListener(new View.OnClickListener() {
+        btnMaintainRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MapActivity.this, EventRegisterActivity.class);
@@ -602,8 +607,7 @@ public class MapActivity extends Activity {
             }
         });
 
-        Button btnAddMaintain = (Button) findViewById(R.id.btn_map_add_maintain);
-        btnAddMaintain.setOnClickListener(new View.OnClickListener() {
+        btnInspectRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MapActivity.this, MaintainInfoActivity.class);
@@ -611,8 +615,7 @@ public class MapActivity extends Activity {
             }
         });
 
-        Button btnAddInspect = (Button) findViewById(R.id.btn_map_add_inspect);
-        btnAddInspect.setOnClickListener(new View.OnClickListener() {
+        btnEventRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MapActivity.this, InspectInfoActivity.class);
@@ -620,8 +623,7 @@ public class MapActivity extends Activity {
             }
         });
 
-        Button btnCheckBasic = (Button) findViewById(R.id.btn_map_check_basicInfo);
-        btnCheckBasic.setOnClickListener(new View.OnClickListener() {
+        btnUGOInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -664,6 +666,7 @@ public class MapActivity extends Activity {
                 Map<String,Object> greenObj = new HashMap<>();
                 if (obj.UGO_ClassType_ID.equals(GreenLandType)) {
                     greenLandList.add(obj);
+                    greenObj.put("UGO_ID", obj.UGO_ID);
                     greenObj.put("GraphicType", 0);
                     Graphic graphic = new Graphic(geometry, new PictureFillSymbol(
                             new BitmapDrawable(texMap.get(GreenLandType))), greenObj);
@@ -671,6 +674,7 @@ public class MapActivity extends Activity {
                 }
                 else if (obj.UGO_ClassType_ID.equals(AncientTreeType)) {
                     ancientTreeList.add(obj);
+                    greenObj.put("UGO_ID", obj.UGO_ID);
                     greenObj.put("GraphicType", 1);
                     Graphic graphic = new Graphic(geometry, new PictureMarkerSymbol(
                             new BitmapDrawable(texMap.get(AncientTreeType))), greenObj);
@@ -678,6 +682,7 @@ public class MapActivity extends Activity {
                 }
                 else if (obj.UGO_ClassType_ID.equals(StreetTreeType)){
                     streetTreeList.add(obj);
+                    greenObj.put("UGO_ID", obj.UGO_ID);
                     greenObj.put("GraphicType", 2);
                     Graphic graphic = new Graphic(geometry, new PictureMarkerSymbol(
                             new BitmapDrawable(texMap.get(StreetTreeType))), greenObj);
