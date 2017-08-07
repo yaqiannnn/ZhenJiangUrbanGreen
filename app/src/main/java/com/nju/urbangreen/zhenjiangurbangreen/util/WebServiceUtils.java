@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjects;
+import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.Maintain;
 import com.nju.urbangreen.zhenjiangurbangreen.map.MapActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.startup.WelcomeActivity;
 
@@ -193,7 +194,7 @@ public class WebServiceUtils {
 
     }
 
-    public static Map<String, Object> getMaintainRecord(Map<String, Object> query) {
+    public static List<Maintain> getMaintainRecord(Map<String, Object> query) {
         return null;
     }
 

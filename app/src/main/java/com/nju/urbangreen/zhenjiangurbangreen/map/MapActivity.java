@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
@@ -19,6 +20,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.Window;
@@ -39,8 +41,12 @@ import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Geometry;
 import com.esri.core.geometry.Point;
 import com.esri.core.map.Graphic;
+import com.esri.core.symbol.MarkerSymbol;
 import com.esri.core.symbol.PictureFillSymbol;
 import com.esri.core.symbol.PictureMarkerSymbol;
+import com.esri.core.symbol.SimpleFillSymbol;
+import com.esri.core.symbol.SimpleLineSymbol;
+import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.symbol.Symbol;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
@@ -652,12 +658,17 @@ public class MapActivity extends Activity {
 
     private void createUGOLayers(List<GreenObjects> list) {
         symbolMap = new HashMap<>();
-        symbolMap.put(GreenLandType, new PictureFillSymbol(new BitmapDrawable(
-                BitmapFactory.decodeResource(getResources(), R.drawable.green_land))));
-        symbolMap.put(AncientTreeType, new PictureMarkerSymbol(new BitmapDrawable(
-                BitmapFactory.decodeResource(getResources(), R.drawable.ancient_tree))));
-        symbolMap.put(StreetTreeType, new PictureMarkerSymbol(new BitmapDrawable(
-                BitmapFactory.decodeResource(getResources(), R.drawable.street_tree))));
+        SimpleFillSymbol greenLandSymbol = new SimpleFillSymbol(
+                ResourcesCompat.getColor(getResources(), R.color.green_land, null), SimpleFillSymbol.STYLE.SOLID);
+        greenLandSymbol.setOutline(new SimpleLineSymbol(
+                ResourcesCompat.getColor(getResources(), R.color.green_land_border, null), 1.0f, SimpleLineSymbol.STYLE.SOLID));
+        symbolMap.put(GreenLandType, greenLandSymbol);
+        PictureMarkerSymbol ancientTreeSymbol = new PictureMarkerSymbol(new BitmapDrawable(
+                BitmapFactory.decodeResource(getResources(), R.drawable.ancient_tree)));
+        ancientTreeSymbol.setOffsetY(16);
+        symbolMap.put(AncientTreeType, ancientTreeSymbol);
+        symbolMap.put(StreetTreeType, new SimpleMarkerSymbol(
+                ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null), 5, SimpleMarkerSymbol.STYLE.CIRCLE));
 
         for(GreenObjects obj : list) {
             Geometry geometry = GeoJsonUtil.String2Geometry(obj.UGO_Geo_Location);
