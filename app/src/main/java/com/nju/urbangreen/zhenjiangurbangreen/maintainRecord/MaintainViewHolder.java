@@ -44,9 +44,9 @@ public class MaintainViewHolder extends RecyclerView.ViewHolder{
     public void setMaintainData(Maintain maintainInfo)
     {
         this.myObject=maintainInfo;
-        maintainID.setText(myObject.getID());
-        maintainType.setText(myObject.getMaintainType());
-        maintainDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(myObject.getMaintainDate()));
-        maintainStaff.setText(myObject.getMaintainStaff());
+//        maintainID.setText(myObject.getID());
+//        maintainType.setText(myObject.getMaintainType());
+//        maintainDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(myObject.getMaintainDate()));
+//        maintainStaff.setText(myObject.getMaintainStaff());
     }
 }

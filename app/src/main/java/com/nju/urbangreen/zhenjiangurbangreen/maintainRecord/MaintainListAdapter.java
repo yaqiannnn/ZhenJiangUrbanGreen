@@ -91,12 +91,12 @@ public class MaintainListAdapter extends RecyclerView.Adapter<MaintainViewHolder
             if(TextUtils.isEmpty(filterStr))
                 m_filteredList.addAll(m_originList);
             else {
-                for(Maintain object:m_originList)
-                {
-                    if(object.getID().contains(filterStr)
-                        || object.getCode().contains(filterStr))
-                        m_filteredList.add(object);
-                }
+//                for(Maintain object:m_originList)
+//                {
+//                    if(object.getID().contains(filterStr)
+//                        || object.getCode().contains(filterStr))
+//                        m_filteredList.add(object);
+//                }
             }
             results.values=m_filteredList;
             results.count=m_filteredList.size();

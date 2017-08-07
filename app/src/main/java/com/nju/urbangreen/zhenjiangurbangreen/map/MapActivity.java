@@ -49,9 +49,12 @@ import com.esri.core.symbol.PictureMarkerSymbol;
 import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventRegisterActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectInfoActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainInfoActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.util.GeoJsonUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WGSTOZhenjiang;
@@ -602,7 +605,8 @@ public class MapActivity extends Activity {
         btnMaintainRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MapActivity.this, EventRegisterActivity.class);
+                Intent intent = new Intent(MapActivity.this, MaintainListActivity.class);
+                intent.putExtra("UGO_ID", curUGOID);
                 startActivity(intent);
             }
         });
@@ -610,7 +614,8 @@ public class MapActivity extends Activity {
         btnInspectRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MapActivity.this, MaintainInfoActivity.class);
+                Intent intent = new Intent(MapActivity.this, InspectListActivity.class);
+                intent.putExtra("UGO_ID", curUGOID);
                 startActivity(intent);
             }
         });
@@ -618,7 +623,8 @@ public class MapActivity extends Activity {
         btnEventRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MapActivity.this, InspectInfoActivity.class);
+                Intent intent = new Intent(MapActivity.this, EventListActivity.class);
+                intent.putExtra("UGO_ID", curUGOID);
                 startActivity(intent);
             }
         });
