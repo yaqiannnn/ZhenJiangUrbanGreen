@@ -44,6 +44,7 @@ import com.esri.core.geometry.Polygon;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.PictureFillSymbol;
 import com.esri.core.symbol.PictureMarkerSymbol;
+import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventRegisterActivity;
@@ -646,29 +647,6 @@ public class MapActivity extends Activity {
                 String errorMsg[] = new String[1];
                 List<GreenObjects> UGO_list = WebServiceUtils.getUGOInfoExceptST(errorMsg);
                 createUGOLayers(UGO_list);
-
-
-                Point[] pointsGreenBlet = new Point[]{new Point(504058.0,3558310.0),new Point(504158.0,3555945.0),new Point(508871.0,3555945.0),new Point(507928.0,3558510.0)};
-                Polygon polygonGreenBelt = new Polygon();
-                Point startPoint = null;
-                Point endPoint = null;
-                for(int i = 0;i < pointsGreenBlet.length;i++){
-                    startPoint = pointsGreenBlet[i];
-                    endPoint = pointsGreenBlet[(i+1)%(pointsGreenBlet.length)];
-                    Line line = new Line();
-                    line.setStart(startPoint);
-                    line.setEnd(endPoint);
-                    polygonGreenBelt.addSegment(line,false);
-                }
-
-                Map<String,Object> greObj = new HashMap<>();
-                greObj.clear();
-                greObj.put("GraphicType",0);
-                Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(),R.drawable.green_land);
-                Graphic graphicGreenBelt = new Graphic(polygonGreenBelt,new PictureFillSymbol(new BitmapDrawable(bitmap3)),greObj);
-                greenLandLayer.addGraphic(graphicGreenBelt);
-                greenLandLayer.setVisible(true);
-
                 loadingDialog.dismiss();
             }
         }).start();
@@ -694,95 +672,18 @@ public class MapActivity extends Activity {
                 else if (obj.UGO_ClassType_ID.equals(AncientTreeType)) {
                     ancientTreeList.add(obj);
                     greenObj.put("GraphicType", 1);
-                    Graphic graphic = new Graphic(geometry, new PictureFillSymbol(
+                    Graphic graphic = new Graphic(geometry, new PictureMarkerSymbol(
                             new BitmapDrawable(texMap.get(AncientTreeType))), greenObj);
                     ancientTreeLayer.addGraphic(graphic);
                 }
                 else if (obj.UGO_ClassType_ID.equals(StreetTreeType)){
                     streetTreeList.add(obj);
                     greenObj.put("GraphicType", 2);
-                    Graphic graphic = new Graphic(geometry, new PictureFillSymbol(
+                    Graphic graphic = new Graphic(geometry, new PictureMarkerSymbol(
                             new BitmapDrawable(texMap.get(StreetTreeType))), greenObj);
                     streetTreeLayer.addGraphic(graphic);
                 }
             }
         }
     }
-
-    private void createLayers(){
-        Point[] pointsScene = new Point[]{new Point(496303.0,3553280.0),new Point(499445.0,3553280.0),new Point(497874.0,3555645.0)};
-        Point[] pointsPark = new Point[]{new Point(483736.0,3555845.0),new Point(485307.0,3554463.0),new Point(488449.0,3555980.0),new Point(485940.0,3556828.0)};
-        Point[] pointsGreenBlet = new Point[]{new Point(504058.0,3558310.0),new Point(504158.0,3555945.0),new Point(508871.0,3555945.0),new Point(507928.0,3558510.0)};
-
-        Polygon polygonScene = new Polygon();
-        Polygon polygonPark = new Polygon();
-        Polygon polygonGreenBelt = new Polygon();
-
-        Point startPoint = null;
-        Point endPoint = null;
-
-        for(int i = 0;i < pointsScene.length;i++){
-            startPoint = pointsScene[i];
-            endPoint = pointsScene[(i+1)%(pointsScene.length)];
-            Line line = new Line();
-            line.setStart(startPoint);
-            line.setEnd(endPoint);
-            polygonScene.addSegment(line,false);
-        }
-        for(int i = 0;i < pointsPark.length;i++){
-            startPoint = pointsPark[i];
-            endPoint = pointsPark[(i+1)%(pointsPark.length)];
-            Line line = new Line();
-            line.setStart(startPoint);
-            line.setEnd(endPoint);
-            polygonPark.addSegment(line,false);
-        }
-        for(int i = 0;i < pointsGreenBlet.length;i++){
-            startPoint = pointsGreenBlet[i];
-            endPoint = pointsGreenBlet[(i+1)%(pointsGreenBlet.length)];
-            Line line = new Line();
-            line.setStart(startPoint);
-            line.setEnd(endPoint);
-            polygonGreenBelt.addSegment(line,false);
-        }
-
-        Map<String,Object> greObj = new HashMap<>();
-
-        greObj.clear();
-        greObj.put("GraphicType",2);
-        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(),R.drawable.texture3);
-        Graphic graphicGreenBelt = new Graphic(polygonGreenBelt,new PictureFillSymbol(new BitmapDrawable(bitmap3)),greObj);
-        //Graphic graphicGreenBelt = new Graphic(polygonGreenBelt,new SimpleFillSymbol(Color.GREEN),greObj);
-        greenLandLayer = new GraphicsLayer();
-        greenLandLayer.addGraphic(graphicGreenBelt);
-
-        greObj.clear();
-        greObj.put("GraphicType",3);
-        Point loc0 = new Point(491067.0,3558797.0);
-        Graphic graphic0 = new Graphic(loc0,new SimpleMarkerSymbol(Color.RED,10, SimpleMarkerSymbol.STYLE.CIRCLE),greObj);
-
-        Point loc1 = new Point(500000.000,3560000.00);
-        Graphic graphic1 = new Graphic(loc1,new SimpleMarkerSymbol(Color.RED,10, SimpleMarkerSymbol.STYLE.CIRCLE),greObj);
-
-        greObj.clear();
-        greObj.put("GraphicType",4);
-        Point loc2 = new Point(490000.000,3556000.00);
-
-        Graphic graphic2 = new Graphic(loc2,new SimpleMarkerSymbol(Color.BLACK,10, SimpleMarkerSymbol.STYLE.CIRCLE),greObj);
-
-
-
-        //PictureMarkerSymbol symbol = new PictureMarkerSymbol(new BitmapDrawable(Bitmap.createBitmap(bitmap, 0, 0, bmpWidth, bmpHeght, matrix, true)));
-        //Graphic graphic2 = new Graphic(loc2,symbol);
-
-        streetTreeLayer = new GraphicsLayer();
-        streetTreeLayer.addGraphic(graphic1);
-        streetTreeLayer.addGraphic(graphic0);
-
-        ancientTreeLayer = new GraphicsLayer();
-        ancientTreeLayer.addGraphic(graphic2);
-
-    }
-
-
 }

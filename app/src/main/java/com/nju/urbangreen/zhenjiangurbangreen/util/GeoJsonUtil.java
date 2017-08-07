@@ -93,10 +93,7 @@ public class GeoJsonUtil {
     }
     private static Point pointFromCoordinate(ArrayList<Double> coordinate)
     {
-        Point point=new Point();
-        point.setX(coordinate.get(0));
-        point.setY(coordinate.get(1));
-        return point;
+        return new Point(coordinate.get(0).intValue(), coordinate.get(1).intValue());
     }
     private static ArrayList<Double> pointToCoordinate(Point point)
     {
@@ -136,9 +133,6 @@ public class GeoJsonUtil {
                 line.setEnd(endP);
                 polygon.addSegment(line, false);
             }
-//            coordinates.remove(coordinates.size() - 1);
-//            polygon.add(pathFromCoordinates(coordinates), false);
-//            polygon.closePathWithLine();
         }
         return polygon;
     }

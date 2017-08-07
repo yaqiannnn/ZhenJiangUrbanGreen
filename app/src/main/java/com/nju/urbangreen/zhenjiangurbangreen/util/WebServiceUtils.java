@@ -41,7 +41,7 @@ public class WebServiceUtils {
     //public static final String OPERATION_NAME = "CheckUpdate";
     //public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
     public static final String WSDL_TARGET_NAMESPACE = "http://services.ui.webbos.sjf.org/";
-    public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLService.asmx";
+    public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand/EXT_GreenLand/Mobile/Services/GLService.asmx";
     public static final int Timeout = 10000;
 
     public static final String CHECK_UPDATE = "CheckUpdate";
