@@ -45,7 +45,7 @@ public class WebServiceUtils {
     //public static final String OPERATION_NAME = "CheckUpdate";
     //public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
     public static final String WSDL_TARGET_NAMESPACE = "http://services.ui.webbos.sjf.org/";
-    public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand/EXT_GreenLand/Mobile/Services/GLService.asmx";
+    public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLService.asmx";
     public static final int Timeout = 10000;
 
     public static final String CHECK_UPDATE = "CheckUpdate";
@@ -105,8 +105,8 @@ public class WebServiceUtils {
 
         SoapObject request;
         if (identify) {
-            String username = SPUtils.get("username", "xk").toString();
-            String password = SPUtils.get("password", "@").toString();
+            String username = SPUtils.getString("username", "xk");
+            String password = SPUtils.getString("password", "@");
 
             if (methodName.equals(LOGIN)) {
                 username = params.get(KEY_USERNAME).toString();
@@ -215,7 +215,7 @@ public class WebServiceUtils {
     }
 
     public static List<GreenObjects> getUGOInfoExceptST(String[] errorMessage) {
-        if(Boolean.parseBoolean(SPUtils.get("HasUGO", false).toString())) {
+        if(SPUtils.getBool("HasUGO", false)) {
             return RealmUtils.getUGOs();
         }
         else {

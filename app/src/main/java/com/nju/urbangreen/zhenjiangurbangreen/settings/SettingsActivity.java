@@ -28,6 +28,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.startup.LoginActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.util.DownloadNewApkService;
 import com.nju.urbangreen.zhenjiangurbangreen.util.MyApplication;
+import com.nju.urbangreen.zhenjiangurbangreen.util.RealmUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
@@ -43,13 +44,6 @@ import java.util.Map;
 
 public class SettingsActivity extends Activity {
 
-    public static String DOWNLOAD_URL = "";
-    public static int NEW_Version;
-    public static final String SOAP_ACTION = "http://tempuri.org/CheckUpdate";
-    public static final String OPERATION_NAME = "CheckUpdate";
-    public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
-    public static final String SOAP_ADDRESS = "http://192.168.0.106:82/WebService.asmx";
-
     private ProgressDialog progressDialog;
 
     private Handler handler = new Handler(){
@@ -62,11 +56,12 @@ public class SettingsActivity extends Activity {
     @BindView(R.id.btn_check_update)
     public Button btnHandUpdate;
 
-    @BindView(R.id.btn_logout)
-    public Button btnLogout;
+    @BindView(R.id.btn_clear_cache)
+    public Button btnClearCache;
 
     @BindView(R.id.ly_settings_title_bar)
     public TitleBarLayout titleBarLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ActivityCollector.addActivity(this);
@@ -76,13 +71,41 @@ public class SettingsActivity extends Activity {
         ButterKnife.bind(this);
         setTitleBar();
         setHandUpdateButton();
-        setLogoutButton();
+        setClearButton();
     }
 
     @Override
     protected void onDestroy() {
         ActivityCollector.removeActivity(this);
         super.onDestroy();
+    }
+
+    private void setClearButton() {
+        btnClearCache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                builder.setTitle("提示");
+                builder.setMessage("确定要清除缓存吗?");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SPUtils.remove("username");
+                        SPUtils.remove("password");
+                        RealmUtils.removeUGOs();
+                        dialogInterface.dismiss();
+                        Toast.makeText(SettingsActivity.this, "清除缓存成功", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
     }
 
     private void setHandUpdateButton(){
@@ -137,8 +160,16 @@ public class SettingsActivity extends Activity {
         });
     }
 
-    private void setLogoutButton(){
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+    private void setTitleBar(){
+        titleBarLayout.setTitleText("设置");
+        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_logout);
+        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
@@ -163,17 +194,6 @@ public class SettingsActivity extends Activity {
                     }
                 });
                 builder.show();
-            }
-        });
-    }
-
-
-    private void setTitleBar(){
-        titleBarLayout.setTitleText("设置");
-        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
             }
         });
     }

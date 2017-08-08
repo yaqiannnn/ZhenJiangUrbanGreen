@@ -10,26 +10,35 @@
         android:id="@+id/ly_settings_title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"></com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
+        android:background="@color/colorPrimary">
+    </com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
 
     <Button
         android:id="@+id/btn_check_update"
         android:layout_width="match_parent"
-
         android:layout_height="50dp"
-        android:layout_margin="5dp"
+        android:layout_margin="8dp"
         android:background="@drawable/button_shape"
         android:text="检查更新"
         android:textColor="#FFF" />
 
     <Button
-        android:id="@+id/btn_logout"
+        android:id="@+id/btn_clear_cache"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="5dp"
+        android:layout_margin="8dp"
         android:background="@drawable/button_shape"
-        android:text="退出登录"
+        android:text="清除缓存"
         android:textColor="#FFF" />
+
+    <!--<Button-->
+        <!--android:id="@+id/btn_logout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:background="@drawable/button_shape"-->
+        <!--android:text="退出登录"-->
+        <!--android:textColor="#FFF" />-->
 
     <LinearLayout
 
