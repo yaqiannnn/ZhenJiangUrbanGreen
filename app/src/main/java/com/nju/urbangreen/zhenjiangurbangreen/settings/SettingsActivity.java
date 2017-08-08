@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +54,12 @@ public class SettingsActivity extends Activity {
         }
     };
 
+    @BindView(R.id.et_settings_radius)
+    public EditText etRaduis;
+
+    @BindView(R.id.btn_save_setting)
+    public Button btnSave;
+
     @BindView(R.id.btn_check_update)
     public Button btnHandUpdate;
 
@@ -70,6 +77,8 @@ public class SettingsActivity extends Activity {
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         setTitleBar();
+        setSettingValue();
+        setSaveButton();
         setHandUpdateButton();
         setClearButton();
     }
@@ -78,6 +87,27 @@ public class SettingsActivity extends Activity {
     protected void onDestroy() {
         ActivityCollector.removeActivity(this);
         super.onDestroy();
+    }
+
+    private void setSaveButton() {
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    SPUtils.put("NearRadius", Float.parseFloat(etRaduis.getText().toString()));
+                } catch(Exception e) {
+                    showFormatErrorToast("行道树缓冲区半径");
+                }
+            }
+        });
+    }
+
+    private void showFormatErrorToast(String key) {
+        Toast.makeText(SettingsActivity.this, key + "格式有误", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setSettingValue() {
+        etRaduis.setText(SPUtils.getFloat("NearRadius", 50.f).toString());
     }
 
     private void setClearButton() {

@@ -115,7 +115,7 @@ public class TitleBarLayout extends LinearLayout {
                     imm.hideSoftInputFromWindow(getApplicationWindowToken(),0);
                 }
                 tsvSearch.setVisibility(GONE);
-                //mContext.unregisterReceiver(recoverReceiver);
+                mContext.unregisterReceiver(recoverReceiver);
             }
         }
     }

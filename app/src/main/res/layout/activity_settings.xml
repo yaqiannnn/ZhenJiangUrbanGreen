@@ -13,39 +13,72 @@
         android:background="@color/colorPrimary">
     </com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
 
-    <Button
-        android:id="@+id/btn_check_update"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="8dp"
-        android:background="@drawable/button_shape"
-        android:text="检查更新"
-        android:textColor="#FFF" />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:divider="@drawable/table_divider_line"
+                android:orientation="vertical"
+                android:showDividers="middle"
+                android:shrinkColumns="1"
+                android:stretchColumns="1">
 
-    <Button
-        android:id="@+id/btn_clear_cache"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="8dp"
-        android:background="@drawable/button_shape"
-        android:text="清除缓存"
-        android:textColor="#FFF" />
+                <TableRow style="@style/RecordItem">
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="行道树缓冲区半径" />
+                    <EditText
+                        android:id="@+id/et_settings_radius"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext"  />
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginLeft="8dp"
+                        android:text="m"/>
+                </TableRow>
 
-    <!--<Button-->
-        <!--android:id="@+id/btn_logout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_margin="8dp"-->
-        <!--android:background="@drawable/button_shape"-->
-        <!--android:text="退出登录"-->
-        <!--android:textColor="#FFF" />-->
 
-    <LinearLayout
+            </TableLayout>
 
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#FFF">
+            <Button
+                android:id="@+id/btn_save_setting"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_shape"
+                android:text="保存设置"
+                android:textColor="#FFF" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/btn_check_update"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_shape"
+                android:text="检查更新"
+                android:textColor="#FFF" />
+
+            <Button
+                android:id="@+id/btn_clear_cache"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_shape"
+                android:text="清除缓存"
+                android:textColor="#FFF" />
+        </LinearLayout>
+    </ScrollView>
+
+
+
 </LinearLayout>

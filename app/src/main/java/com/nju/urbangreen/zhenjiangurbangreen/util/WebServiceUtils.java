@@ -52,6 +52,7 @@ public class WebServiceUtils {
     public static final String LOGIN = "Login";
     public static final String GET_MAINTAIN_RECORD = "GetMaintainRecord";
     public static final String GET_UGO_INFO_EXCEPT_ST = "GetUGOInfoExceptST";//ST表示行道树
+    public static final String GET_NEAR_STREET_TREE = "GetNearStreetTree";
 
     public static final String KEY_REFLACT_OPERATION_NAME = "wmn";
     public static final String KEY_REFLACT_OPERATION_PARAM = "wmp";
@@ -180,7 +181,7 @@ public class WebServiceUtils {
             errorMessage[0] = "网络连接断开，请稍后再试";
             return null;
         }
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("VersionCode", getVersion());
         Map<String, Object> results = callMethod(CHECK_UPDATE, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
@@ -230,7 +231,6 @@ public class WebServiceUtils {
                 objs = gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>(){}.getType());
                 RealmUtils.insertUGOs(objs);
                 return objs;
-//                return gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>(){}.getType());
             } else {
                 if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                     errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
@@ -241,12 +241,34 @@ public class WebServiceUtils {
 
     }
 
+    public static List<GreenObjects> getNearStreetTree(double x, double y, double radius, String[] errorMessage) {
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("radius", radius);
+        params.put("pos_json_str", GeoJsonUtil.Point2WKTString(x, y));
+        Map<String, Object> results = callMethod(GET_NEAR_STREET_TREE, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>(){}.getType());
+
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "get near street tree: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
     public static Map<String, Object> login(String username, String password, String[] errorMessage) {
         if(is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
             return null;
         }
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put(KEY_USERNAME, username);
         params.put(KEY_PASSWORD, password);
         Map<String, Object> results = callMethod(LOGIN, params);
