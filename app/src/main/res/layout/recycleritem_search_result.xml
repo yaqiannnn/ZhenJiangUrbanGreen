@@ -62,7 +62,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_weight="2"
                     android:id="@+id/iv_recyclerItemInspect_map"
-                    android:src="@drawable/ic_card_map" />
+                    android:src="@drawable/ic_card_map1" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

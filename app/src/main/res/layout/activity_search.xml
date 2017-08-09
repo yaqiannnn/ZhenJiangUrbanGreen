@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout
+        android:id="@+id/ly_search_UGO_title_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <include
-            layout="@layout/toolbar"/>
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+    </com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

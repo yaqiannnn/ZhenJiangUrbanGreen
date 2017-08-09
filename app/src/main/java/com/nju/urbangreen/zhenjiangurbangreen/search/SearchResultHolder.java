@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
  * Created by lxs on 2016/9/30.
  */
 public class SearchResultHolder extends RecyclerView.ViewHolder{
-    private UGObject obj;
+    private GreenObjects obj;
     private CardView mCardView;
 
     @BindView(R.id.recyclerItem_btn_toMaintainRecord)

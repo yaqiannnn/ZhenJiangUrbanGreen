@@ -94,7 +94,6 @@ public class LayerSwitchPopupWindow extends PopupWindow {
             viewHolder.layerName.setText(layerName[i]);
 
 
-            viewHolder.layerSwitch.setOnCheckedChangeListener(null);
             viewHolder.layerSwitch.setChecked(layerState[i]);
             viewHolder.layerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

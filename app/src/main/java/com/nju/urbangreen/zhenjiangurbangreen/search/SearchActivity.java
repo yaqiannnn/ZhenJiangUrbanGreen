@@ -3,10 +3,8 @@ package com.nju.urbangreen.zhenjiangurbangreen.search;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,14 +18,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
-    
-    @BindView(R.id.Toolbar)
-    public Toolbar mToolbar;
+
+    @BindView(R.id.ly_search_UGO_title_bar)
+    public TitleBarLayout titleBarLayout;
+
     public SearchView searchView;
 
     @BindView(R.id.listView_suggestionList)
@@ -36,14 +38,22 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @BindView(R.id.recyclerView_searchResult)
     public RecyclerView searchResult_recyclerView;
     private List<String> suggestionList;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        ActivityCollector.addActivity(this);
         initViews();
         initSuggestionList();
-        initSearchResultList();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+        if(titleBarLayout.recoverReceiver != null){
+            unregisterReceiver(titleBarLayout.recoverReceiver);
+        }
     }
 
     @Override
@@ -97,15 +107,22 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     }
     private void initToolbar()
     {
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.ic_toolbar_back);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        titleBarLayout.setTitleText("搜索绿化对象");
+        titleBarLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                SearchActivity.this.finish();
+            public void onClick(View view) {
+                finish();
             }
         });
+        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_search);
+        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //显示出TitleSearchView
+                titleBarLayout.setTsvSearchAvailable();
+            }
+        });
+        TitleSearchView searchView = titleBarLayout.getSearchView();
     }
     private void initSuggestionList()
     {
@@ -127,15 +144,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         });
         setSuggestionFilter(null);
     }
-    private void initSearchResultList()
-    {
-        List<UGObject> ugList=new ArrayList<>();
-        ugList.add(new UGObject("00000001","00000003","古树名木","梧桐树","镇江市","镇江市",15,"null"));
-        ugList.add(new UGObject("00001111","00000333","绿地","公园","镇江市","镇江市",100,"null"));
-        SearchResultAdapter searchResultAdapter=new SearchResultAdapter(ugList);
-        searchResult_recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        searchResult_recyclerView.setAdapter(searchResultAdapter);
-    }
+
     private void setSuggestionFilter(String filterText)
     {
         if(suggestionList_listView.getAdapter() instanceof Filterable)

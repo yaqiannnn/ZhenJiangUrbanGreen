@@ -13,18 +13,17 @@
         android:layout_centerVertical="true"
         />
     <TextView
-
         android:layout_toRightOf="@+id/iv_layer_icon"
         android:id="@+id/tv_layer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"/>
-    <CheckBox
-        android:button="@null"
-        android:background="@drawable/ic_switch"
+    <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/cb_layer_switch"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:buttonTint="@color/colorPrimary"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:checked="false"/>
 </RelativeLayout>
