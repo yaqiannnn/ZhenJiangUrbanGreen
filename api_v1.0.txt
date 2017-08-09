@@ -275,3 +275,80 @@ Param中带"*"的为一定包含的参数
         string rela_company 负责人单位,
         string rela_address 负责人地址,
     }
+
+// 获得搜索框匹配信息
+1. 获得所有绿化对象
+    Method: GetUGOSuggest
+    Return: List<{
+        string UGO_ID,
+        string UGO_Address
+    }>
+
+2. 获得所有管养记录
+    Method: GetMRSuggest
+    Return: List<{
+        string MR_ID
+    }>
+
+3. 获得所有巡查记录
+    Method: GetIRSuggest
+    Return: List<{
+        string MR_ID
+    }>
+
+4. 获得所有事件记录
+    Method: GetEventSuggest
+    Return: List<{
+        string MR_ID
+    }>
+
+// 搜索记录信息
+1.搜索绿化对象
+    Method: SearchUGOInfo_1
+    Param: {
+    *   string id 绿化对象UGO_ID(模糊搜索)
+    *   bool is_green_land
+    *   bool is_ancient_tree
+    *   bool is_street_tree
+    }
+    Return: List<{
+        UGO_ID
+        UGO_ClassType_ID
+        UGO_Name
+        UGO_Name_PinYinAbbrevation
+        UGO_Geo_Location
+        UGO_Address
+        UGO_CurrentArea
+        UGO_CurrentOwner
+        UGO_CurrentOwnerType
+        UGO_SpatialDescription
+        UGO_Description
+        UGO_LoggerPID
+        UGO_LogTime
+        UGO_LastEditorPID
+        UGO_LastEditTime
+        UGO_DirectManage
+        UGO_DirectManage_BeginDate
+        UGO_DirectManage_SrcOrganization
+        UGO_DirectManage_LoggerPID
+        UGO_DirectManage_LogTime
+        UGO_DirectManage_LogDescription
+        UGO_Destroyed
+        UGO_DateOfDestroyed
+        UGO_DateOfDestroyRecord
+        UGO_DescriptionOfDestroy
+        UGO_LoggerPIDOfDestroyRecord
+    }>
+
+2.搜索绿化对象
+    Method: SearchUGOInfo_2
+    Param: {
+    *   string id 绿化对象UGO_ID(精确搜索)
+    *   string address 绿化对象UGO_Adress(模糊搜索)
+    }
+    Return: List<{
+        UGO_ID
+        UGO_ClassType_ID
+        UGO_Name
+        UGO_Address
+    }>
