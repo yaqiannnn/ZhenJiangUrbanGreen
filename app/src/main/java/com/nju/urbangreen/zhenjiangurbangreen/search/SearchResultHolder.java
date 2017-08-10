@@ -2,6 +2,7 @@ package com.nju.urbangreen.zhenjiangurbangreen.search;
 
 import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -32,10 +33,19 @@ public class SearchResultHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.btn_search_item_IR)
     public AppCompatButton btnInspectRecord;
 
+    @BindView(R.id.iv_search_item_detail)
+    public AppCompatImageView ivDetail;
+
     public SearchResultHolder(View itemView) {
         super(itemView);
         mCardView=(CardView) itemView.findViewById(R.id.cardView_searchResult);
         ButterKnife.bind(this, itemView);
+        ivDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MaintainListActivity.class);
+            }
+        });
         btnMaintainRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
