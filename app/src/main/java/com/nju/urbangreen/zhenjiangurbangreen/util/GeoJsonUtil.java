@@ -27,6 +27,11 @@ import java.util.Map;
 
 public class GeoJsonUtil {
 
+    public static String Point2WKTString(double longitude, double latitude) {
+        Point p = WGSTOZhenjiang.WGS2ZJ(latitude, longitude);
+        return "POINT (" + p.getX() + " " + p.getY() + ")";
+    }
+
     public static String Geometry2String(Geometry geometry) {
         Gson gson = new GsonBuilder().serializeNulls().create();
         Map<String, Object> resMap = new HashMap<>();

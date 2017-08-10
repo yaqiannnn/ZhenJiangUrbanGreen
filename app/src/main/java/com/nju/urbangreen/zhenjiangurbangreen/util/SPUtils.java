@@ -1,6 +1,7 @@
 package com.nju.urbangreen.zhenjiangurbangreen.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import java.util.Map;
@@ -52,6 +53,31 @@ public class SPUtils {
             return sp.getString(key, (String) defaultObj);
         }
         return null;
+    }
+
+    public static Boolean getBool(String key, boolean defaultValue) {
+        SharedPreferences sp = MyApplication.getContext().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        return sp.getBoolean(key, defaultValue);
+    }
+
+    public static Float getFloat(String key, float defaultValue) {
+        SharedPreferences sp = MyApplication.getContext().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        return sp.getFloat(key, defaultValue);
+    }
+
+    public static Integer getInt(String key, int defaultValue) {
+        SharedPreferences sp = MyApplication.getContext().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        return sp.getInt(key, defaultValue);
+    }
+
+    public static Long getLong(String key, long defaultValue) {
+        SharedPreferences sp = MyApplication.getContext().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        return sp.getLong(key, defaultValue);
+    }
+
+    public static String getString(String key, String defaultValue) {
+        SharedPreferences sp = MyApplication.getContext().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        return sp.getString(key, defaultValue);
     }
 
     /**

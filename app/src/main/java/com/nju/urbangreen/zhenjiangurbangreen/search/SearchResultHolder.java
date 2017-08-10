@@ -1,5 +1,6 @@
 package com.nju.urbangreen.zhenjiangurbangreen.search;
 
+import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -8,32 +9,56 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjects;
+import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by lxs on 2016/9/30.
  */
 public class SearchResultHolder extends RecyclerView.ViewHolder{
+    private GreenObjects obj;
     private CardView mCardView;
+
+    @BindView(R.id.recyclerItem_btn_toMaintainRecord)
+    public AppCompatButton btnMaintainRecord;
+
+    @BindView(R.id.recyclerItem_btn_toEvent)
+    public AppCompatButton btnEvent;
+
+    @BindView(R.id.recyclerItem_btn_toInspectRecord)
+    public AppCompatButton btnInspectRecord;
+
     public SearchResultHolder(View itemView) {
         super(itemView);
         mCardView=(CardView) itemView.findViewById(R.id.cardView_searchResult);
-        AppCompatButton maintainRecord_button=(AppCompatButton)mCardView.findViewById(R.id.recyclerItem_btn_toMaintainRecord);
-        AppCompatButton event_button=(AppCompatButton)mCardView.findViewById(R.id.recyclerItem_btn_toEvent);
-        AppCompatButton inspectRecord_button=(AppCompatButton)mCardView.findViewById(R.id.recyclerItem_btn_toInspectRecord);
-        maintainRecord_button.setOnClickListener(new View.OnClickListener() {
+        ButterKnife.bind(this, itemView);
+        btnMaintainRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MaintainListActivity.class);
+//                intent.putExtra("UGO_ID", obj.getID());
+                v.getContext().startActivity(intent);
             }
         });
-        event_button.setOnClickListener(new View.OnClickListener() {
+        btnEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("click","event_button");
+                Intent intent = new Intent(v.getContext(), EventListActivity.class);
+//                intent.putExtra("UGO_ID", obj.getID());
+                v.getContext().startActivity(intent);
             }
         });
-        inspectRecord_button.setOnClickListener(new View.OnClickListener() {
+        btnInspectRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), InspectListActivity.class);
+//                intent.putExtra("UGO_ID", obj.getID());
+                v.getContext().startActivity(intent);
             }
         });
     }

@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListFragment;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventRegisterActivity;
@@ -25,7 +26,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
-public class MaintainListActivity extends FragmentActivity {
+public class MaintainListActivity extends BaseActivity {
 
     @BindView(R.id.ly_maintain_list_title_bar)
     public TitleBarLayout titleBarLayout;//标题栏
@@ -45,7 +46,6 @@ public class MaintainListActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityCollector.addActivity(this);
         setContentView(R.layout.activity_maintain_list);
         initViews();
     }
@@ -53,8 +53,6 @@ public class MaintainListActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ActivityCollector.removeActivity(this);
-        Log.i("管养活动", "onDestroy");
         if (titleBarLayout.recoverReceiver != null) {
             unregisterReceiver(titleBarLayout.recoverReceiver);
         }

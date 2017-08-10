@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-public class MaintainInfoActivity extends AppCompatActivity {
+public class MaintainInfoActivity extends BaseActivity {
 
     @BindView(R.id.ly_maintainInfo_title_bar)
     public TitleBarLayout titleBarLayout;//标题栏
@@ -70,8 +71,6 @@ public class MaintainInfoActivity extends AppCompatActivity {
     private int updateState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        ActivityCollector.addActivity(this);
         super.onCreate(savedInstanceState);
 
         Intent intent=getIntent();
@@ -129,12 +128,6 @@ public class MaintainInfoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
     }
 
     @Override

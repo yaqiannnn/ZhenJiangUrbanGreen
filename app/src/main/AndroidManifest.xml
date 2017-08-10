@@ -27,6 +27,25 @@
             <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
             <!-- </intent-filter> -->
         </activity>
+        <activity android:name=".search.SearchActivity">
+<!--             <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter> -->
+        </activity>
+        <activity android:name=".navigation.NaviActivity"/>
+        <activity android:name=".settings.SettingsActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
+        </activity>
         <activity android:name=".search.SearchActivity" />
         <activity android:name=".navigation.NaviActivity" />
         <activity android:name=".settings.SettingsActivity" />
@@ -35,9 +54,9 @@
             android:theme="@style/TranslucentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity android:name=".startup.LoginActivity" />
 

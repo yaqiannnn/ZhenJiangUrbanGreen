@@ -68,6 +68,7 @@ Param中带"*"的为一定包含的参数
     *   int limit,
         bool is_activity 是否为活动
         bool is_conclude 是否结案
+        string UGO_ID 绿化对象ID
     }
     Return: List<{
         UGE_Code
@@ -156,7 +157,7 @@ Param中带"*"的为一定包含的参数
 1.添加一条管养记录
     Method: AddMaintainRecord
     Param: {
-        *   string type 类型,
+        *   string type 类型,
         *   string date 管养时间,
         *   string staff 参与人员,
         *   string UGO_ID 涉及对象(一个或多个对象，用","隔开)
@@ -166,7 +167,7 @@ Param中带"*"的为一定包含的参数
 2.添加一条养护巡查记录
     Method: AddInspectRecord
     Param: {
-        *   string type 类型,
+        *   string type 类型,
         *   string date 巡查时间,
         *   string UGO_ID 涉及对象(一个或多个对象，用","隔开),
             string score 巡查得分,
@@ -179,7 +180,7 @@ Param中带"*"的为一定包含的参数
 3.添加一条事件记录
     Method: AddEvent
     Param: {
-    *   string title 标题,
+    *   string title 标题,
     *   string type 类型,
     *   string location 地点,
     *   string date 时间,
@@ -216,6 +217,7 @@ Param中带"*"的为一定包含的参数
 1.修改管养记录
     Method: UpdateMaintainRecord
     Param: {
+        *   string id 管养记录MR_ID
         *   string type 类型,
         *   string date 管养时间,
         *   string staff 参与人员,
@@ -226,6 +228,7 @@ Param中带"*"的为一定包含的参数
 2.修改养护巡查记录
     Method: UpdateInspectRecord
     Param: {
+        *   string id 巡查记录IR_ID
         *   string type 类型,
         *   string date 巡查时间,
         *   string UGO_ID 涉及对象(一个或多个对象，用","隔开),
@@ -239,6 +242,7 @@ Param中带"*"的为一定包含的参数
 3.修改事件记录
     Method: UpdateEvent
     Param: {
+    *   string id 事件记录UGE_ID
     *   string title 标题,
     *   string type 类型,
     *   string location 地点,
@@ -259,6 +263,7 @@ Param中带"*"的为一定包含的参数
 4.修改活动记录
     Method: UpdateActivity
     Param: {
+    *   string id 事件记录UGE_ID
     *   string title 标题,
     *   string type 类型,
     *   string location 地点,
@@ -270,3 +275,80 @@ Param中带"*"的为一定包含的参数
         string rela_company 负责人单位,
         string rela_address 负责人地址,
     }
+
+// 获得搜索框匹配信息
+1. 获得所有绿化对象
+    Method: GetUGOSuggest
+    Return: List<{
+        string UGO_ID,
+        string UGO_Address
+    }>
+
+2. 获得所有管养记录
+    Method: GetMRSuggest
+    Return: List<{
+        string MR_ID
+    }>
+
+3. 获得所有巡查记录
+    Method: GetIRSuggest
+    Return: List<{
+        string MR_ID
+    }>
+
+4. 获得所有事件记录
+    Method: GetEventSuggest
+    Return: List<{
+        string MR_ID
+    }>
+
+// 搜索记录信息
+1.搜索绿化对象
+    Method: SearchUGOInfo_1
+    Param: {
+    *   string id 绿化对象UGO_ID(模糊搜索)
+    *   bool is_green_land
+    *   bool is_ancient_tree
+    *   bool is_street_tree
+    }
+    Return: List<{
+        UGO_ID
+        UGO_ClassType_ID
+        UGO_Name
+        UGO_Name_PinYinAbbrevation
+        UGO_Geo_Location
+        UGO_Address
+        UGO_CurrentArea
+        UGO_CurrentOwner
+        UGO_CurrentOwnerType
+        UGO_SpatialDescription
+        UGO_Description
+        UGO_LoggerPID
+        UGO_LogTime
+        UGO_LastEditorPID
+        UGO_LastEditTime
+        UGO_DirectManage
+        UGO_DirectManage_BeginDate
+        UGO_DirectManage_SrcOrganization
+        UGO_DirectManage_LoggerPID
+        UGO_DirectManage_LogTime
+        UGO_DirectManage_LogDescription
+        UGO_Destroyed
+        UGO_DateOfDestroyed
+        UGO_DateOfDestroyRecord
+        UGO_DescriptionOfDestroy
+        UGO_LoggerPIDOfDestroyRecord
+    }>
+
+2.搜索绿化对象
+    Method: SearchUGOInfo_2
+    Param: {
+        string id 绿化对象UGO_ID(精确搜索)
+        string address 绿化对象UGO_Adress(模糊搜索)
+    }
+    Return: List<{
+        UGO_ID
+        UGO_ClassType_ID
+        UGO_Name
+        UGO_Address
+    }>

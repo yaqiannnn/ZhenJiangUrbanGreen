@@ -1,150 +1,163 @@
 package com.nju.urbangreen.zhenjiangurbangreen.search;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ListView;
+import android.widget.Toast;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
+import com.nju.urbangreen.zhenjiangurbangreen.map.ILayerSwitchListener;
+import com.nju.urbangreen.zhenjiangurbangreen.map.LayerSwitchPopupWindow;
+import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
+import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
-    
-    @BindView(R.id.Toolbar)
-    public Toolbar mToolbar;
-    public SearchView searchView;
+public class SearchActivity extends BaseActivity {
 
-    @BindView(R.id.listView_suggestionList)
-    public ListView suggestionList_listView;
+    @BindView(R.id.Toolbar)
+    public Toolbar toolbar;
+
+    @BindView(R.id.material_search_view)
+    public MaterialSearchView searchView;
 
     @BindView(R.id.recyclerView_searchResult)
     public RecyclerView searchResult_recyclerView;
-    private List<String> suggestionList;
+
+    private ProgressDialog loadingDialog;
+
+    private LayerSwitchPopupWindow popupWindow;
+    private boolean searchType[]; // 0: GreenLand, 1: AncientTree, 2: StreetTree
+
+    private String sugIDs[] = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        initViews();
-        initSuggestionList();
-        initSearchResultList();
+        setContentView(R.layout.activity_search);
+        ButterKnife.bind(this);
 
+        loadingDialog = new ProgressDialog(SearchActivity.this);
+        loadingDialog.setMessage("请稍候...");
+
+//        initSuggestionList();
+        initPopupWindow();
+        initToolbar();
+        initSuggestionList();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_toolbar_search,menu);
-        MenuItem search_menuItem=menu.findItem(R.id.menu_toolbar_item_search);
-        searchView=(SearchView) MenuItemCompat.getActionView(search_menuItem);
-        searchView.onActionViewExpanded();
-        searchView.setOnQueryTextListener(this);
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar_search, menu);
+        MenuItem item = menu.findItem(R.id.menu_toolbar_item_search);
+        searchView.setMenuItem(item);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void initPopupWindow() {
+        searchType = new boolean[] {true, true, false};
+        popupWindow = new LayerSwitchPopupWindow(this, new ILayerSwitchListener() {
             @Override
-            public void onClick(View v) {
-                Log.d("search","click");
-                setSuggestionFilter(null);
-                searchResult_recyclerView.setVisibility(View.INVISIBLE);
+            public boolean[] getLayerState() {
+                return searchType;
+            }
+
+            @Override
+            public void changeLayerState(boolean[] layerState) {
+                searchType = layerState;
             }
         });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+    }
+
+    private void initToolbar()
+    {
+        toolbar.setTitle("搜索绿化对象");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onClose() {
-                Log.d("search","close");
-                searchResult_recyclerView.setVisibility(View.VISIBLE);
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.i("bar", "submit");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.i("bar", "change");
                 return false;
             }
         });
-        return true;
-    }
 
-    @Override
-    public boolean onQueryTextSubmit(String query)
-    {
-        Log.d("search",query);
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String nextText)
-    {
-        Log.d("search","change_"+nextText);
-        setSuggestionFilter(nextText);
-        return true;
-    }
-
-    private void initViews()
-    {
-        setContentView(R.layout.activity_search);
-        ButterKnife.bind(this);
-        initToolbar();
-    }
-    private void initToolbar()
-    {
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.ic_toolbar_back);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
-            public void onClick(View v) {
-                SearchActivity.this.finish();
+            public void onSearchViewShown() {
+                Log.i("bar", "show");
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                //Do some magic
+                Log.i("bar", "close");
             }
         });
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.menu_toolbar_item_filter) {
+                    popupWindow.showAsDropDown(toolbar, 0, 12, Gravity.RIGHT | Gravity.BOTTOM);
+                }
+                return false;
+            }
+        });
+        searchView.setSuggestions(sugIDs);
     }
     private void initSuggestionList()
     {
-        suggestionList=new ArrayList<>();
-        for(int i=0;i<5000;i++)
-        {
-            suggestionList.add(Math.random()*10000+"tree");
-        }
-        final ArrayAdapter<String> suggestionListAdapter=new ArrayAdapter<>(SearchActivity.this,
-                android.R.layout.simple_list_item_1,suggestionList);
-        suggestionList_listView.setAdapter(suggestionListAdapter);
-        suggestionList_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("click","position"+position+"");
-                Log.d("click","id:"+id+"");
-                searchView.setQuery(suggestionListAdapter.getItem(position),true);
-            }
-        });
-        setSuggestionFilter(null);
-    }
-    private void initSearchResultList()
-    {
-        List<UGObject> ugList=new ArrayList<>();
-        ugList.add(new UGObject("00000001","00000003","古树名木","梧桐树","镇江市","镇江市",15,"null"));
-        ugList.add(new UGObject("00001111","00000333","绿地","公园","镇江市","镇江市",100,"null"));
-        SearchResultAdapter searchResultAdapter=new SearchResultAdapter(ugList);
-        searchResult_recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        searchResult_recyclerView.setAdapter(searchResultAdapter);
-    }
-    private void setSuggestionFilter(String filterText)
-    {
-        if(suggestionList_listView.getAdapter() instanceof Filterable)
-        {
-            Filter filter=((Filterable)suggestionList_listView.getAdapter()).getFilter();
-            if(filterText==null||filterText.length()==0)
-                filter.filter("-1");
-            else
-                filter.filter(filterText);
+        if(CacheUtil.hasUGOSug()) {
+            sugIDs = CacheUtil.getUGOSug("UGO_ID");
+        } else {
+            loadingDialog.show();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String errorMsg[] = new String[1];
+                    List<GreenObjectSug> res = WebServiceUtils.getUGOSug(errorMsg);
+                    loadingDialog.dismiss();
+                    if(res != null) {
+                        CacheUtil.putUGOSug(res);
+                        sugIDs = CacheUtil.getUGOSug("UGO_ID");
+                    } else if(errorMsg[0] != null && !errorMsg[0].equals("")) {
+                        Looper.prepare();
+                        Toast.makeText(SearchActivity.this, errorMsg[0], Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    } else {
+                        Looper.prepare();
+                        Toast.makeText(SearchActivity.this, "网络连接断开，请稍后再试", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+                }
+            }).start();
         }
     }
+
 }

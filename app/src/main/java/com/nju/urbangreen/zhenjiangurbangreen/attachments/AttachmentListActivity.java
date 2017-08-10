@@ -10,12 +10,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
 import java.util.ArrayList;
 
-public class AttachmentListActivity extends AppCompatActivity {
+public class AttachmentListActivity extends BaseActivity {
 
     @BindView(R.id.ly_attachments_title_bar)
     public TitleBarLayout titleBarLayout;
@@ -23,8 +24,6 @@ public class AttachmentListActivity extends AppCompatActivity {
     public ListView lvAttachmentRecords;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ActivityCollector.addActivity(this);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attachment_list);
 
@@ -52,11 +51,5 @@ public class AttachmentListActivity extends AppCompatActivity {
         list.add(new OneAttachmentRecord("what doesn't kill you","0kb"));
         AttachmentRecordAdapter adapter = new AttachmentRecordAdapter(this,R.layout.attachment_list_item,list);
         lvAttachmentRecords.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
     }
 }

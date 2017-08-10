@@ -10,7 +10,9 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjects;
+import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.Maintain;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -21,6 +23,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import java.io.EOFException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,13 +36,15 @@ public class WebServiceUtils {
     //public static final String OPERATION_NAME = "CheckUpdate";
     //public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
     public static final String WSDL_TARGET_NAMESPACE = "http://services.ui.webbos.sjf.org/";
-    public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand/EXT_GreenLand/Mobile/Services/GLService.asmx";
+    public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLService.asmx";
     public static final int Timeout = 10000;
 
-    public static final String CHECK_UPDATE = "CheckUpdate";
-    public static final String LOGIN = "Login";
-    public static final String GET_MAINTAIN_RECORD = "GetMaintainRecord";
-    public static final String GET_UGO_INFO_EXCEPT_ST = "GetUGOInfoExceptST";//ST表示行道树
+    public static final String Check_Update = "CheckUpdate";
+    public static final String Login = "Login";
+    public static final String Get_Maintain_Record = "GetMaintainRecord";
+    public static final String Get_UGO_Info_Except_ST = "GetUGOInfoExceptST";//ST表示行道树
+    public static final String Get_Near_Street_Tree = "GetNearStreetTree";
+    public static final String GET_UGO_Suggest = "GetUGOSuggest";
 
     public static final String KEY_REFLACT_OPERATION_NAME = "wmn";
     public static final String KEY_REFLACT_OPERATION_PARAM = "wmp";
@@ -93,10 +98,10 @@ public class WebServiceUtils {
 
         SoapObject request;
         if (identify) {
-            String username = SPUtils.get("username", "xk").toString();
-            String password = SPUtils.get("password", "@").toString();
+            String username = SPUtils.getString("username", "xk");
+            String password = SPUtils.getString("password", "@");
 
-            if (methodName.equals(LOGIN)) {
+            if (methodName.equals(Login)) {
                 username = params.get(KEY_USERNAME).toString();
                 password = params.get(KEY_PASSWORD).toString();
                 Log.i("Login username: ", username);
@@ -168,16 +173,16 @@ public class WebServiceUtils {
             errorMessage[0] = "网络连接断开，请稍后再试";
             return null;
         }
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("VersionCode", getVersion());
-        Map<String, Object> results = callMethod(CHECK_UPDATE, params);
-        if (Integer.parseInt(results.get("ok").toString()) == RESULT_SUCCEED) {
-            String jsonResults = results.get("ret").toString();
+        Map<String, Object> results = callMethod(Check_Update, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
             return gson.fromJson(jsonResults, new TypeToken<Map<String, Object>>() {
             }.getType());
         } else {
-            if (errorMessage != null && results.get("msg") != null) {
-                errorMessage[0] = results.get("msg").toString();
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
                 Log.i("错误消息", "checkUpdate: " + errorMessage[0]);
             }
             return null;
@@ -185,30 +190,97 @@ public class WebServiceUtils {
 
     }
 
-    public static Map<String, Object> getMaintainRecord(Map<String, Object> query) {
-        return null;
+    public static List<Maintain> getMaintainRecord(Map<String, Object> query, String[] errorMessage) {
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> res = callMethod(Get_Maintain_Record, query);
+        if(Integer.parseInt(res.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return gson.fromJson(res.get(KEY_RESULT).toString(),
+                    new TypeToken<List<Maintain>>(){}.getType());
+        } else {
+            if (errorMessage != null && res.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = res.get(KEY_ERRMESSAGE).toString();
+            }
+            return null;
+        }
     }
 
-    public static List<GreenObject> getUGOInfoExceptST(String[] errorMessage) {
-        Map<String, Object> results = callMethod(GET_UGO_INFO_EXCEPT_ST, null);
+    public static List<GreenObjects> getUGOInfoExceptST(String[] errorMessage) {
+        if(CacheUtil.hasUGOs()) {
+            return CacheUtil.getUGOs();
+        }
+        else {
+            if(is_offline()) {
+                errorMessage[0] = "网络连接断开，请稍后再试";
+                return null;
+            }
+            Map<String, Object> results = callMethod(Get_UGO_Info_Except_ST, null);
+            if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+                String jsonResults = results.get(KEY_RESULT).toString();
+                List<GreenObjects> objs = new ArrayList<>();
+                objs = gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>(){}.getType());
+                CacheUtil.putUGOs(objs);
+                return objs;
+            } else {
+                if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                    errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                }
+                return null;
+            }
+        }
+
+    }
+
+    public static List<GreenObjects> getNearStreetTree(double x, double y, double radius, String[] errorMessage) {
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("radius", radius);
+        params.put("pos_json_str", GeoJsonUtil.Point2WKTString(x, y));
+        Map<String, Object> results = callMethod(Get_Near_Street_Tree, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
-            }.getType());
-
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>(){}.getType());
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "get near street tree: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
+    public static List<GreenObjectSug> getUGOSug(String[] errorMessage) {
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> results = callMethod(GET_UGO_Suggest, null);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObjectSug>>(){}.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get UGO Sug: " + errorMessage[0]);
             }
             return null;
         }
     }
 
     public static Map<String, Object> login(String username, String password, String[] errorMessage) {
-        Map<String, Object> params = new HashMap<String, Object>();
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> params = new HashMap<>();
         params.put(KEY_USERNAME, username);
         params.put(KEY_PASSWORD, password);
-        Map<String, Object> results = callMethod(LOGIN, params);
+        Map<String, Object> results = callMethod(Login, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
             return gson.fromJson(jsonResults, new TypeToken<Map<String, Object>>() {

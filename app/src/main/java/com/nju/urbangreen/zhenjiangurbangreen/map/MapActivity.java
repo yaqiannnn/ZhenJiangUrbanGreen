@@ -16,10 +16,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Environment;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -31,6 +33,7 @@ import butterknife.ButterKnife;
 
 import com.esri.android.map.Callout;
 import com.esri.android.map.GraphicsLayer;
+import com.esri.android.map.LocationDisplayManager;
 import com.esri.android.map.MapView;
 import com.esri.android.map.ags.ArcGISLocalTiledLayer;
 import com.esri.android.map.event.OnSingleTapListener;
@@ -39,15 +42,19 @@ import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Geometry;
 import com.esri.core.geometry.Point;
 import com.esri.core.map.Graphic;
-import com.esri.core.symbol.PictureFillSymbol;
 import com.esri.core.symbol.PictureMarkerSymbol;
+import com.esri.core.symbol.SimpleFillSymbol;
+import com.esri.core.symbol.SimpleLineSymbol;
+import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.symbol.Symbol;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.util.GeoJsonUtil;
+import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WGSTOZhenjiang;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
@@ -58,9 +65,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapActivity extends Activity {
-
-    private double distance = 500.0;
+public class MapActivity extends BaseActivity {
 
     private static final String GreenLandType = "000", AncientTreeType = "001", StreetTreeType = "002";
     private static Map<String, Symbol> symbolMap;
@@ -70,19 +75,12 @@ public class MapActivity extends Activity {
 
     //当前行道树图层是否可见
     private boolean isGreenTreeLayerVisible;
-    private boolean isGreenTreeLayerVisibleFromSwitch;
 
-    private boolean isNearbyOpen = false;
     Envelope fullExtent=new Envelope(480594.6020435903,3550915.606576609,512013.935715591,3574562.78928764);
     Envelope fullExtent2=new Envelope(491067.0,3558797.0,501540.0,3566679.0);
     //用于定位按钮的LocationManager
     private LocationManager locationManager;
-
-    //用于显示周边开关的LocationManager
-    private LocationManager nearbyLocMag;
-
-    //显示周边按钮的位置监听
-    private NearbyLocListener nearbyLocListener;
+    private LocationDisplayManager locationDisplayManager;
 
     //正在定位对话框
     private ProgressDialog dlgLocating;
@@ -141,12 +139,11 @@ public class MapActivity extends Activity {
     GraphicsLayer greenLandLayer;
     GraphicsLayer locationLayer;
 
-    private ArrayList<GreenObject> greenLandList, ancientTreeList, streetTreeList;
+    private List<GreenObjects> greenLandList, ancientTreeList, streetTreeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        ActivityCollector.addActivity(this);
         super.onCreate(savedInstanceState);
         checkStoragePermission();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -178,7 +175,7 @@ public class MapActivity extends Activity {
         setLayerSwitchPopupWindow();
 
         //设置显示周边按钮
-        setNearbyButton();
+        setNearTreeButton();
 
         //设置底部栏的按钮点击事件
         setBottomBar();
@@ -193,10 +190,51 @@ public class MapActivity extends Activity {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
+    private void setNearTreeButton() {
+        imgBtnNearby.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadingDialog.show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Location cur_loc = locationDisplayManager.getLocation();
+                        String errorMsg[] = new String[1];
+                        List<GreenObjects> res = WebServiceUtils.getNearStreetTree(cur_loc.getLongitude(),
+                                cur_loc.getLatitude(), SPUtils.getFloat("NearRadius", 50.f), errorMsg);
+                        if(res != null) {
+                            streetTreeList.clear();
+                            streetTreeLayer.removeAll();
+                            for(GreenObjects obj : res) {
+                                Geometry geometry = GeoJsonUtil.String2Geometry(obj.UGO_Geo_Location);
+                                if(geometry != null) {
+                                    Map<String,Object> greenObj = new HashMap<>();
+                                    if (obj.UGO_ClassType_ID.equals(StreetTreeType)){
+                                        streetTreeList.add(obj);
+                                        greenObj.put("UGO_ID", obj.UGO_ID);
+                                        greenObj.put("GraphicType", 2);
+                                        Graphic graphic = new Graphic(geometry, symbolMap.get(StreetTreeType), greenObj);
+                                        streetTreeLayer.addGraphic(graphic);
+                                    }
+                                }
+                            }
+                            loadingDialog.dismiss();
+                        } else if(errorMsg[0] != null && !errorMsg[0].equals("")) {
+                            loadingDialog.dismiss();
+                            Looper.prepare();
+                            Toast.makeText(MapActivity.this, errorMsg[0], Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        } else {
+                            loadingDialog.dismiss();
+                            Looper.prepare();
+                            Toast.makeText(MapActivity.this, "无法获取周边行道树", Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        }
+                    }
+                }).start();
+
+            }
+        });
     }
 
     /*
@@ -219,7 +257,17 @@ public class MapActivity extends Activity {
     * 设置定位按钮
     * */
     private void setLocateButton(){
-        imgBtnLocate.setOnClickListener(new LocateButtonListener());
+        locationDisplayManager= map.getLocationDisplayManager();
+        locationDisplayManager.setShowLocation(true);
+        locationDisplayManager.setAutoPanMode(LocationDisplayManager.AutoPanMode.LOCATION);//设置模式
+        locationDisplayManager.setShowPings(true);
+        locationDisplayManager.start();//开始定位
+        imgBtnLocate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                zoomTo(locationDisplayManager.getPoint());
+            }
+        });
         locationLayer = new GraphicsLayer();
         locationManager = (LocationManager)MapActivity.this.getSystemService(Context.LOCATION_SERVICE);
     }
@@ -255,94 +303,6 @@ public class MapActivity extends Activity {
     }
 
     /*
-    *恢复行道树图层中树木的显示
-    * */
-    private void recoverGreenTreeLayer(){
-        GraphicsLayer graphicsLayer = streetTreeLayer;
-        int[] ids = graphicsLayer.getGraphicIDs();
-        for(int i = 0;i < ids.length;i++){
-            graphicsLayer.setGraphicVisible(ids[i],true);
-        }
-        streetTreeLayer.setVisible(isGreenTreeLayerVisible);
-    }
-
-    /*
-    * 设置周边按钮
-    * */
-    private void setNearbyButton(){
-
-
-        nearbyLocListener = new NearbyLocListener();
-        nearbyLocMag = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-//        imgBtnNearby.setChecked(false);
-//
-//        imgBtnNearby.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                //若按钮开启，则设置位置监听，搜索附近的行道树
-//                if(b){
-//                    isGreenTreeLayerVisible = streetTreeLayer.isVisible();
-//                    imgBtnNearby.setBackgroundResource(R.mipmap.ic_nearby_selected);
-//
-////                    if(nearbyLocMag.getProvider(LocationManager.NETWORK_PROVIDER) != null){
-////                        if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-////                                ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-////                            nearbyLocMag.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,5,nearbyLocListener);
-////                        }
-////
-////                    }else if(nearbyLocMag.getProvider(LocationManager.GPS_PROVIDER) != null) {
-////                        if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-////                                ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-////                            nearbyLocMag.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, nearbyLocListener);
-////                        }
-////                    }
-//                    searchNearbyTrees(new Point(491060.0,3558790.0));
-//                }
-//                //否则，移除位置监听，恢复行道树图层的初始状态
-//                else {
-//                    //isGreenTreeLayerVisible = streetTreeLayer.isVisible();
-//                    imgBtnNearby.setBackgroundResource(R.mipmap.ic_nearby_unselected);
-//
-//                    if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-//                            ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-//                        nearbyLocMag.removeUpdates(nearbyLocListener);
-//                    }
-//                    recoverGreenTreeLayer();
-//                }
-//            }
-//        });
-    }
-
-    /*
-    * 搜索某个点附近xxx米范围内的行道树
-    * */
-    private void searchNearbyTrees(Point loc){
-        isGreenTreeLayerVisible = streetTreeLayer.isVisible();
-        GraphicsLayer graphicsLayer = streetTreeLayer;
-        int[] ids = graphicsLayer.getGraphicIDs();
-        for(int i = 0;i < ids.length;i++){
-            Point treeLoc = (Point) graphicsLayer.getGraphic(ids[i]).getGeometry();
-            if(calcDistance(loc,treeLoc) < distance){
-                graphicsLayer.setGraphicVisible(ids[i],true);
-            }
-            else{
-                graphicsLayer.setGraphicVisible(ids[i],false);
-            }
-        }
-        graphicsLayer.setVisible(true);
-        if(isGreenTreeLayerVisible != true)
-            isGreenTreeLayerVisible = false;
-    }
-
-    /*
-    * 计算两个点之间的距离
-    * */
-    private double calcDistance(Point p1,Point p2){
-        return Math.sqrt((p1.getX() - p2.getX())*(p1.getX() - p2.getX()) + (p1.getY() - p2.getY()) * (p1.getY() - p2.getY()));
-    }
-
-    /*
     * 缩放至特定的位置来显示
     * */
     private void zoomTo(Geometry geometry){
@@ -354,123 +314,6 @@ public class MapActivity extends Activity {
         double ew = envelope.getWidth();
         double res = Math.max(eh/vh,ew/vw);
         map.zoomToResolution(envelope.getCenter(),res);
-    }
-
-    /*
-    * 定位按钮的点击监听实现
-    * */
-    private class LocateButtonListener implements View.OnClickListener{
-        @Override
-        public void onClick(View view) {
-            dlgLocating = new ProgressDialog(MapActivity.this);
-            dlgLocating.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-
-            dlgLocating.setTitle("正在定位...");
-            dlgLocating.setCancelable(true);
-            dlgLocating.show();
-
-
-            //if(locationManager.getProvider(LocationManager.NETWORK_PROVIDER) != null)
-            if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-                if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                        ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,5,new GPS_NetWorkLocListener());
-                }
-
-            }else if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                        ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,5,new GPS_NetWorkLocListener());
-                }
-
-            }else {
-                Toast.makeText(MapActivity.this,"定位失败",Toast.LENGTH_SHORT).show();
-                dlgLocating.dismiss();
-            }
-
-        }
-    }
-
-    /*
-    * 网络和GPS的位置监听，用于定位按钮
-    * */
-    private class GPS_NetWorkLocListener implements LocationListener{
-
-        @Override
-        public void onLocationChanged(Location location) {
-            Point currPosition = WGSTOZhenjiang.WGS2ZJ(location.getLatitude(),location.getLongitude());
-            double x = currPosition.getX();
-            double y = currPosition.getY();
-            if(x >= fullExtent.getXMin() && x <= fullExtent.getXMax() &&
-                    y >= fullExtent.getYMin() && y <= fullExtent.getYMax()){
-
-
-                BitmapDrawable image = (BitmapDrawable) MapActivity.this.getResources().getDrawable(R.drawable.ic_curr_lcocation);
-                Bitmap bitmap = image.getBitmap();
-                int bmpWidth = bitmap.getWidth();
-                int bmpHeght = bitmap.getHeight();
-                Matrix matrix = new Matrix();
-                matrix.postScale(112.0f / bmpWidth,108.0f / bmpHeght);
-                PictureMarkerSymbol symbol = new PictureMarkerSymbol(new BitmapDrawable(Bitmap.createBitmap(bitmap, 0, 0, bmpWidth, bmpHeght, matrix, true)));
-                Graphic graphic = new Graphic(currPosition,symbol);
-                locationLayer.addGraphic(graphic);
-                locationLayer.setVisible(true);
-                zoomTo(currPosition);
-            }else{
-                Toast.makeText(MapActivity.this,"当前位置不在地图范围内",Toast.LENGTH_SHORT).show();
-            }
-            dlgLocating.dismiss();
-            if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                locationManager.removeUpdates(this);
-            }
-
-
-        }
-
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String s) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-            if(dlgLocating != null){
-                //dlgLocating.dismiss();
-            }
-        }
-    }
-
-    /*
-    * 周边按钮的位置监听
-    * */
-    private class NearbyLocListener implements LocationListener{
-
-        @Override
-        public void onLocationChanged(Location location) {
-            Point currPosition = WGSTOZhenjiang.WGS2ZJ(location.getLatitude(),location.getLongitude());
-            searchNearbyTrees(currPosition);
-        }
-
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String s) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-
-        }
     }
 
     private void highlightGraphic(Graphic graphic){
@@ -493,7 +336,6 @@ public class MapActivity extends Activity {
     * 实例化一个单次tap事件监听
     * */
     private OnSingleTapListener onSingleTapListener = new OnSingleTapListener() {
-
         @Override
         public void onSingleTap(float v, float v1) {
             if(!map.isLoaded()){
@@ -535,36 +377,11 @@ public class MapActivity extends Activity {
 
 
     /*
-    *没有用到
-    * */
-    private void setNearbyLocMag(){
-        nearbyLocListener = new NearbyLocListener();
-        nearbyLocMag = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if(nearbyLocMag.getProvider(LocationManager.NETWORK_PROVIDER) != null){
-            if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                nearbyLocMag.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,5,nearbyLocListener);
-            }
-
-        }else if(nearbyLocMag.getProvider(LocationManager.GPS_PROVIDER) != null){
-            if(ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                nearbyLocMag.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,5,nearbyLocListener);
-            }
-
-        }else {
-            Toast.makeText(MapActivity.this,"无法获取您的当前位置",Toast.LENGTH_SHORT).show();
-            dlgLocating.dismiss();
-        }
-    }
-
-    /*
     *打开定位服务设置界面
     * */
     private void openGPS(){
 
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            AlertDialog dialog = null;
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("系统提示");
             builder.setMessage("是否现在打开GPS?");
@@ -583,7 +400,7 @@ public class MapActivity extends Activity {
 //                }
 //            });
             builder.setCancelable(true);
-            dialog = builder.create();
+            AlertDialog dialog = builder.create();
             dialog.show();
         }
 
@@ -638,7 +455,7 @@ public class MapActivity extends Activity {
         greenLandList = new ArrayList<>();
         ancientTreeList = new ArrayList<>();
         streetTreeList = new ArrayList<>();
-        loadingDialog.setMessage("正在获取数据...");
+        loadingDialog.setMessage("正在加载数据...");
         loadingDialog.show();
         new Thread(new Runnable() {
             @Override
@@ -653,12 +470,17 @@ public class MapActivity extends Activity {
 
     private void createUGOLayers(List<GreenObject> list) {
         symbolMap = new HashMap<>();
-        symbolMap.put(GreenLandType, new PictureFillSymbol(new BitmapDrawable(
-                BitmapFactory.decodeResource(getResources(), R.drawable.green_land))));
-        symbolMap.put(AncientTreeType, new PictureMarkerSymbol(new BitmapDrawable(
-                BitmapFactory.decodeResource(getResources(), R.drawable.ancient_tree))));
-        symbolMap.put(StreetTreeType, new PictureMarkerSymbol(new BitmapDrawable(
-                BitmapFactory.decodeResource(getResources(), R.drawable.street_tree))));
+        SimpleFillSymbol greenLandSymbol = new SimpleFillSymbol(
+                ResourcesCompat.getColor(getResources(), R.color.green_land, null), SimpleFillSymbol.STYLE.SOLID);
+        greenLandSymbol.setOutline(new SimpleLineSymbol(
+                ResourcesCompat.getColor(getResources(), R.color.green_land_border, null), 1.0f, SimpleLineSymbol.STYLE.SOLID));
+        symbolMap.put(GreenLandType, greenLandSymbol);
+        PictureMarkerSymbol ancientTreeSymbol = new PictureMarkerSymbol(new BitmapDrawable(
+                BitmapFactory.decodeResource(getResources(), R.drawable.ancient_tree)));
+        ancientTreeSymbol.setOffsetY(16);
+        symbolMap.put(AncientTreeType, ancientTreeSymbol);
+        symbolMap.put(StreetTreeType, new SimpleMarkerSymbol(
+                ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null), 5, SimpleMarkerSymbol.STYLE.CIRCLE));
 
         for(GreenObject obj : list) {
             Geometry geometry = GeoJsonUtil.String2Geometry(obj.UGO_Geo_Location);

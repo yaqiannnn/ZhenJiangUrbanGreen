@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:toolbar="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_marginRight="0dp"
-    android:paddingRight="0dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <include
-            layout="@layout/toolbar"/>
-    </FrameLayout>
+    <include layout="@layout/toolbar"/>
+
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/tb_search_UGO"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="@color/colorPrimary"-->
+            <!--toolbar:titleTextColor="@color/colorBackground"/>-->
+
+        <!--<com.miguelcatalan.materialsearchview.MaterialSearchView-->
+            <!--android:id="@+id/sv_search_UGO"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+    <!--</FrameLayout>-->
+
+    <!--<com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout-->
+        <!--android:id="@+id/ly_search_UGO_title_bar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/colorPrimary">-->
+
+    <!--</com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>-->
 
     <FrameLayout
-        android:layout_marginRight="0dp"
-        android:paddingRight="0dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView
@@ -28,8 +45,6 @@
             android:id="@+id/recyclerView_searchResult"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:paddingRight="0dp"
             android:background="#e2e2e2"/>
     </FrameLayout>
 </LinearLayout>

@@ -11,4 +11,6 @@
     <color name="divider_color">#B6B6B6</color>
     <color name="black">#000000</color>
 	<color name="background_tab_pressed">#6633B5E5</color>
+    <color name="green_land">#bb8BFA92</color>
+    <color name="green_land_border">#dd52ab57</color>
 </resources>

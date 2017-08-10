@@ -3,52 +3,34 @@ package com.nju.urbangreen.zhenjiangurbangreen.settings;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.google.gson.Gson;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.startup.LoginActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
+import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.DownloadNewApkService;
-import com.nju.urbangreen.zhenjiangurbangreen.util.MyApplication;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.PropertyInfo;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-
-import java.util.HashMap;
 import java.util.Map;
 
-public class SettingsActivity extends Activity {
-
-    public static String DOWNLOAD_URL = "";
-    public static int NEW_Version;
-    public static final String SOAP_ACTION = "http://tempuri.org/CheckUpdate";
-    public static final String OPERATION_NAME = "CheckUpdate";
-    public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
-    public static final String SOAP_ADDRESS = "http://192.168.0.106:82/WebService.asmx";
+public class SettingsActivity extends BaseActivity {
 
     private ProgressDialog progressDialog;
 
@@ -59,30 +41,81 @@ public class SettingsActivity extends Activity {
         }
     };
 
+    @BindView(R.id.et_settings_radius)
+    public EditText etRaduis;
+
+    @BindView(R.id.btn_save_setting)
+    public Button btnSave;
+
     @BindView(R.id.btn_check_update)
     public Button btnHandUpdate;
 
-    @BindView(R.id.btn_logout)
-    public Button btnLogout;
+    @BindView(R.id.btn_clear_cache)
+    public Button btnClearCache;
 
     @BindView(R.id.ly_settings_title_bar)
     public TitleBarLayout titleBarLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ActivityCollector.addActivity(this);
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         setTitleBar();
+        setSettingValue();
+        setSaveButton();
         setHandUpdateButton();
-        setLogoutButton();
+        setClearButton();
     }
 
-    @Override
-    protected void onDestroy() {
-        ActivityCollector.removeActivity(this);
-        super.onDestroy();
+    private void setSaveButton() {
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    SPUtils.put("NearRadius", Float.parseFloat(etRaduis.getText().toString()));
+                } catch(Exception e) {
+                    showFormatErrorToast("行道树缓冲区半径");
+                }
+            }
+        });
+    }
+
+    private void showFormatErrorToast(String key) {
+        Toast.makeText(SettingsActivity.this, key + "格式有误", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setSettingValue() {
+        etRaduis.setText(SPUtils.getFloat("NearRadius", 50.f).toString());
+    }
+
+    private void setClearButton() {
+        btnClearCache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                builder.setTitle("提示");
+                builder.setMessage("确定要清除缓存吗?");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SPUtils.remove("username");
+                        SPUtils.remove("password");
+                        CacheUtil.removeUGOS();
+                        dialogInterface.dismiss();
+                        Toast.makeText(SettingsActivity.this, "清除缓存成功", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
     }
 
     private void setHandUpdateButton(){
@@ -137,8 +170,16 @@ public class SettingsActivity extends Activity {
         });
     }
 
-    private void setLogoutButton(){
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+    private void setTitleBar(){
+        titleBarLayout.setTitleText("设置");
+        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_logout);
+        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
@@ -163,17 +204,6 @@ public class SettingsActivity extends Activity {
                     }
                 });
                 builder.show();
-            }
-        });
-    }
-
-
-    private void setTitleBar(){
-        titleBarLayout.setTitleText("设置");
-        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
             }
         });
     }
