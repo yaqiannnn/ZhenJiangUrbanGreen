@@ -139,7 +139,7 @@ public class MapActivity extends BaseActivity {
     GraphicsLayer greenLandLayer;
     GraphicsLayer locationLayer;
 
-    private List<GreenObject> greenLandList, ancientTreeList, streetTreeList;
+    private ArrayList<GreenObject> greenLandList, ancientTreeList, streetTreeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

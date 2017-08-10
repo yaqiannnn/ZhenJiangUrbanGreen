@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 import butterknife.BindView;
@@ -52,11 +54,12 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.btn_login)
     public Button btnLogin;
 
+    @BindView(R.id.cb_remember_pwd)
+    public AppCompatCheckBox cbRememberPassword;
+    private final String RememberKEY = "RememberPassword";
+    private boolean remember_password;
+
     private ProgressDialog progressDialog;
-    
-    private String username;
-    private String password;
-    private Boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,40 +69,57 @@ public class LoginActivity extends BaseActivity {
         ButterKnife.bind(this);
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setMessage("登录中...");
-        setLoginButton();
+        setButton();
+
+        if(SPUtils.getBool(RememberKEY, false)) {
+            etUserName.setText(SPUtils.getString("username", "xk"));
+            etPassword.setText(SPUtils.getString("password", "@"));
+            onLogin();
+        }
     }
 
-    public void setLoginButton(){
+    public void setButton(){
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.show();
-                username = etUserName.getText().toString();
-                password = etPassword.getText().toString();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String errorMsg[] = new String[1];
-                        Map<String, Object> res = WebServiceUtils.login(username, password, errorMsg);
-                        progressDialog.dismiss();
-                       if(res != null) {
-                           SPUtils.put("username",username);
-                           SPUtils.put("password",password);
-                           Intent intent = new Intent(LoginActivity.this, MapActivity.class);
-                           startActivity(intent);
-                       } else {
-                           Looper.prepare();
-                           if(errorMsg[0] != null) {
-                               Toast.makeText(LoginActivity.this, errorMsg[0], Toast.LENGTH_SHORT).show();
-                           } else {
-                               Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
-                           }
-                           Looper.loop();
-                       }
-                    }
-                }).start();
-
+                onLogin();
             }
         });
+        cbRememberPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                remember_password = b;
+            }
+        });
+    }
+
+    private void onLogin() {
+        progressDialog.show();
+        final String username = etUserName.getText().toString(), password = etPassword.getText().toString();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String errorMsg[] = new String[1];
+                Map<String, Object> res = WebServiceUtils.login(username, password, errorMsg);
+                progressDialog.dismiss();
+                if(res != null) {
+                    if(remember_password) {
+                        SPUtils.put(RememberKEY, true);
+                        SPUtils.put("username", username);
+                        SPUtils.put("password", password);
+                    }
+                    Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+                    startActivity(intent);
+                } else {
+                    Looper.prepare();
+                    if(errorMsg[0] != null) {
+                        Toast.makeText(LoginActivity.this, errorMsg[0], Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                    }
+                    Looper.loop();
+                }
+            }
+        }).start();
     }
 }

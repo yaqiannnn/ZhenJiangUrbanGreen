@@ -1,8 +1,5 @@
 package com.nju.urbangreen.zhenjiangurbangreen.startup;
 
-
-import android.app.Activity;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,8 +12,9 @@ import android.view.WindowManager;
 
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

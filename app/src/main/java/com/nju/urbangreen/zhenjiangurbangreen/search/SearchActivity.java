@@ -148,10 +148,11 @@ public class SearchActivity extends BaseActivity {
     }
     private void initSuggestionList()
     {
+        loadingDialog.show();
         if(CacheUtil.hasUGOSug()) {
             sugIDs = CacheUtil.getUGOSug("UGO_ID");
+            loadingDialog.dismiss();
         } else {
-            loadingDialog.show();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
