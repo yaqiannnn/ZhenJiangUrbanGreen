@@ -139,7 +139,7 @@ public class MapActivity extends BaseActivity {
     GraphicsLayer greenLandLayer;
     GraphicsLayer locationLayer;
 
-    private List<GreenObjects> greenLandList, ancientTreeList, streetTreeList;
+    private List<GreenObject> greenLandList, ancientTreeList, streetTreeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,12 +200,12 @@ public class MapActivity extends BaseActivity {
                     public void run() {
                         Location cur_loc = locationDisplayManager.getLocation();
                         String errorMsg[] = new String[1];
-                        List<GreenObjects> res = WebServiceUtils.getNearStreetTree(cur_loc.getLongitude(),
+                        List<GreenObject> res = WebServiceUtils.getNearStreetTree(cur_loc.getLongitude(),
                                 cur_loc.getLatitude(), SPUtils.getFloat("NearRadius", 50.f), errorMsg);
                         if(res != null) {
                             streetTreeList.clear();
                             streetTreeLayer.removeAll();
-                            for(GreenObjects obj : res) {
+                            for(GreenObject obj : res) {
                                 Geometry geometry = GeoJsonUtil.String2Geometry(obj.UGO_Geo_Location);
                                 if(geometry != null) {
                                     Map<String,Object> greenObj = new HashMap<>();

@@ -4,12 +4,11 @@ import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjects;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
@@ -21,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by lxs on 2016/9/30.
  */
 public class SearchResultHolder extends RecyclerView.ViewHolder{
-    private GreenObjects obj;
+    private GreenObject obj;
     private CardView mCardView;
 
     @BindView(R.id.recyclerItem_btn_toMaintainRecord)

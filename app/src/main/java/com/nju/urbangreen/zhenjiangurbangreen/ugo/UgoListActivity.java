@@ -15,7 +15,6 @@ import android.view.View;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.search.SearchActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.search.UGObject;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
