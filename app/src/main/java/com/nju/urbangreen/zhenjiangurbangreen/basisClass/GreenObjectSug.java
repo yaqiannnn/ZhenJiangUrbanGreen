@@ -6,4 +6,5 @@ package com.nju.urbangreen.zhenjiangurbangreen.basisClass;
 
 public class GreenObjectSug {
     public String UGO_ID;
+    public String UGO_Address;
 }

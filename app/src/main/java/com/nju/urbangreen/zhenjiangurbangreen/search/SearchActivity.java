@@ -1,37 +1,31 @@
 package com.nju.urbangreen.zhenjiangurbangreen.search;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ListView;
+import android.widget.Toast;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.google.gson.JsonArray;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.map.ILayerSwitchListener;
 import com.nju.urbangreen.zhenjiangurbangreen.map.LayerSwitchPopupWindow;
-import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
-import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
-import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
+import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
+import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class SearchActivity extends BaseActivity {
 
@@ -44,17 +38,23 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.recyclerView_searchResult)
     public RecyclerView searchResult_recyclerView;
 
-    private Menu filterMenu;
+    private ProgressDialog loadingDialog;
+
     private LayerSwitchPopupWindow popupWindow;
     private boolean searchType[]; // 0: GreenLand, 1: AncientTree, 2: StreetTree
 
-    private List<String> suggestionList;
+    private String sugIDs[] = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+
+        loadingDialog = new ProgressDialog(SearchActivity.this);
+        loadingDialog.setMessage("请稍候...");
+
+//        initSuggestionList();
         initPopupWindow();
         initToolbar();
         initSuggestionList();
@@ -62,7 +62,6 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        filterMenu = menu;
         getMenuInflater().inflate(R.menu.menu_toolbar_search, menu);
         MenuItem item = menu.findItem(R.id.menu_toolbar_item_search);
         searchView.setMenuItem(item);
@@ -130,32 +129,35 @@ public class SearchActivity extends BaseActivity {
                 return false;
             }
         });
-        String list[] = new String[4];
-        list[0] = "qwert";
-        list[1] = "qweas";
-        list[2] = "qwezxc";
-        list[3] = "zxcasd";
-        searchView.setSuggestions(list);
+        searchView.setSuggestions(sugIDs);
     }
     private void initSuggestionList()
     {
-        suggestionList=new ArrayList<>();
-        for(int i=0;i<5000;i++)
-        {
-            suggestionList.add(Math.random()*10000+"tree");
+        if(CacheUtil.hasUGOSug()) {
+            sugIDs = CacheUtil.getUGOSug("UGO_ID");
+        } else {
+            loadingDialog.show();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String errorMsg[] = new String[1];
+                    List<GreenObjectSug> res = WebServiceUtils.getUGOSug(errorMsg);
+                    loadingDialog.dismiss();
+                    if(res != null) {
+                        CacheUtil.putUGOSug(res);
+                        sugIDs = CacheUtil.getUGOSug("UGO_ID");
+                    } else if(errorMsg[0] != null && !errorMsg[0].equals("")) {
+                        Looper.prepare();
+                        Toast.makeText(SearchActivity.this, errorMsg[0], Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    } else {
+                        Looper.prepare();
+                        Toast.makeText(SearchActivity.this, "网络连接断开，请稍后再试", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+                }
+            }).start();
         }
-        final ArrayAdapter<String> suggestionListAdapter=new ArrayAdapter<>(SearchActivity.this,
-                android.R.layout.simple_list_item_1,suggestionList);
-//        suggestionList_listView.setAdapter(suggestionListAdapter);
-//        suggestionList_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Log.d("click","position"+position+"");
-//                Log.d("click","id:"+id+"");
-//                searchView.setQuery(suggestionListAdapter.getItem(position),true);
-//            }
-//        });
-//        setSuggestionFilter(null);
     }
 
 }
