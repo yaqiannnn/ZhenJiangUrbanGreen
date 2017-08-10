@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_search_ugo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nju.urbangreen.zhenjiangurbangreen.ugo.SearchUgoActivity">
+    <com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout
+        android:id="@+id/ly_events_list_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+    </com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
+</RelativeLayout>

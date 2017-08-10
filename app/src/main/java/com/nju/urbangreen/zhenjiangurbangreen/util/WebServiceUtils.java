@@ -1,26 +1,18 @@
 package com.nju.urbangreen.zhenjiangurbangreen.util;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjects;
-import com.nju.urbangreen.zhenjiangurbangreen.map.MapActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.startup.WelcomeActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 
 import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
@@ -197,11 +189,11 @@ public class WebServiceUtils {
         return null;
     }
 
-    public static List<GreenObjects> getUGOInfoExceptST(String[] errorMessage) {
+    public static List<GreenObject> getUGOInfoExceptST(String[] errorMessage) {
         Map<String, Object> results = callMethod(GET_UGO_INFO_EXCEPT_ST, null);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>() {
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
             }.getType());
 
         } else {

@@ -3,7 +3,7 @@ package com.nju.urbangreen.zhenjiangurbangreen.basisClass;
 /**
  * Created by Liwei on 2017/4/13.
  */
-public class GreenObjects {
+public class GreenObject {
     public String UGO_ID;
     public String UGO_UCode;
     public String UGO_ParentID;

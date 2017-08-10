@@ -20,7 +20,6 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -51,7 +50,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.util.GeoJsonUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WGSTOZhenjiang;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjects;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -142,7 +141,7 @@ public class MapActivity extends Activity {
     GraphicsLayer greenLandLayer;
     GraphicsLayer locationLayer;
 
-    private ArrayList<GreenObjects> greenLandList, ancientTreeList, streetTreeList;
+    private ArrayList<GreenObject> greenLandList, ancientTreeList, streetTreeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -645,14 +644,14 @@ public class MapActivity extends Activity {
             @Override
             public void run() {
                 String errorMsg[] = new String[1];
-                List<GreenObjects> UGO_list = WebServiceUtils.getUGOInfoExceptST(errorMsg);
+                List<GreenObject> UGO_list = WebServiceUtils.getUGOInfoExceptST(errorMsg);
                 createUGOLayers(UGO_list);
                 loadingDialog.dismiss();
             }
         }).start();
     }
 
-    private void createUGOLayers(List<GreenObjects> list) {
+    private void createUGOLayers(List<GreenObject> list) {
         symbolMap = new HashMap<>();
         symbolMap.put(GreenLandType, new PictureFillSymbol(new BitmapDrawable(
                 BitmapFactory.decodeResource(getResources(), R.drawable.green_land))));
@@ -661,7 +660,7 @@ public class MapActivity extends Activity {
         symbolMap.put(StreetTreeType, new PictureMarkerSymbol(new BitmapDrawable(
                 BitmapFactory.decodeResource(getResources(), R.drawable.street_tree))));
 
-        for(GreenObjects obj : list) {
+        for(GreenObject obj : list) {
             Geometry geometry = GeoJsonUtil.String2Geometry(obj.UGO_Geo_Location);
             if(geometry != null) {
                 Map<String,Object> greenObj = new HashMap<>();
