@@ -58,7 +58,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.util.GeoJsonUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WGSTOZhenjiang;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjects;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -462,14 +462,14 @@ public class MapActivity extends BaseActivity {
             @Override
             public void run() {
                 String errorMsg[] = new String[1];
-                List<GreenObjects> UGO_list = WebServiceUtils.getUGOInfoExceptST(errorMsg);
+                List<GreenObject> UGO_list = WebServiceUtils.getUGOInfoExceptST(errorMsg);
                 createUGOLayers(UGO_list);
                 loadingDialog.dismiss();
             }
         }).start();
     }
 
-    private void createUGOLayers(List<GreenObjects> list) {
+    private void createUGOLayers(List<GreenObject> list) {
         symbolMap = new HashMap<>();
         SimpleFillSymbol greenLandSymbol = new SimpleFillSymbol(
                 ResourcesCompat.getColor(getResources(), R.color.green_land, null), SimpleFillSymbol.STYLE.SOLID);
@@ -483,7 +483,7 @@ public class MapActivity extends BaseActivity {
         symbolMap.put(StreetTreeType, new SimpleMarkerSymbol(
                 ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null), 5, SimpleMarkerSymbol.STYLE.CIRCLE));
 
-        for(GreenObjects obj : list) {
+        for(GreenObject obj : list) {
             Geometry geometry = GeoJsonUtil.String2Geometry(obj.UGO_Geo_Location);
             if(geometry != null) {
                 Map<String,Object> greenObj = new HashMap<>();

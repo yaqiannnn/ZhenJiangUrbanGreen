@@ -33,6 +33,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
     compile 'com.esri.arcgis.android:arcgis-android:10.2.8-1'
     compile files('libs/ksoap2-android-assembly-3.3.0-jar-with-dependencies.jar')
@@ -40,7 +41,11 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.jakewharton:butterknife:8.7.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
+<<<<<<< HEAD
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
+=======
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
+>>>>>>> f96a1fe5b4fc93926509e4abc300ea3398019c40
 }
 
 

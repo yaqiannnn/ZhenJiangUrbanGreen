@@ -264,7 +264,6 @@ public class WebServiceUtils {
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
             return gson.fromJson(jsonResults, new TypeToken<List<GreenObjectSug>>(){}.getType());
-
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();

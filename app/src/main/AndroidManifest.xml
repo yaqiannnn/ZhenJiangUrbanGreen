@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.nju.urbangreen.zhenjiangurbangreen">
+    package="com.nju.urbangreen.zhenjiangurbangreen">
 
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".util.MyApplication"
@@ -19,12 +19,15 @@
         <activity
             android:name=".map.MapActivity"
             android:windowSoftInputMode="stateHidden">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
         </activity>
+<<<<<<< HEAD
         <activity android:name=".search.SearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -40,26 +43,38 @@
                 <!--<category android:name="android.intent.category.LAUNCHER"/>-->
             <!--</intent-filter>-->
         </activity>
+=======
+        <activity android:name=".search.SearchActivity" />
+        <activity android:name=".navigation.NaviActivity" />
+        <activity android:name=".settings.SettingsActivity" />
+>>>>>>> f96a1fe5b4fc93926509e4abc300ea3398019c40
         <activity
             android:name=".startup.WelcomeActivity"
             android:theme="@style/TranslucentTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+<<<<<<< HEAD
              <!--<intent-filter>-->
              <!--<action android:name="android.intent.action.MAIN" />-->
 
 
              <!--<category android:name="android.intent.category.LAUNCHER" />-->
              <!--</intent-filter>-->
+=======
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+>>>>>>> f96a1fe5b4fc93926509e4abc300ea3398019c40
         </activity>
-        <activity android:name=".startup.LoginActivity"/>
+        <activity android:name=".startup.LoginActivity" />
 
         <service
             android:name=".util.DownloadNewApkService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
-        <activity android:name=".inspectRecord.InspectInfoActivity"/>
-        <activity android:name=".maintainRecord.MaintainInfoActivity"/>
+        <activity android:name=".inspectRecord.InspectInfoActivity" />
+        <activity android:name=".maintainRecord.MaintainInfoActivity" />
         <activity
             android:name=".events.EventListActivity"
             android:windowSoftInputMode="stateHidden">
@@ -74,12 +89,13 @@
         </activity>
         <activity
             android:name=".events.EventRegisterActivity"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".attachments.AttachmentListActivity"/>
-        <activity android:name=".inspectRecord.InspectListActivity"/>
-        <activity android:name=".maintainRecord.MaintainListActivity"/>
-        <activity android:name=".maintainRecord.MaintainRegisterActivity">
-        </activity>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".attachments.AttachmentListActivity" />
+        <activity android:name=".inspectRecord.InspectListActivity" />
+        <activity android:name=".maintainRecord.MaintainListActivity" />
+        <activity android:name=".ugo.UgoListActivity" />
+        <activity android:name=".maintainRecord.MaintainRegisterActivity"></activity>
+        <activity android:name=".ugo.SearchUgoActivity"></activity>
     </application>
 
 </manifest>

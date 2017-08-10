@@ -4,9 +4,10 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,8 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.BindView;
-
+import com.nju.urbangreen.zhenjiangurbangreen.ugo.UgoListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
@@ -29,7 +29,6 @@ import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +37,8 @@ public class EventRegisterActivity extends BaseActivity {
 
     private int state;
 
+    @BindView(R.id.btn_event_register_add_ugo)
+    AppCompatButton btnEventRegisterAddUgo;
     @BindView(R.id.edit_event_register_code)
     public TextView etCode;
     @BindView(R.id.edit_event_register_name)
@@ -97,9 +98,9 @@ public class EventRegisterActivity extends BaseActivity {
             public void onClick(View view) {
 
                 //隐藏软件盘
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                if(imm.isActive()){
-                    imm.hideSoftInputFromWindow(view.getApplicationWindowToken(),0);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm.isActive()) {
+                    imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
                 }
                 processBack();
             }
@@ -119,18 +120,18 @@ public class EventRegisterActivity extends BaseActivity {
 
         //初始化日期选择框
         Calendar calendar = Calendar.getInstance();
-        int year,month,day;
+        int year, month, day;
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH) + 1;
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        dtpckDateSelect=new DatePickerDialog(EventRegisterActivity.this,
+        dtpckDateSelect = new DatePickerDialog(EventRegisterActivity.this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         etDateSelect.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
                     }
-                },year,month,day);
+                }, year, month, day);
 
         etDateSelect.setText(year + "-" + (month + 1) + "-" + day);
         etDateSelect.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +140,7 @@ public class EventRegisterActivity extends BaseActivity {
                 dtpckDateSelect.show();
             }
         });
-        if(oneEvent != null){
+        if (oneEvent != null) {
             addDataToViews(oneEvent);
         }
         //初始化添加附件按钮
@@ -147,6 +148,14 @@ public class EventRegisterActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(EventRegisterActivity.this, AttachmentListActivity.class);
+                startActivity(intent);
+            }
+        });
+        //添加相关养护对象按钮点击事件
+        btnEventRegisterAddUgo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EventRegisterActivity.this,UgoListActivity.class);
                 startActivity(intent);
             }
         });
@@ -210,9 +219,9 @@ public class EventRegisterActivity extends BaseActivity {
     /**
      * 处理一些退出登记界面的事情
      */
-    private void processBack(){
+    private void processBack() {
         //如果用户没有填写编号，就会弹框提示一下
-        if(etCode.getText().toString().equals("")){
+        if (etCode.getText().toString().equals("")) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("温馨提示");
             builder.setMessage("您没有填写事件编号，返回后相关信息不会保存");
@@ -230,10 +239,9 @@ public class EventRegisterActivity extends BaseActivity {
                 }
             });
             builder.show();
-        }
-        else{
-            if(oneEvent == null){//oneEvent为null，说明不是从详情按钮过来的
-                Toast.makeText(this,"事件登记成功~",Toast.LENGTH_SHORT).show();
+        } else {
+            if (oneEvent == null) {//oneEvent为null，说明不是从详情按钮过来的
+                Toast.makeText(this, "事件登记成功~", Toast.LENGTH_SHORT).show();
                 saveTempViewData();
             }
             finish();
