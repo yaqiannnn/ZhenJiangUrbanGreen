@@ -22,6 +22,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -48,6 +49,7 @@ import com.esri.core.symbol.SimpleLineSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.symbol.Symbol;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
@@ -64,7 +66,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapActivity extends Activity {
+public class MapActivity extends BaseActivity {
 
     private static final String GreenLandType = "000", AncientTreeType = "001", StreetTreeType = "002";
     private static Map<String, Symbol> symbolMap;
@@ -143,7 +145,6 @@ public class MapActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        ActivityCollector.addActivity(this);
         super.onCreate(savedInstanceState);
         checkStoragePermission();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -188,12 +189,6 @@ public class MapActivity extends Activity {
 
         openGPS();
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
     }
 
     private void setNearTreeButton() {

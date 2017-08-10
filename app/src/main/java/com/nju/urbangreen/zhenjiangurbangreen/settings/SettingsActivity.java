@@ -19,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.startup.LoginActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
@@ -29,7 +30,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
 import java.util.Map;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends BaseActivity {
 
     private ProgressDialog progressDialog;
 
@@ -57,7 +58,6 @@ public class SettingsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ActivityCollector.addActivity(this);
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_settings);
@@ -67,12 +67,6 @@ public class SettingsActivity extends Activity {
         setSaveButton();
         setHandUpdateButton();
         setClearButton();
-    }
-
-    @Override
-    protected void onDestroy() {
-        ActivityCollector.removeActivity(this);
-        super.onDestroy();
     }
 
     private void setSaveButton() {

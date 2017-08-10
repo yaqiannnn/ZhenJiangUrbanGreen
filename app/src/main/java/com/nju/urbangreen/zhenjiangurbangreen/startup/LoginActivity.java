@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 
 import com.google.gson.Gson;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.map.MapActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.MyApplication;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
@@ -40,7 +41,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.edit_username)
     public EditText etUserName;
@@ -100,17 +101,5 @@ public class LoginActivity extends Activity {
 
             }
         });
-    }
-
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            startActivity(intent);
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }

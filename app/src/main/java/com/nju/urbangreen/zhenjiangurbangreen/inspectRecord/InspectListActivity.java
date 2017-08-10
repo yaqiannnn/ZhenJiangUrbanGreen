@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListFragment;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventRegisterActivity;
@@ -24,7 +25,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
 
-public class InspectListActivity extends AppCompatActivity {
+public class InspectListActivity extends BaseActivity {
 
     @BindView(R.id.ly_inspect_list_title_bar)
     public TitleBarLayout titleBarLayout;//标题栏
@@ -44,8 +45,6 @@ public class InspectListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ActivityCollector.addActivity(this);
         setContentView(R.layout.activity_inspect_list);
         initViews();
     }
@@ -53,8 +52,6 @@ public class InspectListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ActivityCollector.removeActivity(this);
-        Log.i("巡查活动","onDestroy");
         if(titleBarLayout.recoverReceiver != null){
             unregisterReceiver(titleBarLayout.recoverReceiver);
         }

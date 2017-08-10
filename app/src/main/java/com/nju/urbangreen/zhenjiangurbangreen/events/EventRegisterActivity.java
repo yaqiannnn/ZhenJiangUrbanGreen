@@ -20,6 +20,7 @@ import butterknife.BindView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.util.UrbanGreenDB;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText;
@@ -33,7 +34,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EventRegisterActivity extends AppCompatActivity {
+public class EventRegisterActivity extends BaseActivity {
 
     private int state;
 
@@ -80,7 +81,6 @@ public class EventRegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityCollector.addActivity(this);
         setContentView(R.layout.activity_event_register);
         initViews();
 
@@ -155,13 +155,6 @@ public class EventRegisterActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         processBack();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
-        Log.i("注册活动", "onDestroy");
     }
 
     @Override

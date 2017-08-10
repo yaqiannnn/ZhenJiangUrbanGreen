@@ -9,6 +9,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
@@ -16,7 +17,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.settings.SettingsActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
-public class NaviActivity extends AppCompatActivity implements View.OnClickListener{
+public class NaviActivity extends BaseActivity implements View.OnClickListener{
 
     @BindView(R.id.ly_navi_title_bar)
     public TitleBarLayout titleBarLayout;
@@ -37,7 +38,6 @@ public class NaviActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        ActivityCollector.addActivity(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navi);
         ButterKnife.bind(this);
@@ -58,12 +58,6 @@ public class NaviActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
     }
 
     @Override

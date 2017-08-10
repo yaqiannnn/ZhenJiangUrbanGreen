@@ -20,13 +20,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class InspectInfoActivity extends AppCompatActivity {
+public class InspectInfoActivity extends BaseActivity {
 
     @BindView(R.id.tv_inspectInfo_ID)
     public AppCompatTextView tvInspectID;
@@ -64,7 +65,6 @@ public class InspectInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityCollector.addActivity(this);
         Intent intent=getIntent();
         if(intent.getSerializableExtra("InspectInfo")==null)
         {
@@ -85,12 +85,6 @@ public class InspectInfoActivity extends AppCompatActivity {
         etInspectContent.getEditText().setText(myObject.getContent());
         etEtInspectOpinion.getEditText().setText(myObject.getInspectOpinion());
         initToolbar();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
     }
 
     @Override

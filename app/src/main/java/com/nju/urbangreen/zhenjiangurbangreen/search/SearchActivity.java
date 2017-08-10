@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import com.google.gson.JsonArray;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.map.ILayerSwitchListener;
 import com.nju.urbangreen.zhenjiangurbangreen.map.LayerSwitchPopupWindow;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SearchActivity extends AppCompatActivity{
+public class SearchActivity extends BaseActivity {
 
     @BindView(R.id.Toolbar)
     public Toolbar toolbar;
@@ -52,7 +53,6 @@ public class SearchActivity extends AppCompatActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityCollector.addActivity(this);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
         initPopupWindow();
@@ -67,12 +67,6 @@ public class SearchActivity extends AppCompatActivity{
         MenuItem item = menu.findItem(R.id.menu_toolbar_item_search);
         searchView.setMenuItem(item);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
     }
 
     private void initPopupWindow() {
