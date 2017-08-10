@@ -41,11 +41,8 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.jakewharton:butterknife:8.7.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
-<<<<<<< HEAD
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
-=======
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
->>>>>>> f96a1fe5b4fc93926509e4abc300ea3398019c40
 }
 
 

@@ -27,44 +27,36 @@
             <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
             <!-- </intent-filter> -->
         </activity>
-<<<<<<< HEAD
         <activity android:name=".search.SearchActivity">
-            <intent-filter>
+<!--             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+            </intent-filter> -->
         </activity>
         <activity android:name=".navigation.NaviActivity"/>
         <activity android:name=".settings.SettingsActivity">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN"/>-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
         </activity>
-=======
         <activity android:name=".search.SearchActivity" />
         <activity android:name=".navigation.NaviActivity" />
         <activity android:name=".settings.SettingsActivity" />
->>>>>>> f96a1fe5b4fc93926509e4abc300ea3398019c40
         <activity
             android:name=".startup.WelcomeActivity"
             android:theme="@style/TranslucentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-<<<<<<< HEAD
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN" />-->
-
-
-             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
-=======
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
->>>>>>> f96a1fe5b4fc93926509e4abc300ea3398019c40
+
         </activity>
         <activity android:name=".startup.LoginActivity" />
 
