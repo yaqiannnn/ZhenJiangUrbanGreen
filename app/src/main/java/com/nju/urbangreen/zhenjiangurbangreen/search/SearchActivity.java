@@ -3,6 +3,7 @@ package com.nju.urbangreen.zhenjiangurbangreen.search;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,6 +20,7 @@ import butterknife.ButterKnife;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.map.ILayerSwitchListener;
 import com.nju.urbangreen.zhenjiangurbangreen.map.LayerSwitchPopupWindow;
@@ -35,8 +37,9 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.material_search_view)
     public MaterialSearchView searchView;
 
-    @BindView(R.id.recyclerView_searchResult)
-    public RecyclerView searchResult_recyclerView;
+    @BindView(R.id.rcv_search_UGO)
+    public RecyclerView rcvSearchUGO;
+    private SearchResultAdapter m_adapter;
 
     private ProgressDialog loadingDialog;
 
@@ -54,10 +57,14 @@ public class SearchActivity extends BaseActivity {
         loadingDialog = new ProgressDialog(SearchActivity.this);
         loadingDialog.setMessage("请稍候...");
 
-//        initSuggestionList();
+        rcvSearchUGO.setLayoutManager(new LinearLayoutManager(this));
+        m_adapter = new SearchResultAdapter();
+        rcvSearchUGO.setAdapter(m_adapter);
+        rcvSearchUGO.getAdapter().notifyDataSetChanged();
+
+        initSuggestionList();
         initPopupWindow();
         initToolbar();
-        initSuggestionList();
     }
 
     @Override
@@ -78,7 +85,9 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public void changeLayerState(boolean[] layerState) {
-                searchType = layerState;
+                searchType[0] = layerState[0];
+                searchType[1] = layerState[1];
+                searchType[2] = layerState[2];
             }
         });
     }
@@ -96,8 +105,28 @@ public class SearchActivity extends BaseActivity {
         });
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                Log.i("bar", "submit");
+            public boolean onQueryTextSubmit(final String query) {
+                loadingDialog.show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String errorMsg[] = new String[1];
+                        List<GreenObject> res = WebServiceUtils.searchUGOByID(query, searchType, errorMsg);
+                        loadingDialog.dismiss();
+                        if(res != null) {
+                            m_adapter.addUGOs(res);
+                            SearchActivity.this.runOnUiThread(updateUI);
+                        } else if(errorMsg[0] != null && !errorMsg[0].equals("")) {
+                            Looper.prepare();
+                            Toast.makeText(SearchActivity.this, errorMsg[0], Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        } else {
+                            Looper.prepare();
+                            Toast.makeText(SearchActivity.this, "没有匹配的搜索结果", Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        }
+                    }
+                }).start();
                 return false;
             }
 
@@ -105,19 +134,6 @@ public class SearchActivity extends BaseActivity {
             public boolean onQueryTextChange(String newText) {
                 Log.i("bar", "change");
                 return false;
-            }
-        });
-
-        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-                Log.i("bar", "show");
-            }
-
-            @Override
-            public void onSearchViewClosed() {
-                //Do some magic
-                Log.i("bar", "close");
             }
         });
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -142,7 +158,6 @@ public class SearchActivity extends BaseActivity {
                 public void run() {
                     String errorMsg[] = new String[1];
                     List<GreenObjectSug> res = WebServiceUtils.getUGOSug(errorMsg);
-                    loadingDialog.dismiss();
                     if(res != null) {
                         CacheUtil.putUGOSug(res);
                         sugIDs = CacheUtil.getUGOSug("UGO_ID");
@@ -155,9 +170,17 @@ public class SearchActivity extends BaseActivity {
                         Toast.makeText(SearchActivity.this, "网络连接断开，请稍后再试", Toast.LENGTH_SHORT).show();
                         Looper.loop();
                     }
+                    loadingDialog.dismiss();
                 }
             }).start();
         }
     }
+
+    private Runnable updateUI = new Runnable() {
+        @Override
+        public void run() {
+            rcvSearchUGO.getAdapter().notifyDataSetChanged();
+        }
+    };
 
 }
