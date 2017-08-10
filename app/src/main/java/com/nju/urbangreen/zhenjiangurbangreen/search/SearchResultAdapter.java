@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjects;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import java.util.List;
  * Created by lxs on 2016/9/30.
  */
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultHolder>{
-    private List<GreenObjects> UGList;
+    private List<GreenObject> UGList;
 
-    public SearchResultAdapter(List<GreenObjects> list)
+    public SearchResultAdapter(List<GreenObject> list)
     {
         this.UGList=list;
     }

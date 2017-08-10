@@ -1,12 +1,8 @@
 package com.nju.urbangreen.zhenjiangurbangreen.util;
 
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjects;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,15 +28,15 @@ public class CacheUtil {
         return SPUtils.getBool(UGO_KEY, false);
     }
 
-    public static void putUGOs(List<GreenObjects> objs) {
+    public static void putUGOs(List<GreenObject> objs) {
         instance().put(UGO_KEY, objs.toArray());
         SPUtils.put(UGO_KEY, true);
     }
 
-    public static List<GreenObjects> getUGOs() {
+    public static List<GreenObject> getUGOs() {
         if(!hasUGOs())
             return null;
-        return instance().<GreenObjects>getAsObjectList(UGO_KEY);
+        return instance().<GreenObject>getAsObjectList(UGO_KEY);
     }
 
     public static void removeUGOS() {

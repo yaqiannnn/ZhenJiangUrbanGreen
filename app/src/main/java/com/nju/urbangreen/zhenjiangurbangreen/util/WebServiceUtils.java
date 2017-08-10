@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjects;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.Maintain;
 
 import org.ksoap2.SoapEnvelope;
@@ -207,7 +207,7 @@ public class WebServiceUtils {
         }
     }
 
-    public static List<GreenObjects> getUGOInfoExceptST(String[] errorMessage) {
+    public static List<GreenObject> getUGOInfoExceptST(String[] errorMessage) {
         if(CacheUtil.hasUGOs()) {
             return CacheUtil.getUGOs();
         }
@@ -219,8 +219,8 @@ public class WebServiceUtils {
             Map<String, Object> results = callMethod(Get_UGO_Info_Except_ST, null);
             if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
                 String jsonResults = results.get(KEY_RESULT).toString();
-                List<GreenObjects> objs = new ArrayList<>();
-                objs = gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>(){}.getType());
+                List<GreenObject> objs = new ArrayList<>();
+                objs = gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>(){}.getType());
                 CacheUtil.putUGOs(objs);
                 return objs;
             } else {
@@ -233,7 +233,7 @@ public class WebServiceUtils {
 
     }
 
-    public static List<GreenObjects> getNearStreetTree(double x, double y, double radius, String[] errorMessage) {
+    public static List<GreenObject> getNearStreetTree(double x, double y, double radius, String[] errorMessage) {
         if(is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
             return null;
@@ -244,7 +244,7 @@ public class WebServiceUtils {
         Map<String, Object> results = callMethod(Get_Near_Street_Tree, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>(){}.getType());
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>(){}.getType());
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
