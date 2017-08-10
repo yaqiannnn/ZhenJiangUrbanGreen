@@ -35,8 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.realm.Realm;
-
 /**
  * Created by Liwei on 2016/12/25.
  */
@@ -216,8 +214,8 @@ public class WebServiceUtils {
     }
 
     public static List<GreenObjects> getUGOInfoExceptST(String[] errorMessage) {
-        if(SPUtils.getBool("HasUGO", false)) {
-            return RealmUtils.getUGOs();
+        if(CacheUtil.hasUGOs()) {
+            return CacheUtil.getUGOs();
         }
         else {
             if(is_offline()) {
@@ -229,7 +227,7 @@ public class WebServiceUtils {
                 String jsonResults = results.get(KEY_RESULT).toString();
                 List<GreenObjects> objs = new ArrayList<>();
                 objs = gson.fromJson(jsonResults, new TypeToken<List<GreenObjects>>(){}.getType());
-                RealmUtils.insertUGOs(objs);
+                CacheUtil.putUGOs(objs);
                 return objs;
             } else {
                 if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {

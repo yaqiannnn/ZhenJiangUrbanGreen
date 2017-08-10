@@ -3,44 +3,30 @@ package com.nju.urbangreen.zhenjiangurbangreen.settings;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.google.gson.Gson;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.startup.LoginActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
+import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.DownloadNewApkService;
-import com.nju.urbangreen.zhenjiangurbangreen.util.MyApplication;
-import com.nju.urbangreen.zhenjiangurbangreen.util.RealmUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.PropertyInfo;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-
-import java.util.HashMap;
 import java.util.Map;
 
 public class SettingsActivity extends Activity {
@@ -122,7 +108,7 @@ public class SettingsActivity extends Activity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         SPUtils.remove("username");
                         SPUtils.remove("password");
-                        RealmUtils.removeUGOs();
+                        CacheUtil.removeUGOS();
                         dialogInterface.dismiss();
                         Toast.makeText(SettingsActivity.this, "清除缓存成功", Toast.LENGTH_SHORT).show();
                     }

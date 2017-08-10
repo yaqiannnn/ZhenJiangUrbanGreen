@@ -1,15 +1,17 @@
 package com.nju.urbangreen.zhenjiangurbangreen.basisClass;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Liwei on 2017/4/13.
  */
-public class GreenObjects extends RealmObject {
-    @PrimaryKey
-    public String UGO_ID;
+public class GreenObjects extends RealmObject implements Serializable {
+    private static final long serialVersionUID = 21455356667888L;
 
+    public String UGO_ID;
     public String UGO_UCode;
     public String UGO_ParentID;
     public String UGO_ClassType_ID;

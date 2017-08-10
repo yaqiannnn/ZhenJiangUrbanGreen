@@ -19,6 +19,7 @@ import android.widget.ListView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.google.gson.JsonArray;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.map.ILayerSwitchListener;
@@ -141,32 +142,6 @@ public class SearchActivity extends AppCompatActivity{
         list[2] = "qwezxc";
         list[3] = "zxcasd";
         searchView.setSuggestions(list);
-
-//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                int id = item.getItemId();
-//                switch (id) {
-//                    case R.id.menu_toolbar_item_search:
-//                }
-//            }
-//        });
-//        titleBarLayout.setTitleText("搜索绿化对象");
-//        titleBarLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
-//        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_search);
-//        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //显示出TitleSearchView
-//                titleBarLayout.setTsvSearchAvailable();
-//            }
-//        });
-//        TitleSearchView searchView = titleBarLayout.getSearchView();
     }
     private void initSuggestionList()
     {
@@ -189,15 +164,4 @@ public class SearchActivity extends AppCompatActivity{
 //        setSuggestionFilter(null);
     }
 
-//    private void setSuggestionFilter(String filterText)
-//    {
-//        if(suggestionList_listView.getAdapter() instanceof Filterable)
-//        {
-//            Filter filter=((Filterable)suggestionList_listView.getAdapter()).getFilter();
-//            if(filterText==null||filterText.length()==0)
-//                filter.filter("-1");
-//            else
-//                filter.filter(filterText);
-//        }
-//    }
 }
