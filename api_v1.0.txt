@@ -343,8 +343,8 @@ Param中带"*"的为一定包含的参数
 2.搜索绿化对象
     Method: SearchUGOInfo_2
     Param: {
-    *   string id 绿化对象UGO_ID(精确搜索)
-    *   string address 绿化对象UGO_Adress(模糊搜索)
+        string id 绿化对象UGO_ID(精确搜索)
+        string address 绿化对象UGO_Adress(模糊搜索)
     }
     Return: List<{
         UGO_ID
