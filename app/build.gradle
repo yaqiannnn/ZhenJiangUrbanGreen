@@ -43,6 +43,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'com.liulishuo.filedownloader:library:1.6.3'
 }
 
 
