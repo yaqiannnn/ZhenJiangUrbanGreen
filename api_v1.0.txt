@@ -29,6 +29,11 @@ Param中带"*"的为一定包含的参数
         MR_SubmitStatus
         MR_SubmitorPID
         MR_SubmitTime
+++++++++++++++++++++++++++
+        MR_LoggerName
+        MR_LastEditorName
+        MR_SubmitorName
+++++++++++++++++++++++++++
     }>
 
 2.获取管养记录涉及绿化对象(所有种类，包括绿地、古树名木、行道树)
@@ -59,6 +64,10 @@ Param中带"*"的为一定包含的参数
         IR_LogTime
         IR_LastEditorPID
         IR_LastEditTime
+++++++++++++++++++++++++++
+        IR_LoggerName
+        IR_LastEditorName
+++++++++++++++++++++++++++
     }>
 
 4.获取事件记录
@@ -99,6 +108,11 @@ Param中带"*"的为一定包含的参数
         UGE_RelevantAddress
         UGE_RelevantDescription
         UGE_LastStateID
+++++++++++++++++++++++++++
+        UGE_LoggerName
+        UGE_LastEditorName
+        UGE_ConcludeName
+++++++++++++++++++++++++++
     }>
 
 5.获取绿化对象(除行道树以外)
@@ -135,6 +149,10 @@ Param中带"*"的为一定包含的参数
         UGO_DateOfDestroyRecord
         UGO_DescriptionOfDestroy
         UGO_LoggerPIDOfDestroyRecord
+++++++++++++++++++++++++++
+        UGO_LoggerName
+        UGO_LastEditorName
+++++++++++++++++++++++++++
     }>
 
 6.获取行道树(某个点周围)
@@ -338,6 +356,10 @@ Param中带"*"的为一定包含的参数
         UGO_DateOfDestroyRecord
         UGO_DescriptionOfDestroy
         UGO_LoggerPIDOfDestroyRecord
+++++++++++++++++++++++++++
+        UGO_LoggerName
+        UGO_LastEditorName
+++++++++++++++++++++++++++
     }>
 
 2.搜索绿化对象
