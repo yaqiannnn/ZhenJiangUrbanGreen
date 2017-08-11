@@ -82,13 +82,14 @@
         </activity>
         <activity
             android:name=".events.EventRegisterActivity"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".attachments.AttachmentListActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+            <action android:name="android.intent.action.MAIN"/>
+
+            <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".attachments.AttachmentListActivity"/>
         <activity android:name=".inspectRecord.InspectListActivity"/>
         <activity android:name=".maintainRecord.MaintainListActivity"/>
         <activity android:name=".ugo.UgoListActivity"/>
