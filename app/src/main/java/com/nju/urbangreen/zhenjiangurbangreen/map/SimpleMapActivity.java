@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.view.Window;
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
 import com.esri.android.map.ags.ArcGISLocalTiledLayer;
+import com.esri.android.map.event.OnStatusChangedListener;
 import com.esri.android.runtime.ArcGISRuntime;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Geometry;
@@ -85,7 +88,8 @@ public class SimpleMapActivity extends BaseActivity {
         map.addLayer(curUGOLayer);
         map.setExtent(fullExtent);
 
-        Geometry geometry = GeoJsonUtil.String2Geometry(location);
+
+        final Geometry geometry = GeoJsonUtil.String2Geometry(location);
         if(geometry != null) {
             Symbol symbol;
             if(type.equals("000")) {
@@ -104,8 +108,17 @@ public class SimpleMapActivity extends BaseActivity {
             Graphic graphic = new Graphic(geometry, symbol, null);
             curUGOLayer.addGraphic(graphic);
             curUGOLayer.setSelectedGraphics(new int[]{(int)graphic.getId()}, true);
-            zoomTo(geometry);
         }
+
+        map.setOnStatusChangedListener(new OnStatusChangedListener() {
+            @Override
+            public void onStatusChanged(Object o, STATUS status) {
+                if(status == STATUS.INITIALIZED && o == map) {
+                    zoomTo(geometry);
+                }
+            }
+        });
+
     }
 
     private void zoomTo(Geometry geometry){
@@ -116,7 +129,8 @@ public class SimpleMapActivity extends BaseActivity {
         double eh = envelope.getHeight();
         double ew = envelope.getWidth();
         double res = Math.max(eh/vh,ew/vw);
-        map.zoomToResolution(envelope.getCenter(),res * 1.2f);
+        map.zoomToResolution(envelope.getCenter(),res);
     }
+
 
 }
