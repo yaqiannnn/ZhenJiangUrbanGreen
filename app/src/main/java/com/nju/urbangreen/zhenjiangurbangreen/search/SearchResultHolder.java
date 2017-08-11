@@ -1,6 +1,7 @@
 package com.nju.urbangreen.zhenjiangurbangreen.search;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
@@ -43,7 +44,11 @@ public class SearchResultHolder extends RecyclerView.ViewHolder{
         ivDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), MaintainListActivity.class);
+                Intent intent = new Intent(view.getContext(), UGOInfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("UGO", obj);
+                intent.putExtras(bundle);
+                view.getContext().startActivity(intent);
             }
         });
         btnMaintainRecord.setOnClickListener(new View.OnClickListener() {

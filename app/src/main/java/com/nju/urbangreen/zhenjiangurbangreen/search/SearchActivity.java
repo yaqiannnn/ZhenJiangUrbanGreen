@@ -75,7 +75,7 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void initPopupWindow() {
-        searchType = new boolean[] {true, true, false};
+        searchType = new boolean[] {true, true, true};
         popupWindow = new LayerSwitchPopupWindow(this, new ILayerSwitchListener() {
             @Override
             public boolean[] getLayerState() {
