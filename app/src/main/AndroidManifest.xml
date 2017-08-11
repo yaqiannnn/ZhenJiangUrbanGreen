@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -29,12 +31,12 @@
         </activity>
         <activity android:name=".search.SearchActivity">
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN"/>
+             <!--<intent-filter>-->
+             <!--<action android:name="android.intent.action.MAIN"/>-->
 
 
-             <category android:name="android.intent.category.LAUNCHER"/>
-             </intent-filter>
+             <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+             <!--</intent-filter>-->
         </activity>
         <activity android:name=".navigation.NaviActivity"/>
         <activity android:name=".settings.SettingsActivity">
@@ -80,7 +82,12 @@
         </activity>
         <activity
             android:name=".events.EventRegisterActivity"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".attachments.AttachmentListActivity"/>
         <activity android:name=".inspectRecord.InspectListActivity"/>
         <activity android:name=".maintainRecord.MaintainListActivity"/>

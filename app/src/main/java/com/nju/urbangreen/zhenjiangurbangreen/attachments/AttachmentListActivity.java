@@ -1,8 +1,9 @@
 package com.nju.urbangreen.zhenjiangurbangreen.attachments;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 
@@ -11,32 +12,28 @@ import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
-import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
 import java.util.ArrayList;
 
 public class AttachmentListActivity extends BaseActivity {
 
-    @BindView(R.id.ly_attachments_title_bar)
-    public TitleBarLayout titleBarLayout;
+    @BindView(R.id.Toolbar_simple)
+    public Toolbar toolbar;
+
     @BindView(R.id.lv_attachments_list)
     public ListView lvAttachmentRecords;
+
+    @BindView(R.id.floatingbtn_add_attach)
+    public FloatingActionButton floatingbtnAddAttach;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attachment_list);
 
         ButterKnife.bind(this);
-        titleBarLayout.setTitleText("附件列表");
-        titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        titleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_add);
-        titleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
+        initToolbar();
+        floatingbtnAddAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //添加选择文件的操作
@@ -51,5 +48,17 @@ public class AttachmentListActivity extends BaseActivity {
         list.add(new OneAttachmentRecord("what doesn't kill you","0kb"));
         AttachmentRecordAdapter adapter = new AttachmentRecordAdapter(this,R.layout.attachment_list_item,list);
         lvAttachmentRecords.setAdapter(adapter);
+    }
+
+    private void initToolbar() {
+        toolbar.setTitle("附件列表");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 }

@@ -34,6 +34,9 @@ public class NaviActivity extends BaseActivity implements View.OnClickListener{
     @BindView(R.id.imgbtn_inspection_record)
     public ImageButton imgBtnInspect;
 
+    @BindView(R.id.imgbtn_file_mag)
+    public ImageButton imgBtnFile;
+
     Intent intent = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,8 @@ public class NaviActivity extends BaseActivity implements View.OnClickListener{
         imgBtnMaintain.setOnClickListener(this);
 
         imgBtnInspect.setOnClickListener(this);
+
+        imgBtnFile.setOnClickListener(this);
 
         titleBarLayout.setTitleText("功能选择");
         titleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
