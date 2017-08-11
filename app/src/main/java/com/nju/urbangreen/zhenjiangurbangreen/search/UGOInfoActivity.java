@@ -3,6 +3,7 @@ package com.nju.urbangreen.zhenjiangurbangreen.search;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,6 +21,9 @@ import butterknife.ButterKnife;
 
 public class UGOInfoActivity extends BaseActivity {
     private GreenObject obj;
+
+    @BindView(R.id.Toolbar_simple)
+    public Toolbar toolbar;
 
     @BindView(R.id.floatingbtn_UGO_location)
     public FloatingActionButton floatingbtn_location;
@@ -63,8 +67,15 @@ public class UGOInfoActivity extends BaseActivity {
         getIntentData();
         setContentView(R.layout.activity_ugoinfo);
         ButterKnife.bind(this);
+        initToolbar();
         setLocationButton();
         bindText();
+    }
+
+    private void initToolbar() {
+        toolbar.setTitle("绿化对象详情");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void bindText() {
