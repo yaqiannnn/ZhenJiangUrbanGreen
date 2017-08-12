@@ -24,10 +24,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </FrameLayout>
-    <TextView
+    <!--<TextView-->
+        <!--android:id="@+id/search_hint_textview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:visibility="visible"-->
+        <!--android:text="请在右上角菜单选择搜索条件"-->
+        <!--android:gravity="center"-->
+        <!--android:textColor="#C0C0C0"/>-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_ugo_search_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="请在右上角菜单选择搜索条件"
-        android:gravity="center"
-        android:textColor="#C0C0C0"/>
+        android:layout_height="match_parent" />
 </LinearLayout>

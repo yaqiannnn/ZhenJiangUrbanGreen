@@ -45,6 +45,7 @@ public class WebServiceUtils {
     public static final String Get_UGO_Info_Except_ST = "GetUGOInfoExceptST";//ST表示行道树
     public static final String Get_Near_Street_Tree = "GetNearStreetTree";
     public static final String GET_UGO_Suggest = "GetUGOSuggest";
+    public static final String SEARCH_UGO_INFO="SearchUGOInfo_1";
 
     public static final String KEY_REFLACT_OPERATION_NAME = "wmn";
     public static final String KEY_REFLACT_OPERATION_PARAM = "wmp";
@@ -250,6 +251,30 @@ public class WebServiceUtils {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
                 Log.i("错误信息", "get near street tree: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
+    public static List<GreenObject> searchUGOInfo_1(String[] errorMessage,String ugo_id){
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", ugo_id);
+        params.put("is_green_land",true);
+        params.put("is_ancient_tree",true);
+        params.put("is_street_tree",true);
+
+        Map<String, Object> results = callMethod(SEARCH_UGO_INFO, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>(){}.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get UGO Sug: " + errorMessage[0]);
             }
             return null;
         }

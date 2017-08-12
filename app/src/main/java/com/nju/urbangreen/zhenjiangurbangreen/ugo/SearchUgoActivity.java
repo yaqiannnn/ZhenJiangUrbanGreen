@@ -4,22 +4,27 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.PermissionsUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,9 +36,16 @@ public class SearchUgoActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.search_view)
     MaterialSearchView searchView;
+    @BindView(R.id.recycler_ugo_search_result)
+    RecyclerView recyclerUgoSearchResult;
+
     private String sugIDs[];
     private String sugAddresses[];
     private ProgressDialog loadingDialog;
+    private boolean isSearchOptionsSelected = false;
+    private UgoListAdapter adapter;
+    private List<GreenObject> searchResult = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +59,17 @@ public class SearchUgoActivity extends BaseActivity {
         initToolbar();
         initSearchView();
         initSuggestionList();
+        initSnackbar();
 //        searchView.setSuggestions(sugIDs);
+    }
+
+    private void initSnackbar() {
+        Snackbar.make(findViewById(R.id.toolbar),"请在右上角菜单栏选择搜索选项",Snackbar.LENGTH_INDEFINITE)
+                .setAction("关闭", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                    }
+                }).show();
     }
 
     private void initToolbar() {
@@ -66,7 +88,30 @@ public class SearchUgoActivity extends BaseActivity {
     private void initSearchView() {
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(final String query) {
+                loadingDialog.show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String errorMsg[] = new String[1];
+                        try {
+                            searchResult = WebServiceUtils.searchUGOInfo_1(errorMsg, query);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadingDialog.dismiss();
+                                Toast.makeText(SearchUgoActivity.this, searchResult.get(0).UGO_Address, Toast.LENGTH_SHORT).show();
+                                recyclerUgoSearchResult.setVisibility(View.VISIBLE);
+                                initRecyclerView();
+                            }
+                        });
+                    }
+
+                }).start();
                 return false;
             }
 
@@ -80,11 +125,17 @@ public class SearchUgoActivity extends BaseActivity {
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
             public void onSearchViewShown() {
-
+//                searchView.setSuggestions(sugIDs);
+                if (!isSearchOptionsSelected) {
+                    searchView.closeSearch();
+                    Toast.makeText(SearchUgoActivity.this, "请选择搜索条件", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onSearchViewClosed() {
+//                recyclerUgoSearchResult.setVisibility(View.INVISIBLE);
+//                searchHintTextview.setVisibility(View.VISIBLE);
 
             }
         });
@@ -92,8 +143,7 @@ public class SearchUgoActivity extends BaseActivity {
         searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(SearchUgoActivity.this, "test"+i, Toast.LENGTH_SHORT).show();
-                Log.d("tag","test"+i);
+
             }
         });
     }
@@ -129,6 +179,13 @@ public class SearchUgoActivity extends BaseActivity {
         }
     }
 
+    private void initRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerUgoSearchResult.setLayoutManager(linearLayoutManager);
+        adapter = new UgoListAdapter(searchResult);
+        recyclerUgoSearchResult.setAdapter(adapter);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -140,6 +197,7 @@ public class SearchUgoActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        isSearchOptionsSelected = true;
         if (item.getItemId() == R.id.menu_toolbar_item_uid) {
             searchView.setSuggestions(sugIDs);
         } else {
