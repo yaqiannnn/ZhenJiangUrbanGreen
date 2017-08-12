@@ -233,6 +233,7 @@ public class WebServiceUtils {
 
     }
 
+
     public static List<GreenObject> getNearStreetTree(double x, double y, double radius, String[] errorMessage) {
         if(is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";

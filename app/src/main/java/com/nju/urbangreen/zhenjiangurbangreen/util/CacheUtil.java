@@ -1,5 +1,7 @@
 package com.nju.urbangreen.zhenjiangurbangreen.util;
 
+import android.util.Log;
+
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 
@@ -36,6 +38,7 @@ public class CacheUtil {
     public static List<GreenObject> getUGOs() {
         if(!hasUGOs())
             return null;
+        Log.d("test2",instance().<GreenObject>getAsObjectList(UGO_KEY)+"");
         return instance().<GreenObject>getAsObjectList(UGO_KEY);
     }
 

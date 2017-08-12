@@ -3,6 +3,7 @@ package com.nju.urbangreen.zhenjiangurbangreen.ugo;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -11,8 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.search.SearchActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
@@ -24,7 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class UgoListActivity extends AppCompatActivity {
+public class UgoListActivity extends BaseActivity {
 
     @BindView(R.id.add_ugo_title_bar)
     TitleBarLayout addUgoTitleBarLayout;
@@ -43,6 +46,7 @@ public class UgoListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ugo_list);
         ButterKnife.bind(this);
+        
         addUgoTitleBarLayout.setTitleText("养护对象列表");
         addUgoTitleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override
@@ -54,13 +58,74 @@ public class UgoListActivity extends AppCompatActivity {
         addUgoTitleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(UgoListActivity.this, SearchActivity.class);
+                Intent intent = new Intent(UgoListActivity.this, SearchUgoActivity.class);
                 startActivity(intent);
             }
         });
-
         initUgos();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (addUgoTitleBarLayout.recoverReceiver != null) {
+            unregisterReceiver(addUgoTitleBarLayout.recoverReceiver);
+        }
+    }
+
+    //刷新养护对象数据
+    private void refreshUgos() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        initUgos();
+                        Toast.makeText(UgoListActivity.this, "刷新数据（还没做）", Toast.LENGTH_SHORT).show();
+//                        ugObjectList.add(new GreenObject("00000001", "00000003", "古树名木", "新数据", "镇江市", "镇江市", 15, "null"));
+                        adapter.notifyDataSetChanged();
+                        swipeRefresh.setRefreshing(false);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    //养护对象模拟数据
+    private void initUgos() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("正在加载列表");
+        progressDialog.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String[] errMsg = new String[1];
+                try {
+                    ugObjectList = WebServiceUtils.getUGOInfoExceptST(errMsg);
+                    Log.d("test",ugObjectList+"");
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                progressDialog.dismiss();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initRecyclerView();
+                    }
+                });
+            }
+        }).start();
+
+    }
+
+    private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerUgoList.setLayoutManager(linearLayoutManager);
         adapter = new UgoListAdapter(ugObjectList);
@@ -93,7 +158,14 @@ public class UgoListActivity extends AppCompatActivity {
                         }
                     }).show();*/
                     adapter.notifyItemRemoved(position);
-                    ugObjectList.remove(position);
+//                    ugObjectList.remove(position);
+                    Snackbar.make(viewHolder.itemView,"数据已删除",Snackbar.LENGTH_SHORT)
+                            .setAction("撤销", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Toast.makeText(UgoListActivity.this, "数据已恢复", Toast.LENGTH_SHORT).show();
+                                }
+                            }).show();
                 }
             }
         };
@@ -114,52 +186,5 @@ public class UgoListActivity extends AppCompatActivity {
                 refreshUgos();
             }
         });
-    }
-
-    //刷新养护对象数据
-    private void refreshUgos() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-//                        initUgos();
-
-//                        ugObjectList.add(new GreenObject("00000001", "00000003", "古树名木", "新数据", "镇江市", "镇江市", 15, "null"));
-                        adapter.notifyDataSetChanged();
-                        swipeRefresh.setRefreshing(false);
-                    }
-                });
-            }
-        }).start();
-    }
-
-    //养护对象模拟数据
-    private void initUgos() {
-//        for (int i = 0; i < 4; i++) {
-//            ugObjectList.add(new UGObject("00000001", "00000003", "古树名木", "梧桐树", "镇江市", "镇江市", 15, "null"));
-//            ugObjectList.add(new UGObject("00001111", "00000333", "绿地", "公园", "镇江市", "镇江市", 100, "null"));
-//        }
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("正在加载列表");
-        progressDialog.show();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String[] errMsg = new String[1];
-                ugObjectList = WebServiceUtils.getUGOInfoExceptST(errMsg);
-                Log.d("ts",ugObjectList.size()+"");
-                Log.d("ts",ugObjectList.get(0).UGO_Address);
-
-                progressDialog.dismiss();
-            }
-        }).start();
-
     }
 }
