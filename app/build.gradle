@@ -44,6 +44,8 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'com.bignerdranch.android:recyclerview-multiselect:0.2'
+    compile 'com.github.goyourfly:MultiSelectAdapter:3.8'
 }
 
 

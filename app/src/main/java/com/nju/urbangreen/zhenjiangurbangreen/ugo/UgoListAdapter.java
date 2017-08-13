@@ -22,15 +22,22 @@ public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ugo_list_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ugo_list_item, parent, false);
         final ViewHolder holder = new ViewHolder(view);
         final ImageView tickImage = holder.tickImage;
+
+        tickImage.setTag("unselected");
         tickImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int position = holder.getAdapterPosition();
-                GreenObject greenObject = mUgoList.get(position);
-                Toast.makeText(view.getContext(), "you select "+greenObject.UGO_Address, Toast.LENGTH_SHORT).show();
+                Object tag = tickImage.getTag();
+                if (tag == "unselected") {
+                    tickImage.setTag("selected");
+                    tickImage.setImageResource(R.drawable.ic_tick_selected);
+                } else {
+                    tickImage.setTag("unselected");
+                    tickImage.setImageResource(R.drawable.ic_tick_unselected);
+                }
             }
         });
         return holder;
@@ -48,20 +55,20 @@ public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHold
         return mUgoList.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView ugoName;
         TextView ugoAddress;
         ImageView tickImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ugoName=(TextView)itemView.findViewById(R.id.ugo_name);
-            ugoAddress=(TextView)itemView.findViewById(R.id.ugo_address);
-            tickImage=(ImageView)itemView.findViewById(R.id.img_tick);
+            ugoName = (TextView) itemView.findViewById(R.id.ugo_name);
+            ugoAddress = (TextView) itemView.findViewById(R.id.ugo_address);
+            tickImage = (ImageView) itemView.findViewById(R.id.img_tick);
         }
     }
 
-    public UgoListAdapter(List<GreenObject> ugObjectList){
+    public UgoListAdapter(List<GreenObject> ugObjectList) {
         mUgoList = ugObjectList;
     }
 }

@@ -59,10 +59,11 @@ public class UgoListActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(UgoListActivity.this, SearchUgoActivity.class);
-                startActivity(intent);
+//                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
-        initUgos();
+//        initUgos();
     }
 
     @Override
@@ -70,6 +71,19 @@ public class UgoListActivity extends BaseActivity {
         super.onDestroy();
         if (addUgoTitleBarLayout.recoverReceiver != null) {
             unregisterReceiver(addUgoTitleBarLayout.recoverReceiver);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 1:
+                if(resultCode==RESULT_OK){
+                    String returnData = data.getStringExtra("selectUgos");
+                    Toast.makeText(this, returnData, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
         }
     }
 
@@ -97,7 +111,6 @@ public class UgoListActivity extends BaseActivity {
         }).start();
     }
 
-    //养护对象模拟数据
     private void initUgos() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("正在加载列表");
