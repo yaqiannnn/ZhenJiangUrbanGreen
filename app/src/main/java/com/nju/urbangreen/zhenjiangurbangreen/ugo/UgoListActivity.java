@@ -79,8 +79,11 @@ public class UgoListActivity extends BaseActivity {
         switch (requestCode){
             case 1:
                 if(resultCode==RESULT_OK){
-                    String returnData = data.getStringExtra("selectUgos");
-                    Toast.makeText(this, returnData, Toast.LENGTH_SHORT).show();
+//                    String returnData = data.getStringExtra("selectUgos");
+                    ugObjectList = (List<GreenObject>)data.getSerializableExtra("selectUgo");
+                    for(GreenObject o : ugObjectList){
+                        Log.d("tag","in ugolistactivity: "+o.UGO_Address);
+                    }
                 }
                 break;
             default:

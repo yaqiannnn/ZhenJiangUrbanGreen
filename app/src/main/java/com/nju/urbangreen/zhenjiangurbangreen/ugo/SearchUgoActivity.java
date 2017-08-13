@@ -3,6 +3,7 @@ package com.nju.urbangreen.zhenjiangurbangreen.ugo;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +22,11 @@ import android.widget.Toast;
 
 import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
+import com.goyourfly.multiple.adapter.MultipleAdapter;
+import com.goyourfly.multiple.adapter.MultipleSelect;
+import com.goyourfly.multiple.adapter.StateChangeListener;
+import com.goyourfly.multiple.adapter.menu.SimpleDoneMenuBar;
+import com.goyourfly.multiple.adapter.viewholder.view.CheckBoxFactory;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
@@ -28,6 +35,8 @@ import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.PermissionsUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +59,7 @@ public class SearchUgoActivity extends BaseActivity {
     private boolean isSearchOptionsSelected = false;
     private UgoListAdapter adapter;
     private List<GreenObject> searchResult = new ArrayList<>();
+    private List<GreenObject> selectResult = new ArrayList<>();
 
 
     @Override
@@ -186,28 +196,55 @@ public class SearchUgoActivity extends BaseActivity {
     }
 
     private void initRecyclerView() {
-
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerUgoSearchResult.setLayoutManager(linearLayoutManager);
         adapter = new UgoListAdapter(searchResult);
+        MultipleAdapter multipleAdapter = MultipleSelect.with(this)
+                .adapter(adapter)
+                .decorateFactory(new CheckBoxFactory(Color.BLUE))
+                .stateChangeListener(new StateChangeListener() {
+                    @Override
+                    public void onSelectMode() {
 
-        recyclerUgoSearchResult.setAdapter(adapter);
+                    }
+
+                    @Override
+                    public void onSelect(int i, int i1) {
+//                        Toast.makeText(SearchUgoActivity.this, ""+i, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onUnSelect(int i, int i1) {
+
+                    }
+
+                    @Override
+                    public void onDone(@NotNull ArrayList<Integer> arrayList) {
+                        for(Integer i : arrayList){
+                            selectResult.add(searchResult.get(i));
+                        }
+                        Intent intent = new Intent();
+                        intent.putExtra("selectUgo",selectResult);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onDelete(@NotNull ArrayList<Integer> arrayList) {
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                })
+                .build();
+
+        recyclerUgoSearchResult.setAdapter(multipleAdapter);
 
     }
 
-    private class MyViewHolder extends SwappingHolder implements View.OnLongClickListener{
-
-        public MyViewHolder(View itemView, MultiSelector multiSelector) {
-            super(itemView, multiSelector);
-            itemView.setLongClickable(true);
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            return false;
-        }
-    }
 
     private void initDialog() {
 //        Log.d("tag",adapter.getmSelectedUgoList().get(0).UGO_Address);

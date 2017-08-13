@@ -24,22 +24,22 @@ public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ugo_list_item, parent, false);
         final ViewHolder holder = new ViewHolder(view);
-        final ImageView tickImage = holder.tickImage;
+//        final ImageView tickImage = holder.tickImage;
 
-        tickImage.setTag("unselected");
-        tickImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Object tag = tickImage.getTag();
-                if (tag == "unselected") {
-                    tickImage.setTag("selected");
-                    tickImage.setImageResource(R.drawable.ic_tick_selected);
-                } else {
-                    tickImage.setTag("unselected");
-                    tickImage.setImageResource(R.drawable.ic_tick_unselected);
-                }
-            }
-        });
+//        tickImage.setTag("unselected");
+//        tickImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Object tag = tickImage.getTag();
+//                if (tag == "unselected") {
+//                    tickImage.setTag("selected");
+//                    tickImage.setImageResource(R.drawable.ic_tick_selected);
+//                } else {
+//                    tickImage.setTag("unselected");
+//                    tickImage.setImageResource(R.drawable.ic_tick_unselected);
+//                }
+//            }
+//        });
         return holder;
     }
 
@@ -58,13 +58,13 @@ public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHold
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView ugoName;
         TextView ugoAddress;
-        ImageView tickImage;
+//        ImageView tickImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ugoName = (TextView) itemView.findViewById(R.id.ugo_name);
             ugoAddress = (TextView) itemView.findViewById(R.id.ugo_address);
-            tickImage = (ImageView) itemView.findViewById(R.id.img_tick);
+//            tickImage = (ImageView) itemView.findViewById(R.id.img_tick);
         }
     }
 
