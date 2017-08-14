@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +39,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,12 +94,6 @@ public class SearchUgoActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                initDialog();
-            }
-        });
     }
 
 
@@ -112,6 +108,10 @@ public class SearchUgoActivity extends BaseActivity {
                         String errorMsg[] = new String[1];
                         try {
                             searchResult = WebServiceUtils.searchUGOInfo_1(errorMsg, query);
+                            Log.d("tag","searchresultbefore"+searchResult.size()+"");
+                            Log.d("tag","selectresult"+selectResult.size());
+                            searchResult.removeAll(selectResult);     //去除已经选择的item
+                            Log.d("tag","searchresultafter"+searchResult.size()+"");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -167,7 +167,7 @@ public class SearchUgoActivity extends BaseActivity {
     private void initSuggestionList() {
         if (CacheUtil.hasUGOSug()) {
             sugIDs = CacheUtil.getUGOSug("UGO_ID");
-            Log.d("tag", "size=" + sugIDs.length);
+//            Log.d("tag", "size=" + sugIDs.length);
             sugAddresses = CacheUtil.getUGOSug("UGO_Address");
         } else {
             loadingDialog.show();
@@ -224,7 +224,7 @@ public class SearchUgoActivity extends BaseActivity {
                             selectResult.add(searchResult.get(i));
                         }
                         Intent intent = new Intent();
-                        intent.putExtra("selectUgo",selectResult);
+                        intent.putExtra("selectUgo",(Serializable)selectResult);
                         setResult(RESULT_OK, intent);
                         finish();
                     }
@@ -240,30 +240,12 @@ public class SearchUgoActivity extends BaseActivity {
                     }
                 })
                 .build();
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerUgoSearchResult.getContext(),
+                linearLayoutManager.getOrientation());
+        recyclerUgoSearchResult.addItemDecoration(dividerItemDecoration);
 
         recyclerUgoSearchResult.setAdapter(multipleAdapter);
 
-    }
-
-
-    private void initDialog() {
-//        Log.d("tag",adapter.getmSelectedUgoList().get(0).UGO_Address);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("确定保存的修改么?");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent();
-                intent.putExtra("selectUgos", "test");
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }).show();
     }
 
 
@@ -292,7 +274,7 @@ public class SearchUgoActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        initDialog();
+
     }
 
 

@@ -2,6 +2,7 @@ package com.nju.urbangreen.zhenjiangurbangreen.ugo;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,9 +12,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.goyourfly.multiple.adapter.MultipleAdapter;
+import com.goyourfly.multiple.adapter.MultipleSelect;
+import com.goyourfly.multiple.adapter.StateChangeListener;
+import com.goyourfly.multiple.adapter.menu.SimpleDeleteMenuBar;
+import com.goyourfly.multiple.adapter.viewholder.view.CheckBoxFactory;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
@@ -21,6 +28,9 @@ import com.nju.urbangreen.zhenjiangurbangreen.search.SearchActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,17 +50,21 @@ public class UgoListActivity extends BaseActivity {
     private List<GreenObject> ugObjectList = new ArrayList<>();
     private UgoListAdapter adapter;
     private ProgressDialog progressDialog;
+    private MultipleAdapter multipleAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ugo_list);
         ButterKnife.bind(this);
-        
+
         addUgoTitleBarLayout.setTitleText("养护对象列表");
         addUgoTitleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("selectUgoList",(Serializable)ugObjectList);
+                setResult(RESULT_OK,intent);
                 finish();
             }
         });
@@ -59,11 +73,11 @@ public class UgoListActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(UgoListActivity.this, SearchUgoActivity.class);
-//                startActivity(intent);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
             }
         });
 //        initUgos();
+        initRecyclerView();
     }
 
     @Override
@@ -76,14 +90,13 @@ public class UgoListActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
+        switch (requestCode) {
             case 1:
-                if(resultCode==RESULT_OK){
+                if (resultCode == RESULT_OK) {
 //                    String returnData = data.getStringExtra("selectUgos");
-                    ugObjectList = (List<GreenObject>)data.getSerializableExtra("selectUgo");
-                    for(GreenObject o : ugObjectList){
-                        Log.d("tag","in ugolistactivity: "+o.UGO_Address);
-                    }
+                    List<GreenObject> tempList = (List<GreenObject>) data.getSerializableExtra("selectUgo");
+                    ugObjectList.addAll(tempList);
+                    multipleAdapter.notifyDataSetChanged();
                 }
                 break;
             default:
@@ -104,7 +117,7 @@ public class UgoListActivity extends BaseActivity {
                     @Override
                     public void run() {
 //                        initUgos();
-                        Toast.makeText(UgoListActivity.this, "刷新数据（还没做）", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(UgoListActivity.this, "刷新数据（还没做）", Toast.LENGTH_SHORT).show();
 //                        ugObjectList.add(new GreenObject("00000001", "00000003", "古树名木", "新数据", "镇江市", "镇江市", 15, "null"));
                         adapter.notifyDataSetChanged();
                         swipeRefresh.setRefreshing(false);
@@ -124,8 +137,8 @@ public class UgoListActivity extends BaseActivity {
                 String[] errMsg = new String[1];
                 try {
                     ugObjectList = WebServiceUtils.getUGOInfoExceptST(errMsg);
-                    Log.d("test",ugObjectList+"");
-                }catch (Exception e){
+                    Log.d("test", ugObjectList + "");
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -145,50 +158,87 @@ public class UgoListActivity extends BaseActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerUgoList.setLayoutManager(linearLayoutManager);
         adapter = new UgoListAdapter(ugObjectList);
-        recyclerUgoList.setAdapter(adapter);
+        multipleAdapter = MultipleSelect.with(this)
+                .adapter(adapter)
+                .decorateFactory(new CheckBoxFactory(Color.BLUE))
+                .stateChangeListener(new StateChangeListener() {
+                    @Override
+                    public void onSelectMode() {
 
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
+                    }
 
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                final int position = viewHolder.getAdapterPosition();
-                if (direction == ItemTouchHelper.LEFT) {
-                    /*AlertDialog.Builder builder = new AlertDialog.Builder(UgoListActivity.this);
-                    builder.setMessage("你确定要删除这一项吗?");
-                    builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            adapter.notifyItemRemoved(position);
-                            ugObjectList.remove(position);
-                        }
-                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            //这2句是什么意思..
-                            adapter.notifyItemRemoved(position + 1);
-                            adapter.notifyItemRangeChanged(position, adapter.getItemCount());
-                        }
-                    }).show();*/
-                    adapter.notifyItemRemoved(position);
-//                    ugObjectList.remove(position);
-                    Snackbar.make(viewHolder.itemView,"数据已删除",Snackbar.LENGTH_SHORT)
-                            .setAction("撤销", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Toast.makeText(UgoListActivity.this, "数据已恢复", Toast.LENGTH_SHORT).show();
-                                }
-                            }).show();
-                }
-            }
-        };
+                    @Override
+                    public void onSelect(int i, int i1) {
 
-        //列表项侧滑
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerUgoList);
+                    }
+
+                    @Override
+                    public void onUnSelect(int i, int i1) {
+
+                    }
+
+                    @Override
+                    public void onDone(@NotNull ArrayList<Integer> arrayList) {
+
+                    }
+
+                    @Override
+                    public void onDelete(@NotNull ArrayList<Integer> arrayList) {
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                })
+                .linkList(ugObjectList)
+                .customMenu(new SimpleDeleteMenuBar(this, R.color.colorPrimary, Gravity.BOTTOM))
+                .build();
+        recyclerUgoList.setAdapter(multipleAdapter);
+
+//        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+//            @Override
+//            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+//                final int position = viewHolder.getAdapterPosition();
+//                if (direction == ItemTouchHelper.LEFT) {
+//                    /*AlertDialog.Builder builder = new AlertDialog.Builder(UgoListActivity.this);
+//                    builder.setMessage("你确定要删除这一项吗?");
+//                    builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            adapter.notifyItemRemoved(position);
+//                            ugObjectList.remove(position);
+//                        }
+//                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            //这2句是什么意思..
+//                            adapter.notifyItemRemoved(position + 1);
+//                            adapter.notifyItemRangeChanged(position, adapter.getItemCount());
+//                        }
+//                    }).show();*/
+//                    adapter.notifyItemRemoved(position);
+////                    ugObjectList.remove(position);
+//                    Snackbar.make(viewHolder.itemView, "数据已删除", Snackbar.LENGTH_SHORT)
+//                            .setAction("撤销", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    Toast.makeText(UgoListActivity.this, "数据已恢复", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }).show();
+//                }
+//            }
+//        };
+//
+//        //列表项侧滑
+//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+//        itemTouchHelper.attachToRecyclerView(recyclerUgoList);
 
         //列表项分隔线
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerUgoList.getContext(),
