@@ -65,10 +65,11 @@ public class UgoListActivity extends BaseActivity {
         addUgoTitleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.putExtra("selectUgoList", (Serializable) ugObjectList);
-                setResult(RESULT_OK, intent);
-                writeToSp();
+//                Intent intent = new Intent();
+//                intent.putExtra("selectUgoList", (Serializable) ugObjectList);
+//                setResult(RESULT_OK, intent);
+                writeToCache();
+//                CacheUtil.putUGOs(ugObjectList);
                 finish();
             }
         });
@@ -82,7 +83,8 @@ public class UgoListActivity extends BaseActivity {
         });
 //        initUgos();
         initRecyclerView();
-        readFromSp();
+        readFromCache();
+//        CacheUtil.getUGOs();
     }
 
     @Override
@@ -183,12 +185,12 @@ public class UgoListActivity extends BaseActivity {
         });
     }
 
-    private void writeToSp() {
+    private void writeToCache() {
         ACache mCache = ACache.get(this);
         mCache.put("ugo_select", ugObjectList.toArray());
     }
 
-    private void readFromSp() {
+    private void readFromCache() {
         ACache mCache = ACache.get(this);
         List<GreenObject> tempList = mCache.getAsObjectList("ugo_select");
         if (tempList != null) {

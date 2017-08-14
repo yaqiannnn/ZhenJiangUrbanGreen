@@ -165,13 +165,6 @@ public class SearchUgoActivity extends BaseActivity {
 
             }
         });
-
-        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-            }
-        });
     }
 
     private void initSuggestionList() {
@@ -209,23 +202,21 @@ public class SearchUgoActivity extends BaseActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerUgoSearchResult.setLayoutManager(linearLayoutManager);
         adapter = new UgoListAdapter(searchResult);
+
         MultipleAdapter multipleAdapter = MultipleSelect.with(this)
                 .adapter(adapter)
                 .decorateFactory(new CheckBoxFactory(Color.BLUE))
                 .stateChangeListener(new StateChangeListener() {
                     @Override
                     public void onSelectMode() {
-
                     }
 
                     @Override
                     public void onSelect(int i, int i1) {
-//                        Toast.makeText(SearchUgoActivity.this, ""+i, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onUnSelect(int i, int i1) {
-
                     }
 
                     @Override
@@ -241,15 +232,15 @@ public class SearchUgoActivity extends BaseActivity {
 
                     @Override
                     public void onDelete(@NotNull ArrayList<Integer> arrayList) {
-
                     }
 
                     @Override
                     public void onCancel() {
-
                     }
                 })
                 .build();
+
+        //列表分隔线
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerUgoSearchResult.getContext(),
                 linearLayoutManager.getOrientation());
         recyclerUgoSearchResult.addItemDecoration(dividerItemDecoration);
@@ -283,11 +274,5 @@ public class SearchUgoActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onBackPressed() {
-
-    }
-
 
 }

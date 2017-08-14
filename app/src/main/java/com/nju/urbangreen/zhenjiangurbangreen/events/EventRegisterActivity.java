@@ -164,17 +164,17 @@ public class EventRegisterActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
-            case 1:
-                if (resultCode == RESULT_OK) {
-                     ugoList = (List<GreenObject>) data.getSerializableExtra("selectUgoList");
-                }
-                break;
-            default:
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (requestCode){
+//            case 1:
+//                if (resultCode == RESULT_OK) {
+//                     ugoList = (List<GreenObject>) data.getSerializableExtra("selectUgoList");
+//                }
+//                break;
+//            default:
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
