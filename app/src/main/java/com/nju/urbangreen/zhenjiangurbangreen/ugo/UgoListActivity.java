@@ -25,6 +25,8 @@ import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.search.SearchActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ACache;
+import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
@@ -52,6 +54,7 @@ public class UgoListActivity extends BaseActivity {
     private ProgressDialog progressDialog;
     private MultipleAdapter multipleAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +66,9 @@ public class UgoListActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.putExtra("selectUgoList",(Serializable)ugObjectList);
-                setResult(RESULT_OK,intent);
+                intent.putExtra("selectUgoList", (Serializable) ugObjectList);
+                setResult(RESULT_OK, intent);
+                writeToSp();
                 finish();
             }
         });
@@ -78,6 +82,7 @@ public class UgoListActivity extends BaseActivity {
         });
 //        initUgos();
         initRecyclerView();
+        readFromSp();
     }
 
     @Override
@@ -116,9 +121,6 @@ public class UgoListActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        initUgos();
-//                        Toast.makeText(UgoListActivity.this, "刷新数据（还没做）", Toast.LENGTH_SHORT).show();
-//                        ugObjectList.add(new GreenObject("00000001", "00000003", "古树名木", "新数据", "镇江市", "镇江市", 15, "null"));
                         adapter.notifyDataSetChanged();
                         swipeRefresh.setRefreshing(false);
                     }
@@ -127,6 +129,7 @@ public class UgoListActivity extends BaseActivity {
         }).start();
     }
 
+    //本函数在从服务端获取数据时有用
     private void initUgos() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("正在加载列表");
@@ -161,84 +164,10 @@ public class UgoListActivity extends BaseActivity {
         multipleAdapter = MultipleSelect.with(this)
                 .adapter(adapter)
                 .decorateFactory(new CheckBoxFactory(Color.BLUE))
-                .stateChangeListener(new StateChangeListener() {
-                    @Override
-                    public void onSelectMode() {
-
-                    }
-
-                    @Override
-                    public void onSelect(int i, int i1) {
-
-                    }
-
-                    @Override
-                    public void onUnSelect(int i, int i1) {
-
-                    }
-
-                    @Override
-                    public void onDone(@NotNull ArrayList<Integer> arrayList) {
-
-                    }
-
-                    @Override
-                    public void onDelete(@NotNull ArrayList<Integer> arrayList) {
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                })
                 .linkList(ugObjectList)
                 .customMenu(new SimpleDeleteMenuBar(this, R.color.colorPrimary, Gravity.BOTTOM))
                 .build();
         recyclerUgoList.setAdapter(multipleAdapter);
-
-//        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-//            @Override
-//            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-//                final int position = viewHolder.getAdapterPosition();
-//                if (direction == ItemTouchHelper.LEFT) {
-//                    /*AlertDialog.Builder builder = new AlertDialog.Builder(UgoListActivity.this);
-//                    builder.setMessage("你确定要删除这一项吗?");
-//                    builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            adapter.notifyItemRemoved(position);
-//                            ugObjectList.remove(position);
-//                        }
-//                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            //这2句是什么意思..
-//                            adapter.notifyItemRemoved(position + 1);
-//                            adapter.notifyItemRangeChanged(position, adapter.getItemCount());
-//                        }
-//                    }).show();*/
-//                    adapter.notifyItemRemoved(position);
-////                    ugObjectList.remove(position);
-//                    Snackbar.make(viewHolder.itemView, "数据已删除", Snackbar.LENGTH_SHORT)
-//                            .setAction("撤销", new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//                                    Toast.makeText(UgoListActivity.this, "数据已恢复", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }).show();
-//                }
-//            }
-//        };
-//
-//        //列表项侧滑
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-//        itemTouchHelper.attachToRecyclerView(recyclerUgoList);
 
         //列表项分隔线
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerUgoList.getContext(),
@@ -252,5 +181,19 @@ public class UgoListActivity extends BaseActivity {
                 refreshUgos();
             }
         });
+    }
+
+    private void writeToSp() {
+        ACache mCache = ACache.get(this);
+        mCache.put("ugo_select", ugObjectList.toArray());
+    }
+
+    private void readFromSp() {
+        ACache mCache = ACache.get(this);
+        List<GreenObject> tempList = mCache.getAsObjectList("ugo_select");
+        if (tempList != null) {
+            ugObjectList.addAll(tempList);
+            multipleAdapter.notifyDataSetChanged();
+        }
     }
 }

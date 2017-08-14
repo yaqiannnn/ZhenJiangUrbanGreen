@@ -94,6 +94,12 @@ public class SearchUgoActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
 
@@ -108,10 +114,10 @@ public class SearchUgoActivity extends BaseActivity {
                         String errorMsg[] = new String[1];
                         try {
                             searchResult = WebServiceUtils.searchUGOInfo_1(errorMsg, query);
-                            Log.d("tag","searchresultbefore"+searchResult.size()+"");
-                            Log.d("tag","selectresult"+selectResult.size());
+                            Log.d("tag", "searchresultbefore" + searchResult.size() + "");
+                            Log.d("tag", "selectresult" + selectResult.size());
                             searchResult.removeAll(selectResult);     //去除已经选择的item
-                            Log.d("tag","searchresultafter"+searchResult.size()+"");
+                            Log.d("tag", "searchresultafter" + searchResult.size() + "");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -220,11 +226,11 @@ public class SearchUgoActivity extends BaseActivity {
 
                     @Override
                     public void onDone(@NotNull ArrayList<Integer> arrayList) {
-                        for(Integer i : arrayList){
+                        for (Integer i : arrayList) {
                             selectResult.add(searchResult.get(i));
                         }
                         Intent intent = new Intent();
-                        intent.putExtra("selectUgo",(Serializable)selectResult);
+                        intent.putExtra("selectUgo", (Serializable) selectResult);
                         setResult(RESULT_OK, intent);
                         finish();
                     }
