@@ -33,7 +33,9 @@ import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ACache;
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ListUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.PermissionsUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 
@@ -117,6 +119,10 @@ public class SearchUgoActivity extends BaseActivity {
                             searchResult = WebServiceUtils.searchUGOInfo_2(errorMsg, query, flag);
 //                            Log.d("tag", "searchresultbefore" + searchResult.size() + "");
 //                            Log.d("tag", "selectresult" + selectResult.size());
+                            ACache mCache = ACache.get(SearchUgoActivity.this);
+                            List<GreenObject> selectList = mCache.getAsObjectList("ugo_select");
+                            searchResult = ListUtil.trim(searchResult,selectList);  //去除已经选择的item
+//                            searchResult.removeAll(selectList); //去除已经选择的item
 //                            searchResult.removeAll(selectResult);     //去除已经选择的item
 //                            Log.d("tag", "searchresultafter" + searchResult.size() + "");
                         } catch (Exception e) {
