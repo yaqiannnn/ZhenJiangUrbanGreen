@@ -62,6 +62,7 @@ public class SearchUgoActivity extends BaseActivity {
     private UgoListAdapter adapter;
     private List<GreenObject> searchResult = new ArrayList<>();
     private List<GreenObject> selectResult = new ArrayList<>();
+    public String flag;
 
 
     @Override
@@ -113,11 +114,11 @@ public class SearchUgoActivity extends BaseActivity {
                     public void run() {
                         String errorMsg[] = new String[1];
                         try {
-                            searchResult = WebServiceUtils.searchUGOInfo_1(errorMsg, query);
-                            Log.d("tag", "searchresultbefore" + searchResult.size() + "");
-                            Log.d("tag", "selectresult" + selectResult.size());
-                            searchResult.removeAll(selectResult);     //去除已经选择的item
-                            Log.d("tag", "searchresultafter" + searchResult.size() + "");
+                            searchResult = WebServiceUtils.searchUGOInfo_2(errorMsg, query, flag);
+//                            Log.d("tag", "searchresultbefore" + searchResult.size() + "");
+//                            Log.d("tag", "selectresult" + selectResult.size());
+//                            searchResult.removeAll(selectResult);     //去除已经选择的item
+//                            Log.d("tag", "searchresultafter" + searchResult.size() + "");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -126,9 +127,12 @@ public class SearchUgoActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 loadingDialog.dismiss();
-                                Toast.makeText(SearchUgoActivity.this, searchResult.get(0).UGO_Address, Toast.LENGTH_SHORT).show();
-                                recyclerUgoSearchResult.setVisibility(View.VISIBLE);
-                                initRecyclerView();
+                                if (searchResult == null) {
+                                    Toast.makeText(SearchUgoActivity.this, "找不到结果(是否没输入完整的ID号？)", Toast.LENGTH_SHORT).show();
+                                    searchView.clearFocus();
+                                } else {
+                                    initRecyclerView();
+                                }
                             }
                         });
                     }
@@ -269,9 +273,11 @@ public class SearchUgoActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.menu_toolbar_item_uid:
                 searchView.setSuggestions(sugIDs);
+                flag = "id";
                 break;
             case R.id.menu_toolbar_item_address:
                 searchView.setSuggestions(sugAddresses);
+                flag = "address";
                 break;
             default:
         }
