@@ -31,6 +31,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.map.MapActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.MyApplication;
+import com.nju.urbangreen.zhenjiangurbangreen.util.PermissionsUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 
@@ -64,6 +65,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PermissionsUtil.setPermissions(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);

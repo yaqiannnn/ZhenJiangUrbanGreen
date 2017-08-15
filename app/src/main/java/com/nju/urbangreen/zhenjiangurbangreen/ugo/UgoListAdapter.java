@@ -4,7 +4,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
@@ -20,8 +22,8 @@ public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ugo_list_item,parent,false);
-        ViewHolder holder = new ViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ugo_list_item, parent, false);
+        final ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
@@ -37,18 +39,18 @@ public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHold
         return mUgoList.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView ugoName;
         TextView ugoAddress;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ugoName=(TextView)itemView.findViewById(R.id.ugo_name);
-            ugoAddress=(TextView)itemView.findViewById(R.id.ugo_address);
+            ugoName = (TextView) itemView.findViewById(R.id.ugo_name);
+            ugoAddress = (TextView) itemView.findViewById(R.id.ugo_address);
         }
     }
 
-    public UgoListAdapter(List<GreenObject> ugObjectList){
+    public UgoListAdapter(List<GreenObject> ugObjectList) {
         mUgoList = ugObjectList;
     }
 }

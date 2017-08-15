@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.ugo.UgoListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
@@ -29,6 +30,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,6 +80,7 @@ public class EventRegisterActivity extends BaseActivity {
     @BindView(R.id.btn_event_register_add_files)
     public Button btnAddAttachment;
     private OneEvent oneEvent;//如果是从详情按钮启动的本活动，则需要获取一些事件的信息
+    private List<GreenObject> ugoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,10 +159,22 @@ public class EventRegisterActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(EventRegisterActivity.this,UgoListActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (requestCode){
+//            case 1:
+//                if (resultCode == RESULT_OK) {
+//                     ugoList = (List<GreenObject>) data.getSerializableExtra("selectUgoList");
+//                }
+//                break;
+//            default:
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
