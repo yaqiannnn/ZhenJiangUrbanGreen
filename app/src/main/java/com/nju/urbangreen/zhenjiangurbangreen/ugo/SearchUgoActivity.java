@@ -21,8 +21,6 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bignerdranch.android.multiselector.MultiSelector;
-import com.bignerdranch.android.multiselector.SwappingHolder;
 import com.goyourfly.multiple.adapter.MultipleAdapter;
 import com.goyourfly.multiple.adapter.MultipleSelect;
 import com.goyourfly.multiple.adapter.StateChangeListener;

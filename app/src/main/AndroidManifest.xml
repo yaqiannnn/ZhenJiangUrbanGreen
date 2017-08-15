@@ -59,9 +59,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
         </activity>
         <activity android:name=".startup.LoginActivity"/>
 
@@ -88,11 +85,11 @@
             android:name=".events.EventRegisterActivity"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".attachments.AttachmentListActivity">
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN"/>
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN"/>-->
 
-            <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+            <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".inspectRecord.InspectListActivity"/>
         <activity android:name=".maintainRecord.MaintainListActivity"/>
