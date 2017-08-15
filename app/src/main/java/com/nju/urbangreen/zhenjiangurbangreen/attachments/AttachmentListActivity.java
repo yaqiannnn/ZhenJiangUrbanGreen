@@ -20,8 +20,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
+import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
+import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 
+import net.gotev.uploadservice.BinaryUploadRequest;
+import net.gotev.uploadservice.UploadNotificationConfig;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class AttachmentListActivity extends BaseActivity {
 
@@ -98,5 +105,25 @@ public class AttachmentListActivity extends BaseActivity {
                 finish();
             }
         });
+    }
+
+    private void doUpload() {
+
+        try {
+            final String uploadId = UUID.randomUUID().toString();
+            final String serverUrl = WebServiceUtils.UPLOAD_ADDRESS;
+
+            final BinaryUploadRequest request =
+                    new BinaryUploadRequest(this, uploadId, serverUrl)
+                    .setMethod("POST")
+                    .setNotificationConfig(new UploadNotificationConfig())
+                    .setMaxRetries(SPUtils.getInt("MAX_RETRIES", 2));
+
+            request.startUpload();
+            finish();
+
+        } catch (Exception exc) {
+            Toast.makeText(this, exc.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }
