@@ -31,7 +31,6 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.esri.android.map.Callout;
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.LocationDisplayManager;
 import com.esri.android.map.MapView;
@@ -86,9 +85,6 @@ public class MapActivity extends BaseActivity {
     //正在定位对话框
     private ProgressDialog dlgLocating;
 
-    //当点击某个标识时弹出的callout
-    private Callout callout;
-
     private ProgressDialog loadingDialog;
 
     //本地TPK文件图层
@@ -140,7 +136,7 @@ public class MapActivity extends BaseActivity {
     GraphicsLayer greenLandLayer;
     GraphicsLayer locationLayer;
 
-    private List<GreenObject> greenLandList, ancientTreeList, streetTreeList;
+    private ArrayList<GreenObject> greenLandList, ancientTreeList, streetTreeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,8 +150,6 @@ public class MapActivity extends BaseActivity {
         loadingDialog = new ProgressDialog(MapActivity.this);
 
         ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
-
-        callout = map.getCallout();
 
         //新建一个离线地图图层并添加到mapview中
         tpkFileName = Environment.getExternalStorageDirectory().getPath() + File.separator + "nju_greenland/tpk/vector.tpk";
@@ -265,7 +259,14 @@ public class MapActivity extends BaseActivity {
         imgBtnLocate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                zoomTo(locationDisplayManager.getPoint());
+                Point curP = locationDisplayManager.getPoint();
+                if(curP.getX() >= fullExtent.getXMin() && curP.getX() <= fullExtent.getXMax()
+                   && curP.getY() >= fullExtent.getYMin() && curP.getY() <= fullExtent.getYMax()) {
+                    zoomTo(locationDisplayManager.getPoint());
+                }
+                else {
+                    Toast.makeText(MapActivity.this, "当前位置不在地图范围内", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         locationLayer = new GraphicsLayer();
@@ -341,9 +342,6 @@ public class MapActivity extends BaseActivity {
             if(!map.isLoaded()){
                 return;
             }
-            if(callout.isShowing()){
-                callout.hide();
-            }
             GraphicsLayer[] layers = new GraphicsLayer[]{greenLandLayer,ancientTreeLayer, streetTreeLayer};
 
             Integer graphicID = null;
@@ -393,12 +391,6 @@ public class MapActivity extends BaseActivity {
 
                 }
             });
-//            builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                }
-//            });
             builder.setCancelable(true);
             AlertDialog dialog = builder.create();
             dialog.show();

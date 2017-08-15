@@ -37,6 +37,7 @@ public class WebServiceUtils {
     //public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
     public static final String WSDL_TARGET_NAMESPACE = "http://services.ui.webbos.sjf.org/";
     public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLService.asmx";
+    public static final String UPLOAD_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/TCHandlerUploadAttachment.ashx";
     public static final int Timeout = 10000;
 
     public static final String Check_Update = "CheckUpdate";
@@ -45,6 +46,7 @@ public class WebServiceUtils {
     public static final String Get_UGO_Info_Except_ST = "GetUGOInfoExceptST";//ST表示行道树
     public static final String Get_Near_Street_Tree = "GetNearStreetTree";
     public static final String GET_UGO_Suggest = "GetUGOSuggest";
+    public static final String Search_UGO_By_ID = "SearchUGOInfo_1";
     public static final String SEARCH_UGO_INFO = "SearchUGOInfo_2";
 
     public static final String KEY_REFLACT_OPERATION_NAME = "wmn";
@@ -295,6 +297,29 @@ public class WebServiceUtils {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
                 Log.i("错误信息", "Get UGO Sug: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
+
+    public static List<GreenObject> searchUGOByID(String id, boolean[] type, String[] errorMessage) {
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", id);
+        params.put("is_green_land", type[0]);
+        params.put("is_ancient_tree", type[1]);
+        params.put("is_street_tree", type[2]);
+        Map<String, Object> results = callMethod(Search_UGO_By_ID, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>(){}.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Search UGO Info: " + errorMessage[0]);
             }
             return null;
         }

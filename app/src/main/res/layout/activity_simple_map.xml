@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:toolbar="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_simple_map"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.esri.android.map.MapView
+        android:id="@+id/map_simple"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.esri.android.map.MapView>
+
+    <include layout="@layout/toolbar_simple"/>
+
+</FrameLayout>

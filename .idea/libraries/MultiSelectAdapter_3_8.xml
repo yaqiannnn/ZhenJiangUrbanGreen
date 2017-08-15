@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="MultiSelectAdapter-3.8">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/d9166b82337915d9275888d1ee4a8ff062cb5441/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/d9166b82337915d9275888d1ee4a8ff062cb5441/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/b24b57e2a09ac034daf8ae267a5a4d8c6fcbc594/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/b24b57e2a09ac034daf8ae267a5a4d8c6fcbc594/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

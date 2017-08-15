@@ -7,17 +7,18 @@ import android.view.ViewGroup;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by lxs on 2016/9/30.
  */
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultHolder>{
-    private List<GreenObject> UGList;
+    private List<GreenObject> UGOList;
 
-    public SearchResultAdapter(List<GreenObject> list)
+    public SearchResultAdapter()
     {
-        this.UGList=list;
+        UGOList = new ArrayList<>();
     }
 
     @Override
@@ -29,14 +30,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultHolder
 
     @Override
     public void onBindViewHolder(SearchResultHolder holder, int position) {
-        holder.setID(UGList.get(position).UGO_ID);
-        holder.setName(UGList.get(position).UGO_Name);
-        holder.setAddress(UGList.get(position).UGO_Address);
-        holder.setClassType_ID(UGList.get(position).UGO_ClassType_ID);
+        holder.bindObj(UGOList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return UGList.size();
+        return UGOList.size();
     }
+
+    public void addUGOs(List<GreenObject> data) {
+        UGOList.clear();
+        UGOList.addAll(data);
+    }
+
 }

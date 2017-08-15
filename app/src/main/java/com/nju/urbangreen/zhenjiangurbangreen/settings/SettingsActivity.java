@@ -100,9 +100,8 @@ public class SettingsActivity extends BaseActivity {
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        SPUtils.remove("username");
-                        SPUtils.remove("password");
                         CacheUtil.removeUGOS();
+                        CacheUtil.removeUGOSug();
                         dialogInterface.dismiss();
                         Toast.makeText(SettingsActivity.this, "清除缓存成功", Toast.LENGTH_SHORT).show();
                     }

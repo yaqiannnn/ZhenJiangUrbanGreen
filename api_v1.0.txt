@@ -29,13 +29,25 @@ Param中带"*"的为一定包含的参数
         MR_SubmitStatus
         MR_SubmitorPID
         MR_SubmitTime
+++++++++++++++++++++++++++
+        MR_LoggerName
+        MR_LastEditorName
+        MR_SubmitorName
+++++++++++++++++++++++++++
     }>
 
+++++++++++++++++++++++++++
 2.获取管养记录涉及绿化对象(所有种类，包括绿地、古树名木、行道树)
     Method: GetMaintainRecordUGO
     Param: {
     *   string id 管养记录ID
     }
+    Return: List<{
+        UGO_ID
+        UGO_Address
+        UGO_ClassType_ID
+    }>
+++++++++++++++++++++++++++
 
 3.获取养护巡查记录
     Method: GetInspectRecord
@@ -59,9 +71,26 @@ Param中带"*"的为一定包含的参数
         IR_LogTime
         IR_LastEditorPID
         IR_LastEditTime
+++++++++++++++++++++++++++
+        IR_LoggerName
+        IR_LastEditorName
+++++++++++++++++++++++++++
     }>
 
-4.获取事件记录
+++++++++++++++++++++++++++
+4.获取养护巡查记录涉及绿化对象(所有种类，包括绿地、古树名木、行道树)
+    Method: GetInspectRecordUGO
+    Param: {
+    *   string id 养护巡查记录ID
+    }
+    Return: List<{
+        UGO_ID
+        UGO_Address
+        UGO_ClassType_ID
+    }>
+++++++++++++++++++++++++++
+
+5.获取事件记录
     Method: GetEvent
     Param: {
     *   int page,
@@ -99,9 +128,27 @@ Param中带"*"的为一定包含的参数
         UGE_RelevantAddress
         UGE_RelevantDescription
         UGE_LastStateID
+++++++++++++++++++++++++++
+        UGE_LoggerName
+        UGE_LastEditorName
+        UGE_ConcludeName
+++++++++++++++++++++++++++
     }>
 
-5.获取绿化对象(除行道树以外)
+++++++++++++++++++++++++++
+6.获取事件记录涉及绿化对象(所有种类，包括绿地、古树名木、行道树)
+    Method: GetInspectRecordUGO
+    Param: {
+    *   string id 事件记录ID
+    }
+    Return: List<{
+        UGO_ID
+        UGO_Address
+        UGO_ClassType_ID
+    }>
+++++++++++++++++++++++++++
+
+7.获取绿化对象(除行道树以外)
     Method: GetUGOInfoExceptST
     Param: {
     *   int page,
@@ -135,9 +182,13 @@ Param中带"*"的为一定包含的参数
         UGO_DateOfDestroyRecord
         UGO_DescriptionOfDestroy
         UGO_LoggerPIDOfDestroyRecord
+++++++++++++++++++++++++++
+        UGO_LoggerName
+        UGO_LastEditorName
+++++++++++++++++++++++++++
     }>
 
-6.获取行道树(某个点周围)
+8.获取行道树(某个点周围)
     Method: GetNearStreetTree
     Param: {
     *   string pos_json_str,
@@ -338,6 +389,10 @@ Param中带"*"的为一定包含的参数
         UGO_DateOfDestroyRecord
         UGO_DescriptionOfDestroy
         UGO_LoggerPIDOfDestroyRecord
+++++++++++++++++++++++++++
+        UGO_LoggerName
+        UGO_LastEditorName
+++++++++++++++++++++++++++
     }>
 
 2.搜索绿化对象

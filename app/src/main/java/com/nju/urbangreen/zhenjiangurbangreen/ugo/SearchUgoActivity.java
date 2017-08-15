@@ -21,8 +21,6 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bignerdranch.android.multiselector.MultiSelector;
-import com.bignerdranch.android.multiselector.SwappingHolder;
 import com.goyourfly.multiple.adapter.MultipleAdapter;
 import com.goyourfly.multiple.adapter.MultipleSelect;
 import com.goyourfly.multiple.adapter.StateChangeListener;
@@ -50,9 +48,9 @@ import butterknife.ButterKnife;
 
 public class SearchUgoActivity extends BaseActivity {
 
-    @BindView(R.id.toolbar)
+    @BindView(R.id.Toolbar)
     Toolbar toolbar;
-    @BindView(R.id.search_view)
+    @BindView(R.id.material_search_view)
     MaterialSearchView searchView;
     @BindView(R.id.recycler_ugo_search_result)
     RecyclerView recyclerUgoSearchResult;
@@ -84,7 +82,7 @@ public class SearchUgoActivity extends BaseActivity {
     }
 
     private void initSnackbar() {
-        Snackbar.make(findViewById(R.id.toolbar), "请在右上角菜单栏选择搜索选项", Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(toolbar, "请在右上角菜单栏选择搜索选项", Snackbar.LENGTH_INDEFINITE)
                 .setAction("关闭", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
