@@ -43,18 +43,11 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.7.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
-<<<<<<< HEAD
-<<<<<<< HEAD
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
 //    compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile "net.gotev:uploadservice:3.3.1"
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
-=======
     compile 'com.github.goyourfly:MultiSelectAdapter:3.8'
->>>>>>> d2e51fdd9348c1d95dcdbe472e43cb9885961e59
-=======
-    compile 'com.github.goyourfly:MultiSelectAdapter:3.8'
->>>>>>> tommy951113-master
 }
 
 
