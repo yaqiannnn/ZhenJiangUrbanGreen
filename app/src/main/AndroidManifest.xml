@@ -92,10 +92,15 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".inspectRecord.InspectListActivity"/>
-        <activity android:name=".maintainRecord.MaintainListActivity"/>
+        <activity android:name=".maintainRecord.MaintainListActivity" android:exported="true"/>
         <activity android:name=".ugo.UgoListActivity"/>
-        <activity android:name=".maintainRecord.MaintainRegisterActivity"/>
-        <activity android:name=".ugo.SearchUgoActivity"/>
+        <activity android:name=".maintainRecord.MaintainRegisterActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".ugo.SearchUgoActivity"
+            android:exported="true">
+
+        </activity>
         <activity android:name=".search.UGOInfoActivity">
         </activity>
         <activity android:name=".map.SimpleMapActivity">
