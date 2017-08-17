@@ -20,7 +20,6 @@ import java.util.List;
  */
 
 public class ActionSheet extends NestedScrollView {
-    private int attachIndex;
 
     private RecyclerView rcvActions;
     private ActionSheetAdapter adapter;
@@ -28,19 +27,14 @@ public class ActionSheet extends NestedScrollView {
 
     private BottomSheetDialog dialog;
 
-    public ActionSheet(Context context, int attach_index, String titles[], int icons[], OnClickListener li) {
+    public ActionSheet(Context context, List<ActionItem> actions, OnClickListener li) {
         super(context);
-        attachIndex =attach_index;
         clickListener = li;
         View view = LayoutInflater.from(context).inflate(R.layout.action_sheet, this);
         rcvActions = (RecyclerView)findViewById(R.id.rcv_action_sheet);
 
         rcvActions.setLayoutManager(new LinearLayoutManager(context));
-        List<Drawable> iconsDrawable = new ArrayList<>();
-        for(int icon_id : icons) {
-            iconsDrawable.add(getResources().getDrawable(icon_id));
-        }
-        adapter = new ActionSheetAdapter(titles, iconsDrawable);
+        adapter = new ActionSheetAdapter(actions);
         rcvActions.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -48,8 +42,8 @@ public class ActionSheet extends NestedScrollView {
         dialog.setContentView(view);
         adapter.setOnItemClickListener(new ActionSheetAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                clickListener.onClick(view, attachIndex, position);
+            public void onItemClick(View view, int actionID) {
+                clickListener.onClick(view, actionID);
                 dialog.dismiss();
             }
         });
@@ -57,6 +51,6 @@ public class ActionSheet extends NestedScrollView {
     }
 
     public interface OnClickListener {
-        void onClick(View view, int attachIndex, int actionIndex);
+        void onClick(View view, int actionID);
     }
 }

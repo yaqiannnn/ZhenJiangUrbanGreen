@@ -24,12 +24,10 @@ import butterknife.ButterKnife;
 
 class ActionSheetAdapter extends RecyclerView.Adapter<ActionSheetAdapter.ActionSheetHolder> {
     private OnItemClickListener itemClickListener;
-    private List<String> titles;
-    private List<Drawable> icons;
+    private List<ActionItem> actionItems;
 
-    public ActionSheetAdapter(String buttonTitles[], List<Drawable> buttonIcons) {
-        titles = Arrays.asList(buttonTitles);
-        icons = new ArrayList<>(buttonIcons);
+    public ActionSheetAdapter(List<ActionItem> actions) {
+        actionItems = actions;
     }
 
     public void setOnItemClickListener(OnItemClickListener li) {
@@ -46,13 +44,13 @@ class ActionSheetAdapter extends RecyclerView.Adapter<ActionSheetAdapter.ActionS
 
     @Override
     public void onBindViewHolder(ActionSheetHolder holder, final int position) {
-        holder.ivIcon.setImageDrawable(icons.get(position));
-        holder.tvTitle.setText(titles.get(position));
+        holder.ivIcon.setImageDrawable(actionItems.get(position).icon);
+        holder.tvTitle.setText(actionItems.get(position).title);
         if(itemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    itemClickListener.onItemClick(view, position);
+                    itemClickListener.onItemClick(view, actionItems.get(position).actionID);
                 }
             });
         }
@@ -60,12 +58,12 @@ class ActionSheetAdapter extends RecyclerView.Adapter<ActionSheetAdapter.ActionS
 
     @Override
     public int getItemCount() {
-        return titles.size();
+        return actionItems.size();
     }
 
 
     public interface OnItemClickListener {
-        void onItemClick(View view , int position);
+        void onItemClick(View view , int actionID);
     }
 
     public class ActionSheetHolder extends RecyclerView.ViewHolder {

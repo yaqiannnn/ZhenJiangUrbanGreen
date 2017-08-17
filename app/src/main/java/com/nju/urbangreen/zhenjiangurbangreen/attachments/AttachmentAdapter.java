@@ -1,5 +1,7 @@
 package com.nju.urbangreen.zhenjiangurbangreen.attachments;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,11 +10,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.MyApplication;
 import com.nju.urbangreen.zhenjiangurbangreen.util.TimeFormatUtil;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.ActionSheet.ActionItem;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.ActionSheet.ActionSheet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,16 +30,19 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
     private List<AttachmentRecord> attachList;
     private String parentID;
 
-    private static String[] actionTitles= {"上传", "查看", "删除", "重命名"};
+    private static String actionTitles[] = {"上传", "下载", "查看", "删除", "重命名"};
     private static int[] iconIDs = {R.drawable.ic_btn_location, R.drawable.ic_btn_location,
-            R.drawable.ic_btn_location, R.drawable.ic_btn_location};
-
-    public AttachmentAdapter() {
-        attachList = new ArrayList<>();
-    }
+            R.drawable.ic_btn_location, R.drawable.ic_btn_location, R.drawable.ic_btn_location};
+    private static Drawable[] iconDrawables;
 
     public AttachmentAdapter(List<AttachmentRecord> list) {
         attachList = list;
+        List<Drawable> icons = new ArrayList<>();
+        Context context = MyApplication.getContext();
+        for(int id : iconIDs) {
+            icons.add(context.getResources().getDrawable(id));
+        }
+        iconDrawables = (Drawable[]) icons.toArray();
     }
 
     public AttachmentAdapter(String id) {
@@ -59,11 +67,12 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new ActionSheet(view.getContext(), position, actionTitles, iconIDs, new ActionSheet.OnClickListener() {
-                    @Override
-                    public void onClick(View view, int attachIndex, int actionIndex) {
-                        Log.i("ActionSheet", attachIndex + "  " + actionIndex + "press");
-                    }
+                new ActionSheet(view.getContext(), getActionItemFromAttachmentRecord(attachList.get(position)),
+                        new ActionSheet.OnClickListener() {
+                            @Override
+                            public void onClick(View view, int actionID) {
+                            Log.i("ActionSheet", position + "  " + actionID + "press");
+                        }
                 });
             }
         });
@@ -72,6 +81,19 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
     @Override
     public int getItemCount() {
         return attachList.size();
+    }
+
+    public static List<ActionItem> getActionItemFromAttachmentRecord(AttachmentRecord attachmentRecord) {
+        List<ActionItem> actions = new ArrayList<>();
+        actions.add(new ActionItem(AttachAction.Upload.ordinal(), actionTitles[AttachAction.Upload.ordinal()],
+                iconDrawables[AttachAction.Upload.ordinal()]));
+        actions.add(new ActionItem(AttachAction.Download.ordinal(), actionTitles[AttachAction.Download.ordinal()],
+                iconDrawables[AttachAction.Download.ordinal()]));
+        actions.add(new ActionItem(AttachAction.View.ordinal(), actionTitles[AttachAction.View.ordinal()],
+                iconDrawables[AttachAction.View.ordinal()]));
+        actions.add(new ActionItem(AttachAction.Delete.ordinal(), actionTitles[AttachAction.Delete.ordinal()],
+                iconDrawables[AttachAction.Delete.ordinal()]));
+        return actions;
     }
 
     class AttachmentHolder extends RecyclerView.ViewHolder {
@@ -98,5 +120,9 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
             tvFileSize.setText(record.fileSizeStr);
             tvFileStatus.setText("未上传");
         }
+    }
+
+    enum AttachAction {
+        Upload, Download, View, Delete, Rename
     }
 }
