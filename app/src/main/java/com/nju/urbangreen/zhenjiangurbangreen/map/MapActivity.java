@@ -18,6 +18,7 @@ import android.location.LocationManager;
 import android.os.Environment;
 import android.os.Looper;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
@@ -31,6 +32,8 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.LocationDisplayManager;
 import com.esri.android.map.MapView;
@@ -94,6 +97,10 @@ public class MapActivity extends BaseActivity {
     @BindView(R.id.imgbtn_locate)
     public ImageButton imgBtnLocate;
 
+    //地图底图图层切换
+    @BindView(R.id.imgbtn_map_layer)
+    public ImageButton imgBtnMapLayer;
+
     //图层控制按钮
     @BindView(R.id.imgbtn_layer_switch)
     public ImageButton imgBtnLayerSwitch;
@@ -137,6 +144,9 @@ public class MapActivity extends BaseActivity {
     GraphicsLayer locationLayer;
 
     private ArrayList<GreenObject> greenLandList, ancientTreeList, streetTreeList;
+    private final String[] tpkFileNames = {"vector.tpk", "base.tpk"};
+    private final String[] tpkLayerNames = {"矢量图层", "影像图层"};
+    private int curTpkFileNamesIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +162,8 @@ public class MapActivity extends BaseActivity {
         ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
 
         //新建一个离线地图图层并添加到mapview中
-        tpkFileName = Environment.getExternalStorageDirectory().getPath() + File.separator + "nju_greenland/tpk/vector.tpk";
+        tpkFileName = Environment.getExternalStorageDirectory().getPath() + File.separator
+                + "nju_greenland/tpk/" + tpkFileNames[curTpkFileNamesIndex];
         localTPKLayer = new ArcGISLocalTiledLayer(tpkFileName);
         map.addLayer(localTPKLayer);
 
@@ -164,6 +175,9 @@ public class MapActivity extends BaseActivity {
 
         //设置全局显示按钮
         setGlobalViewButton();
+
+        //设置地图底图切换开关
+        setMapLayerSwitchButton();
 
         //设置图层开关按钮
         setLayerSwitchPopupWindow();
@@ -182,6 +196,36 @@ public class MapActivity extends BaseActivity {
 
         openGPS();
 
+    }
+
+    private void setMapLayerSwitchButton() {
+        imgBtnMapLayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(MapActivity.this)
+                        .title("切换地图图层")
+                        .items(tpkLayerNames)
+                        .itemsCallbackSingleChoice(curTpkFileNamesIndex, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                                curTpkFileNamesIndex = which;
+                                return true;
+                            }
+                        })
+                        .positiveText("确认")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                map.removeLayer(0);
+                                tpkFileName = Environment.getExternalStorageDirectory().getPath() + File.separator
+                                        + "nju_greenland/tpk/" + tpkFileNames[curTpkFileNamesIndex];
+                                localTPKLayer = new ArcGISLocalTiledLayer(tpkFileName);
+                                map.addLayer(localTPKLayer, 0);
+                            }
+                        })
+                        .show();
+            }
+        });
     }
 
     private void setNearTreeButton() {
