@@ -68,7 +68,7 @@
             android:exported="true"/>
 
         <activity android:name=".inspectRecord.InspectInfoActivity"/>
-        <activity android:name=".maintainRecord.MaintainInfoActivity"/>
+        <activity android:name=".maintainRecord.MaintainRegisterActivity"/>
         <activity
             android:name=".events.EventListActivity"
             android:windowSoftInputMode="stateHidden">
@@ -94,9 +94,6 @@
         <activity android:name=".inspectRecord.InspectListActivity"/>
         <activity android:name=".maintainRecord.MaintainListActivity" android:exported="true"/>
         <activity android:name=".ugo.UgoListActivity"/>
-        <activity android:name=".maintainRecord.MaintainRegisterActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".ugo.SearchUgoActivity"
             android:exported="true">
 

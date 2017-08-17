@@ -80,18 +80,8 @@ public class SearchUgoActivity extends BaseActivity {
         initToolbar();
         initSearchView();
         initSuggestionList();
-        initSnackbar();
-//        searchView.setSuggestions(sugIDs);
     }
 
-    private void initSnackbar() {
-        Snackbar.make(toolbar, "请在右上角菜单栏选择搜索选项", Snackbar.LENGTH_INDEFINITE)
-                .setAction("关闭", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    }
-                }).show();
-    }
 
     private void initToolbar() {
         toolbar.setTitle("搜索相关对象");
@@ -127,7 +117,7 @@ public class SearchUgoActivity extends BaseActivity {
 //                            Log.d("tag", "selectresult" + selectResult.size());
                             ACache mCache = ACache.get(SearchUgoActivity.this);
                             List<GreenObject> selectList = mCache.getAsObjectList("ugo_select");
-                            searchResult = ListUtil.trim(searchResult,selectList);  //去除已经选择的item
+                            searchResult = ListUtil.trim(searchResult, selectList);  //去除已经选择的item
                             adapter.notifyDataSetChanged();
 //                            searchResult.removeAll(selectList); //去除已经选择的item
 //                            searchResult.removeAll(selectResult);     //去除已经选择的item
@@ -164,11 +154,7 @@ public class SearchUgoActivity extends BaseActivity {
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
             public void onSearchViewShown() {
-//                searchView.setSuggestions(sugIDs);
-                if (!isSearchOptionsSelected) {
-                    searchView.closeSearch();
-                    Toast.makeText(SearchUgoActivity.this, "请选择搜索条件", Toast.LENGTH_SHORT).show();
-                }
+
             }
 
             @Override
@@ -268,30 +254,33 @@ public class SearchUgoActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.menu_toolbar_ugo_search, menu);
         MenuItem item = menu.findItem(R.id.menu_toolbar_item_search);
         MenuItem spinnerItem = menu.findItem(R.id.spinner);
-        Spinner spinner =(Spinner) MenuItemCompat.getActionView(spinnerItem);
-        String[] data = {"ID","地址"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,data);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(spinnerItem);
+
+        String[] data = {"ID", "地址"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.my_spinner_item, data);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 0) {
+                    searchView.setSuggestions(sugIDs);
+                    flag = "id";
+                } else {
+                    searchView.setSuggestions(sugAddresses);
+                    flag = "address";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         searchView.setMenuItem(item);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        isSearchOptionsSelected = true;
-        switch (item.getItemId()) {
-            case R.id.menu_toolbar_item_uid:
-                searchView.setSuggestions(sugIDs);
-                flag = "id";
-                break;
-            case R.id.menu_toolbar_item_address:
-                searchView.setSuggestions(sugAddresses);
-                flag = "address";
-                break;
-            default:
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

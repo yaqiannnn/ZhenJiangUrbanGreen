@@ -6,16 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainInfoActivity">
+    tools:context="com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainRegisterActivity">
 
-    <com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout
-        android:id="@+id/ly_maintainInfo_title_bar"
+    <!--<com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout-->
+        <!--android:id="@+id/ly_maintainInfo_title_bar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/colorPrimary">-->
+
+    <!--</com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/Toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
-
-    </com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
-
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        toolbar:titleTextColor="@color/colorBackground"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -48,15 +53,15 @@
                         style="@style/RecordItemText" />
                 </TableRow>
 
-                <TableRow
-                    style="@style/RecordItem">
-                    <TextView
-                        style="@style/RecordItemTitle"
-                        android:text="管养维护编码"/>
-                    <TextView
-                        android:id="@+id/tv_maintainInfo_code"
-                        style="@style/RecordItemText" />
-                </TableRow>
+                <!--<TableRow-->
+                    <!--style="@style/RecordItem">-->
+                    <!--<TextView-->
+                        <!--style="@style/RecordItemTitle"-->
+                        <!--android:text="管养维护编码"/>-->
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_maintainInfo_code"-->
+                        <!--style="@style/RecordItemText" />-->
+                <!--</TableRow>-->
 
                 <TableRow
                     style="@style/RecordItem">
@@ -94,16 +99,16 @@
                         android:background="@drawable/bkg_edittext" />
                 </TableRow>
 
-                <TableRow
-                    style="@style/RecordItem">
-                    <TextView
-                        style="@style/RecordItemTitle"
-                        android:text="养护单位ID"/>
-                    <EditText
-                        android:id="@+id/et_maintainInfo_companyID"
-                        style="@style/RecordItemContent"
-                        android:background="@drawable/bkg_edittext"/>
-                </TableRow>
+                <!--<TableRow-->
+                    <!--style="@style/RecordItem">-->
+                    <!--<TextView-->
+                        <!--style="@style/RecordItemTitle"-->
+                        <!--android:text="养护单位ID"/>-->
+                    <!--<EditText-->
+                        <!--android:id="@+id/et_maintainInfo_companyID"-->
+                        <!--style="@style/RecordItemContent"-->
+                        <!--android:background="@drawable/bkg_edittext"/>-->
+                <!--</TableRow>-->
 
                 <TableRow
                     style="@style/RecordItem">
@@ -116,53 +121,65 @@
                         android:background="@drawable/bkg_edittext"/>
                 </TableRow>
 
-                <TableRow
-                    style="@style/RecordItem">
-                    <TextView
-                        style="@style/RecordItemTitle"
-                        android:text="初始登记人"/>
-                    <TextView
-                        android:id="@+id/tv_maintainInfo_LoggerPID"
-                        style="@style/RecordItemText" />
-                </TableRow>
+                <!--<TableRow-->
+                    <!--style="@style/RecordItem">-->
+                    <!--<TextView-->
+                        <!--style="@style/RecordItemTitle"-->
+                        <!--android:text="初始登记人"/>-->
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_maintainInfo_LoggerPID"-->
+                        <!--style="@style/RecordItemText" />-->
+                <!--</TableRow>-->
 
-                <TableRow
-                    style="@style/RecordItem">
-                    <TextView
-                        style="@style/RecordItemTitle"
-                        android:text="初始登记时间"/>
-                    <TextView
-                        android:id="@+id/tv_maintainInfo_LogTime"
-                        style="@style/RecordItemText" />
-                </TableRow>
+                <!--<TableRow-->
+                    <!--style="@style/RecordItem">-->
+                    <!--<TextView-->
+                        <!--style="@style/RecordItemTitle"-->
+                        <!--android:text="初始登记时间"/>-->
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_maintainInfo_LogTime"-->
+                        <!--style="@style/RecordItemText" />-->
+                <!--</TableRow>-->
 
-                <TableRow
-                    style="@style/RecordItem">
-                    <TextView
-                        style="@style/RecordItemTitle"
-                        android:text="最后修改人"/>
-                    <TextView
-                        android:id="@+id/tv_maintainInfo_LastEditorPID"
-                        style="@style/RecordItemText" />
-                </TableRow>
-                <TableRow
-                    style="@style/RecordItem">
-                    <android.support.v7.widget.AppCompatButton
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/btn_maintainInfo_attachment"
-                        android:layout_span="3"
-                        android:background="@color/colorPrimary"
-                        android:layout_marginLeft="28dp"
-                        android:layout_marginRight="28dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:elevation="2dp"
-                        android:text="查看附件"
-                        android:textColor="@color/colorBackground"
-                        android:textSize="24sp"/>
-                </TableRow>
+                <!--<TableRow-->
+                    <!--style="@style/RecordItem">-->
+                    <!--<TextView-->
+                        <!--style="@style/RecordItemTitle"-->
+                        <!--android:text="最后修改人"/>-->
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_maintainInfo_LastEditorPID"-->
+                        <!--style="@style/RecordItemText" />-->
+                <!--</TableRow>-->
+                <!--<TableRow-->
+                    <!--style="@style/RecordItem">-->
+                    <!--<android.support.v7.widget.AppCompatButton-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:id="@+id/btn_maintainInfo_attachment"-->
+                        <!--android:layout_span="3"-->
+                        <!--android:background="@color/colorPrimary"-->
+                        <!--android:layout_marginLeft="28dp"-->
+                        <!--android:layout_marginRight="28dp"-->
+                        <!--android:layout_marginTop="8dp"-->
+                        <!--android:layout_marginBottom="8dp"-->
+                        <!--android:elevation="2dp"-->
+                        <!--android:text="查看附件"-->
+                        <!--android:textColor="@color/colorBackground"-->
+                        <!--android:textSize="24sp"/>-->
+                <!--</TableRow>-->
             </TableLayout>
+            <android.support.v7.widget.AppCompatButton
+                android:background="@drawable/button_shape"
+                android:id="@+id/btn_maintain_register_add_files"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="8dp"
+                android:text="上传"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"/>
         </LinearLayout>
     </ScrollView>
 

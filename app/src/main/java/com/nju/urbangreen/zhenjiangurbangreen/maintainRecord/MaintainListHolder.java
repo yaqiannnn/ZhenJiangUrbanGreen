@@ -9,8 +9,6 @@ import android.view.View;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 
-import java.text.SimpleDateFormat;
-
 /**
  * Created by lxs on 2016/11/28.
  */
@@ -32,7 +30,7 @@ public class MaintainListHolder extends RecyclerView.ViewHolder{
         btnMaintainInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(v.getContext(),MaintainInfoActivity.class);
+                Intent intent=new Intent(v.getContext(),MaintainRegisterActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putSerializable("MaintainInfo",myObject);
                 intent.putExtras(bundle);
