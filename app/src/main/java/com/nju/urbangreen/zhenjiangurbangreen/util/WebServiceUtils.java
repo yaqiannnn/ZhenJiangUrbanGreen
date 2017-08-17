@@ -21,8 +21,10 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.io.EOFException;
+import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,6 +53,7 @@ public class WebServiceUtils {
 
     public static final String KEY_REFLACT_OPERATION_NAME = "wmn";
     public static final String KEY_REFLACT_OPERATION_PARAM = "wmp";
+    public static final String KEY_UPLOAD_PARAM = "whp";
     public static final String OPERATION_NAME = "RequestServices";
     public static final String OPERATION_NAME_WITHOUT_USERINFO = "RequestServicesWithoutUserInfo";
     public static final String KEY_OPERATION_PARAM = "RequestInfo";
@@ -356,6 +359,19 @@ public class WebServiceUtils {
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
+        }
+    }
+
+    public static String getFileUploadUrl(Map<String, Object> params) {
+        HashMap<String, Object> inputParam = new HashMap<>();
+        inputParam.put(KEY_USERNAME, SPUtils.getString("username", "xk"));
+        inputParam.put(KEY_PASSWORD, SPUtils.getString("password", "@"));
+        inputParam.put(KEY_UPLOAD_PARAM, params);
+        try {
+            return UPLOAD_ADDRESS + "?RequestInfo=" +
+                    URLEncoder.encode(ZipUtils.compress(gson.toJson(inputParam)), "utf-8");
+        } catch( UnsupportedEncodingException e) {
+            return UPLOAD_ADDRESS;
         }
     }
 }

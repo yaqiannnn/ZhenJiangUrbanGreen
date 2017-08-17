@@ -239,7 +239,7 @@ public class MapActivity extends BaseActivity {
                         Location cur_loc = locationDisplayManager.getLocation();
                         String errorMsg[] = new String[1];
                         List<GreenObject> res = WebServiceUtils.getNearStreetTree(cur_loc.getLongitude(),
-                                cur_loc.getLatitude(), SPUtils.getFloat("NearRadius", 50.f), errorMsg);
+                                cur_loc.getLatitude(), SPUtils.getFloat("NearRadius", 500.f), errorMsg);
                         if(res != null) {
                             streetTreeList.clear();
                             streetTreeLayer.removeAll();

@@ -7,10 +7,11 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import butterknife.BindView;
@@ -26,7 +27,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import net.gotev.uploadservice.BinaryUploadRequest;
 import net.gotev.uploadservice.UploadNotificationConfig;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -35,19 +36,46 @@ public class AttachmentListActivity extends BaseActivity {
     @BindView(R.id.Toolbar_simple)
     public Toolbar toolbar;
 
-    @BindView(R.id.lv_attachments_list)
-    public ListView lvAttachmentRecords;
+    @BindView(R.id.rcv_attachments_list)
+    public RecyclerView rcvAttachmentRecords;
+    private AttachmentAdapter adapter;
 
     @BindView(R.id.floatingbtn_add_attach)
     public FloatingActionButton floatingbtnAddAttach;
+
+    private String recordID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attachment_list);
-
         ButterKnife.bind(this);
+
         initToolbar();
+        setUploadButton();
+
+        //以下是用来测试附件列表的数据
+        ArrayList<AttachmentRecord> list = new ArrayList<>();
+        rcvAttachmentRecords.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new AttachmentAdapter(list);
+        rcvAttachmentRecords.setAdapter(adapter);
+    }
+
+    private void fileNameInputDialog(final File file, String filename) {
+        new MaterialDialog.Builder(this)
+                .title("重命名文件")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input("文件名", filename, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        Toast.makeText(AttachmentListActivity.this, String.valueOf(file.length()),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .show();
+    }
+
+    private void setUploadButton() {
         floatingbtnAddAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,13 +90,9 @@ public class AttachmentListActivity extends BaseActivity {
                 }
             }
         });
-        //以下是用来测试附件列表的数据
-        ArrayList<OneAttachmentRecord> list = new ArrayList<OneAttachmentRecord>();
-        list.add(new OneAttachmentRecord("what doesn't kill you","0kb"));
-        AttachmentRecordAdapter adapter = new AttachmentRecordAdapter(this,R.layout.attachment_list_item,list);
-        lvAttachmentRecords.setAdapter(adapter);
     }
 
+    //选择完文件后的回调函数
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -78,21 +102,13 @@ public class AttachmentListActivity extends BaseActivity {
         if (requestCode == 1) {
             Uri uri = data.getData();
             String path = FileUtil.getPath(uri);
-            String filename = path.substring(path.lastIndexOf('/') + 1);
-            fileNameInputDialog(filename);
+            if(path != null) {
+                File file = new File(path);
+                adapter.addItem(new AttachmentRecord(file));
+            } else {
+                Toast.makeText(AttachmentListActivity.this, "文件损坏，请重新添加", Toast.LENGTH_SHORT).show();
+            }
         }
-    }
-
-    private void fileNameInputDialog(String filename) {
-        new MaterialDialog.Builder(this)
-                .title("重命名文件")
-                .inputType(InputType.TYPE_CLASS_TEXT)
-                .input("文件名", filename, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        Toast.makeText(AttachmentListActivity.this, "Done", Toast.LENGTH_SHORT).show();
-                    }
-                }).show();
     }
 
     private void initToolbar() {
