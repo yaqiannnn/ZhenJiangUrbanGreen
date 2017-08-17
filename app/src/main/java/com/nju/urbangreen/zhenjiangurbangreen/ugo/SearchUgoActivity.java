@@ -61,7 +61,6 @@ public class SearchUgoActivity extends BaseActivity {
     private String sugIDs[];
     private String sugAddresses[];
     private ProgressDialog loadingDialog;
-    private boolean isSearchOptionsSelected = false;
     private UgoListAdapter adapter;
     private List<GreenObject> searchResult = new ArrayList<>();
     private List<GreenObject> selectResult = new ArrayList<>();
@@ -204,7 +203,7 @@ public class SearchUgoActivity extends BaseActivity {
 
         MultipleAdapter multipleAdapter = MultipleSelect.with(this)
                 .adapter(adapter)
-                .decorateFactory(new CheckBoxFactory(Color.BLUE))
+                .decorateFactory(new CheckBoxFactory(R.color.colorPrimary))
                 .stateChangeListener(new StateChangeListener() {
                     @Override
                     public void onSelectMode() {

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +27,7 @@ public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ugo_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_list_item, parent, false);
         final ViewHolder holder = new ViewHolder(view);
         holder.ugoView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,9 +53,8 @@ public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         GreenObject ugObject = mUgoList.get(position);
-        holder.ugoName.setText(ugObject.UGO_Name);
+        holder.ugoIdName.setText(ugObject.UGO_ID + "/" + ugObject.UGO_Name);
         holder.ugoAddress.setText(ugObject.UGO_Address);
-        holder.ugoId.setText(ugObject.UGO_ID);
     }
 
     @Override
@@ -64,16 +64,14 @@ public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         View ugoView;
-        TextView ugoId;
-        TextView ugoName;
-        TextView ugoAddress;
+        EditText ugoIdName;
+        EditText ugoAddress;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ugoView = itemView;
-            ugoName = (TextView) itemView.findViewById(R.id.ugo_name);
-            ugoAddress = (TextView) itemView.findViewById(R.id.ugo_address);
-            ugoId = (TextView) itemView.findViewById(R.id.ugo_id);
+            ugoIdName = (EditText) itemView.findViewById(R.id.recycler_title);
+            ugoAddress = (EditText) itemView.findViewById(R.id.recycler_content);
         }
     }
 

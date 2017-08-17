@@ -165,7 +165,7 @@ public class UgoListActivity extends BaseActivity {
         adapter = new UgoListAdapter(ugObjectList);
         multipleAdapter = MultipleSelect.with(this)
                 .adapter(adapter)
-                .decorateFactory(new CheckBoxFactory(Color.BLUE))
+                .decorateFactory(new CheckBoxFactory(R.color.colorPrimary))
                 .linkList(ugObjectList)
                 .customMenu(new SimpleDeleteMenuBar(this, R.color.colorPrimary, Gravity.BOTTOM))
                 .build();

@@ -24,7 +24,7 @@ public class MaintainListAdapter2 extends RecyclerView.Adapter<MaintainListAdapt
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.maintain_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_list_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -49,8 +49,8 @@ public class MaintainListAdapter2 extends RecyclerView.Adapter<MaintainListAdapt
         public ViewHolder(View itemView) {
             super(itemView);
             maintainView = itemView;
-            maintainCodeType = (EditText) itemView.findViewById(R.id.maintain_code_type);
-            maintainContent = (EditText) itemView.findViewById(R.id.maintain_content);
+            maintainCodeType = (EditText) itemView.findViewById(R.id.recycler_title);
+            maintainContent = (EditText) itemView.findViewById(R.id.recycler_content);
         }
     }
 }

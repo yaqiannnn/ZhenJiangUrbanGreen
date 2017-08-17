@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -113,6 +114,9 @@ public class MaintainListActivity extends BaseActivity {
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerMaintainList.setLayoutManager(linearLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerMaintainList.getContext(),
+                linearLayoutManager.getOrientation());
+        recyclerMaintainList.addItemDecoration(dividerItemDecoration);
         adapter2 = new MaintainListAdapter2(maintainList);
         recyclerMaintainList.setAdapter(adapter2);
         adapter2.notifyDataSetChanged();
