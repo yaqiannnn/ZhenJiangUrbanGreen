@@ -22,31 +22,17 @@ import java.util.List;
  * Created by tommy on 2017/8/9.
  */
 
-public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHolder> {
+public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHolder> implements View.OnClickListener {
     private List<GreenObject> mUgoList;
+    private ViewHolder holder;
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_list_item, parent, false);
-        final ViewHolder holder = new ViewHolder(view);
-        holder.ugoView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = holder.getAdapterPosition();
-                GreenObject object = mUgoList.get(position);
-                Intent intent = new Intent(parent.getContext(), SimpleMapActivity.class);
-                intent.putExtra("type", object.UGO_ClassType_ID);
-                intent.putExtra("name", object.UGO_Name);
-                intent.putExtra("location", object.UGO_Geo_Location);
-                try {
-                    parent.getContext().startActivity(intent);
-                } catch (Exception e) {
-                    Toast.makeText(parent.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-
-            }
-        });
+        holder = new ViewHolder(view);
+        holder.ugoView.setOnClickListener(this);
+        holder.ugoIdName.setOnClickListener(this);
+        holder.ugoAddress.setOnClickListener(this);
         return holder;
     }
 
@@ -60,6 +46,22 @@ public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHold
     @Override
     public int getItemCount() {
         return mUgoList.size();
+    }
+
+    @Override
+    public void onClick(View view) {
+        int position = holder.getAdapterPosition();
+        GreenObject object = mUgoList.get(position);
+        Intent intent = new Intent(view.getContext(), SimpleMapActivity.class);
+        intent.putExtra("type", object.UGO_ClassType_ID);
+        intent.putExtra("name", object.UGO_Name);
+        intent.putExtra("location", object.UGO_Geo_Location);
+        try {
+            view.getContext().startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
