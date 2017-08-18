@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.MyApplication;
 import com.nju.urbangreen.zhenjiangurbangreen.util.TimeFormatUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.ActionSheet.ActionItem;
@@ -17,7 +19,6 @@ import com.nju.urbangreen.zhenjiangurbangreen.widget.ActionSheet.ActionSheet;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,24 +30,24 @@ import butterknife.ButterKnife;
 public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.AttachmentHolder> {
     private List<AttachmentRecord> attachList;
     private String parentID;
+    private Context mContext;
 
     private static String actionTitles[] = {"上传", "下载", "查看", "删除", "重命名"};
-    private static int[] iconIDs = {R.drawable.ic_btn_location, R.drawable.ic_btn_location,
-            R.drawable.ic_btn_location, R.drawable.ic_btn_location, R.drawable.ic_btn_location};
+    private static int[] iconIDs = {R.drawable.ic_attach_upload, R.drawable.ic_attach_download,
+            R.drawable.ic_attach_view, R.drawable.ic_attach_delete, R.drawable.ic_attach_rename};
     private static Drawable[] iconDrawables;
 
-    public AttachmentAdapter(List<AttachmentRecord> list) {
+
+    public AttachmentAdapter(Context context, String parentRecordID, List<AttachmentRecord> list) {
+        mContext = context;
+        parentID = parentRecordID;
         attachList = list;
         List<Drawable> icons = new ArrayList<>();
-        Context context = MyApplication.getContext();
         for(int id : iconIDs) {
-            icons.add(context.getResources().getDrawable(id));
+            icons.add(mContext.getResources().getDrawable(id));
         }
-        iconDrawables = (Drawable[]) icons.toArray();
-    }
-
-    public AttachmentAdapter(String id) {
-        parentID = id;
+        iconDrawables = new Drawable[icons.size()];
+        icons.toArray(iconDrawables);
     }
 
     public void addItem(AttachmentRecord record) {
@@ -71,7 +72,8 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                         new ActionSheet.OnClickListener() {
                             @Override
                             public void onClick(View view, int actionID) {
-                            Log.i("ActionSheet", position + "  " + actionID + "press");
+                                doAttachAction(attachList.get(position), AttachAction.values()[actionID]);
+                                Log.i("ActionSheet", position + "  " + actionID + "press");
                         }
                 });
             }
@@ -83,16 +85,57 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         return attachList.size();
     }
 
+    private void doAttachAction(final AttachmentRecord attachmentRecord, AttachAction action) {
+        switch (action) {
+            case Upload:
+                AttachmentService.uploadAttach(mContext, this.parentID, attachmentRecord, new AttachmentService.Callback() {
+                    @Override
+                    public void success() {
+                        Toast.makeText(mContext, attachmentRecord.fileName + "上传成功", Toast.LENGTH_SHORT).show();
+                        AttachmentAdapter.this.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void failed() {
+                        Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+            case Rename:
+                AttachmentService.renameAttach(mContext, attachmentRecord, new AttachmentService.Callback() {
+                    @Override
+                    public void success() {
+                        AttachmentAdapter.this.notifyDataSetChanged();
+                    }
+                    @Override
+                    public void failed() {}
+                });
+                break;
+        }
+    }
+
     public static List<ActionItem> getActionItemFromAttachmentRecord(AttachmentRecord attachmentRecord) {
         List<ActionItem> actions = new ArrayList<>();
-        actions.add(new ActionItem(AttachAction.Upload.ordinal(), actionTitles[AttachAction.Upload.ordinal()],
-                iconDrawables[AttachAction.Upload.ordinal()]));
-        actions.add(new ActionItem(AttachAction.Download.ordinal(), actionTitles[AttachAction.Download.ordinal()],
-                iconDrawables[AttachAction.Download.ordinal()]));
-        actions.add(new ActionItem(AttachAction.View.ordinal(), actionTitles[AttachAction.View.ordinal()],
-                iconDrawables[AttachAction.View.ordinal()]));
-        actions.add(new ActionItem(AttachAction.Delete.ordinal(), actionTitles[AttachAction.Delete.ordinal()],
-                iconDrawables[AttachAction.Delete.ordinal()]));
+        if(attachmentRecord.atLocal && !attachmentRecord.hasUpload) {
+            actions.add(new ActionItem(AttachAction.Upload.ordinal(), actionTitles[AttachAction.Upload.ordinal()],
+                    iconDrawables[AttachAction.Upload.ordinal()]));
+            actions.add(new ActionItem(AttachAction.View.ordinal(), actionTitles[AttachAction.View.ordinal()],
+                    iconDrawables[AttachAction.View.ordinal()]));
+            actions.add(new ActionItem(AttachAction.Delete.ordinal(), actionTitles[AttachAction.Delete.ordinal()],
+                    iconDrawables[AttachAction.Delete.ordinal()]));
+            actions.add(new ActionItem(AttachAction.Rename.ordinal(), actionTitles[AttachAction.Rename.ordinal()],
+                    iconDrawables[AttachAction.Rename.ordinal()]));
+        } else if(attachmentRecord.atLocal && attachmentRecord.hasUpload) {
+            actions.add(new ActionItem(AttachAction.View.ordinal(), actionTitles[AttachAction.View.ordinal()],
+                    iconDrawables[AttachAction.View.ordinal()]));
+            actions.add(new ActionItem(AttachAction.Delete.ordinal(), actionTitles[AttachAction.Delete.ordinal()],
+                    iconDrawables[AttachAction.Delete.ordinal()]));
+        } else {
+            actions.add(new ActionItem(AttachAction.Download.ordinal(), actionTitles[AttachAction.Download.ordinal()],
+                    iconDrawables[AttachAction.Download.ordinal()]));
+            actions.add(new ActionItem(AttachAction.Delete.ordinal(), actionTitles[AttachAction.Delete.ordinal()],
+                    iconDrawables[AttachAction.Delete.ordinal()]));
+        }
         return actions;
     }
 
@@ -116,9 +159,20 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
 
         public void setText(AttachmentRecord record) {
             tvFileName.setText(record.fileName);
-            tvUpdateTime.setText(TimeFormatUtil.format(record.updateTime));
-            tvFileSize.setText(record.fileSizeStr);
-            tvFileStatus.setText("未上传");
+            tvUpdateTime.setText(TimeFormatUtil.format(record.uploadTime));
+            tvFileSize.setText(FileUtil.getSizeStr(record.fileSize));
+            if(record.atLocal && !record.hasUpload) {
+                tvFileStatus.setText("未上传");
+                tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+            }
+            else if(record.atLocal && record.hasUpload) {
+                tvFileStatus.setText("已上传");
+                tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+            }
+            else {
+                tvFileStatus.setText("未下载");
+                tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+            }
         }
     }
 

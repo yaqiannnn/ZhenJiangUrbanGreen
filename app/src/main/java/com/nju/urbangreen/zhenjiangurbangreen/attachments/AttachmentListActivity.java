@@ -54,25 +54,10 @@ public class AttachmentListActivity extends BaseActivity {
         initToolbar();
         setUploadButton();
 
-        //以下是用来测试附件列表的数据
         ArrayList<AttachmentRecord> list = new ArrayList<>();
         rcvAttachmentRecords.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AttachmentAdapter(list);
+        adapter = new AttachmentAdapter(AttachmentListActivity.this, "0420b1b8-5b20-4213-9b5f-586dbca94ef7", list);
         rcvAttachmentRecords.setAdapter(adapter);
-    }
-
-    private void fileNameInputDialog(final File file, String filename) {
-        new MaterialDialog.Builder(this)
-                .title("重命名文件")
-                .inputType(InputType.TYPE_CLASS_TEXT)
-                .input("文件名", filename, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        Toast.makeText(AttachmentListActivity.this, String.valueOf(file.length()),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .show();
     }
 
     private void setUploadButton() {

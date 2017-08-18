@@ -10,6 +10,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentRecord;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.Maintain;
@@ -39,7 +40,7 @@ public class WebServiceUtils {
     //public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
     public static final String WSDL_TARGET_NAMESPACE = "http://services.ui.webbos.sjf.org/";
     public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLService.asmx";
-    public static final String UPLOAD_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/TCHandlerUploadAttachment.ashx";
+    public static final String UPLOAD_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLHandlerUploadAttachment.ashx";
     public static final int Timeout = 10000;
 
     public static final String Check_Update = "CheckUpdate";
@@ -48,6 +49,7 @@ public class WebServiceUtils {
     public static final String Get_UGO_Info_Except_ST = "GetUGOInfoExceptST";//ST表示行道树
     public static final String Get_Near_Street_Tree = "GetNearStreetTree";
     public static final String GET_UGO_Suggest = "GetUGOSuggest";
+    public static final String Get_Record_Attachment = "GetRecordAttachment";
     public static final String Search_UGO_By_ID = "SearchUGOInfo_1";
     public static final String SEARCH_UGO_INFO = "SearchUGOInfo_2";
 
@@ -300,6 +302,26 @@ public class WebServiceUtils {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
                 Log.i("错误信息", "Get UGO Sug: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
+    public static List<AttachmentRecord.AttachmentRecordInDB> getRecordAttachmentInfo(
+            String record_id, String errorMessage[]) {
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", record_id);
+        Map<String, Object> results = callMethod(Get_Record_Attachment, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<AttachmentRecord.AttachmentRecordInDB>>(){}.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get Attachment Info: " + errorMessage[0]);
             }
             return null;
         }

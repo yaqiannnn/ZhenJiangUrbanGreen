@@ -85,4 +85,16 @@ public class CacheUtil {
         SPUtils.put(UGO_SUG_KEY, false);
     }
 
+    public static String getFileLocalPath(String fileID) {
+        return instance().getAsString(fileID);
+    }
+
+    public static void putFileLocalPath(String fileID, String localPath) {
+        instance().put(fileID, localPath);
+    }
+
+    public static void removeFileLocalPath(String fileID) {
+        instance().remove(fileID);
+    }
+
 }
