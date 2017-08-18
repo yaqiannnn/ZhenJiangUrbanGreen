@@ -22,7 +22,7 @@
         <item>人为事故</item>
         <item>交通事故</item>
     </string-array>
-    <string name="uploading">上传中.. [[UPLOADED_FILES]] of [[TOTAL_FILES]] at [[UPLOAD_RATE]] - [[PROGRESS]]</string>
+    <string name="uploading">上传中.. [[UPLOAD_RATE]] - [[PROGRESS]]</string>
     <string name="upload_success">上传完成，耗费 [[ELAPSED_TIME]]</string>
     <string name="upload_error">上传出错</string>
     <string name="upload_cancelled">上传被取消</string>

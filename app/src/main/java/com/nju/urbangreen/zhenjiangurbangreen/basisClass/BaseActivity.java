@@ -57,37 +57,4 @@ public class BaseActivity extends AppCompatActivity {
             System.exit(0);
         }
     }
-
-    protected UploadNotificationConfig getNotificationConfig(final String uploadId, @StringRes int title) {
-        UploadNotificationConfig config = new UploadNotificationConfig();
-
-        PendingIntent clickIntent = PendingIntent.getActivity(
-                this, 1, new Intent(this, BaseActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
-        config.setTitleForAllStatuses(getString(title))
-                .setRingToneEnabled(true)
-                .setClickIntentForAllStatuses(clickIntent)
-                .setClearOnActionForAllStatuses(true);
-
-        config.getProgress().message = getString(R.string.uploading);
-        config.getProgress().iconResourceID = R.drawable.ic_upload;
-        config.getProgress().iconColorResourceID = Color.BLUE;
-        config.getProgress().actions.add(new UploadNotificationAction(
-                R.drawable.ic_cancelled, "取消",
-                NotificationActions.getCancelUploadAction(this, 1, uploadId)));
-
-        config.getCompleted().message = getString(R.string.upload_success);
-        config.getCompleted().iconResourceID = R.drawable.ic_upload_success;
-        config.getCompleted().iconColorResourceID = Color.GREEN;
-
-        config.getError().message = getString(R.string.upload_error);
-        config.getError().iconResourceID = R.drawable.ic_upload_error;
-        config.getError().iconColorResourceID = Color.RED;
-
-        config.getCancelled().message = getString(R.string.upload_cancelled);
-        config.getCancelled().iconResourceID = R.drawable.ic_cancelled;
-        config.getCancelled().iconColorResourceID = Color.YELLOW;
-
-        return config;
-    }
 }
