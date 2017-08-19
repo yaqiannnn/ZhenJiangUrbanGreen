@@ -1,23 +1,12 @@
 package com.nju.urbangreen.zhenjiangurbangreen.basisClass;
 
-import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import com.nju.urbangreen.zhenjiangurbangreen.R;
-import com.nju.urbangreen.zhenjiangurbangreen.notice.NotificationActions;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
-
-import net.gotev.uploadservice.UploadNotificationAction;
-import net.gotev.uploadservice.UploadNotificationConfig;
 
 /**
  * Created by lxs on 17-8-10.

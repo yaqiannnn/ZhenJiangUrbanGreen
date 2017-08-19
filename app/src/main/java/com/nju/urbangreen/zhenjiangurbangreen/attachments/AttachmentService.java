@@ -3,12 +3,7 @@ package com.nju.urbangreen.zhenjiangurbangreen.attachments;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.text.InputType;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,15 +11,12 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.notice.NotificationActions;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 
 import net.gotev.uploadservice.BinaryUploadRequest;
 import net.gotev.uploadservice.ServerResponse;
 import net.gotev.uploadservice.UploadInfo;
-import net.gotev.uploadservice.UploadNotificationAction;
 import net.gotev.uploadservice.UploadNotificationConfig;
 import net.gotev.uploadservice.UploadStatusDelegate;
 
@@ -73,29 +65,33 @@ public class AttachmentService {
                     .setFileToUpload(attach.localPath)
                     .setMethod("POST")
 //                    .setNotificationConfig(null)
-                    .setNotificationConfig(getNotificationConfig(context, uploadId, attach.fileName))
+                    .setNotificationConfig(getNotificationConfig(context, attach.fileName))
                     .setMaxRetries(SPUtils.getInt("MAX_RETRIES", 2))
                     .setDelegate(new UploadStatusDelegate() {
                         @Override
                         public void onProgress(Context context, UploadInfo uploadInfo) {
-                            Log.i("Upload", String.valueOf(uploadInfo.getProgressPercent()));
+//                            UploadAttachNotification.updateNotificationProgress(uploadInfo);
                         }
                         @Override
                         public void onError(Context context, UploadInfo uploadInfo, ServerResponse serverResponse, Exception exception) {
+//                            UploadAttachNotification.updateErrorNotification(uploadInfo);
                             attach.hasUpload = false;
                             cb.failed();
                         }
                         @Override
                         public void onCompleted(Context context, UploadInfo uploadInfo, ServerResponse serverResponse) {
+//                            UploadAttachNotification.updateCompletedNotification(uploadInfo);
                             attach.hasUpload = true;
                             cb.success();
                         }
                         @Override
                         public void onCancelled(Context context, UploadInfo uploadInfo) {
+//                            UploadAttachNotification.updateCancelNotification(uploadInfo);
                             attach.hasUpload = false;
                             cb.failed();
                         }
                     });
+//            UploadAttachNotification.createNotification(uploadId, attach.fileName);
             request.startUpload();
 
         } catch (Exception exc) {
@@ -104,14 +100,13 @@ public class AttachmentService {
     }
 
 
-    private static UploadNotificationConfig getNotificationConfig(
-            Context context, final String uploadId, String filename) {
+    private static UploadNotificationConfig getNotificationConfig(Context context, String filename) {
         UploadNotificationConfig config = new UploadNotificationConfig();
 
         PendingIntent clickIntent = PendingIntent.getActivity(context, 1,
                 new Intent(context, AttachmentListActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        config.setTitleForAllStatuses("附件上传—" + filename)
+        config.setTitleForAllStatuses(filename)
                 .setRingToneEnabled(true)
                 .setClickIntentForAllStatuses(clickIntent)
                 .setClearOnActionForAllStatuses(true);

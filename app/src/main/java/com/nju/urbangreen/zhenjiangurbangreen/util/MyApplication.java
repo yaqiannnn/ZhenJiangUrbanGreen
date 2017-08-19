@@ -3,7 +3,8 @@ package com.nju.urbangreen.zhenjiangurbangreen.util;
 import android.app.Application;
 import android.content.Context;
 
-import net.gotev.uploadservice.BuildConfig;
+import com.nju.urbangreen.zhenjiangurbangreen.BuildConfig;
+
 import net.gotev.uploadservice.UploadService;
 
 import io.realm.Realm;

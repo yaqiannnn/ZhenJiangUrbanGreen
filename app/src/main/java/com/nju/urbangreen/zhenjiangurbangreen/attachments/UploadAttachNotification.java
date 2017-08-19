@@ -33,40 +33,41 @@ public class UploadAttachNotification {
     private static UploadNotificationConfig config = getNotificationConfig(mContext);
 
     private static Map<String, Integer> notificationIDMap = new HashMap<>();
+    private static Map<String, NotificationCompat.Builder> notificationBuilderMap = new HashMap<>();
 
-    public static void createNotification(String uploadID) {
+    public static void createNotification(String uploadID, String filename) {
         UploadNotificationStatusConfig statusConfig = config.getProgress();
 
         NotificationCompat.Builder notification = new NotificationCompat.Builder(mContext)
-                .setContentTitle("上传附件")
+                .setContentTitle(filename)
                 .setContentIntent(statusConfig.clickIntent)
                 .setSmallIcon(statusConfig.iconResourceID)
                 .setLargeIcon(statusConfig.largeIcon)
                 .setColor(statusConfig.iconColorResourceID)
                 .setGroup(UploadService.NAMESPACE)
                 .setProgress(100, 0, true)
-                .setSortKey(String.valueOf(Upload_Notification_ID))
                 .setOngoing(true);
 
         Notification builtNotification = notification.build();
-//        builtNotification.when = 1000;
-//        builtNotification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 
         notificationManager.notify(Upload_Notification_ID, builtNotification);
         notificationIDMap.put(uploadID, Upload_Notification_ID);
+        notificationBuilderMap.put(uploadID, notification);
+
         Upload_Notification_ID += 2;
     }
 
     public static void updateNotificationProgress(UploadInfo uploadInfo) {
         UploadNotificationStatusConfig statusConfig = config.getProgress();
 
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(mContext)
-                .setContentTitle(Placeholders.replace(statusConfig.title, uploadInfo))
-                .setContentText(Placeholders.replace(statusConfig.message, uploadInfo))
+        NotificationCompat.Builder notification = notificationBuilderMap.get(uploadInfo.getUploadId());
+
+        notification.setContentText(Placeholders.replace(statusConfig.message, uploadInfo))
                 .setContentIntent(statusConfig.clickIntent)
                 .setSmallIcon(statusConfig.iconResourceID)
                 .setLargeIcon(statusConfig.largeIcon)
                 .setColor(statusConfig.iconColorResourceID)
+                .setGroup(UploadService.NAMESPACE)
                 .setProgress((int)uploadInfo.getTotalBytes(), (int)uploadInfo.getUploadedBytes(), false)
                 .setOngoing(true);
 
@@ -75,12 +76,22 @@ public class UploadAttachNotification {
         notificationManager.notify(notificationIDMap.get(uploadInfo.getUploadId()), builtNotification);
     }
 
-    public static void updateNotification(UploadInfo uploadInfo) {
+    public static void updateErrorNotification(UploadInfo uploadInfo) {
+        updateNotification(uploadInfo, config.getError());
+    }
+
+    public static void updateCancelNotification(UploadInfo uploadInfo) {
+        updateNotification(uploadInfo, config.getCancelled());
+    }
+
+    public static void updateCompletedNotification(UploadInfo uploadInfo) {
+        updateNotification(uploadInfo, config.getCompleted());
+    }
+
+    private static void updateNotification(UploadInfo uploadInfo, UploadNotificationStatusConfig statusConfig) {
         int notificationId = notificationIDMap.get(uploadInfo.getUploadId());
         notificationManager.cancel(notificationId);
-        UploadNotificationStatusConfig statusConfig = config.getProgress();
-
-        if (statusConfig.message == null) return;
+        notificationBuilderMap.remove(uploadInfo.getUploadId());
 
         if (!statusConfig.autoClear) {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(mContext)
@@ -91,8 +102,10 @@ public class UploadAttachNotification {
                     .setSmallIcon(statusConfig.iconResourceID)
                     .setLargeIcon(statusConfig.largeIcon)
                     .setColor(statusConfig.iconColorResourceID)
+                    .setGroup(UploadService.NAMESPACE)
                     .setProgress(0, 0, false)
                     .setOngoing(false);
+
 
             setRingtone(notification);
 
