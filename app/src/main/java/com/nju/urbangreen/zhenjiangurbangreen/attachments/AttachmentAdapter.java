@@ -2,6 +2,10 @@ package com.nju.urbangreen.zhenjiangurbangreen.attachments;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Looper;
+import android.support.annotation.UiThread;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,7 +34,7 @@ import butterknife.ButterKnife;
 public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.AttachmentHolder> {
     private List<AttachmentRecord> attachList;
     private String parentID;
-    private Context mContext;
+    private FragmentActivity mContext;
 
     private static String actionTitles[] = {"上传", "下载", "查看", "删除", "重命名"};
     private static int[] iconIDs = {R.drawable.ic_attach_upload, R.drawable.ic_attach_download,
@@ -38,8 +42,8 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
     private static Drawable[] iconDrawables;
 
 
-    public AttachmentAdapter(Context context, String parentRecordID, List<AttachmentRecord> list) {
-        mContext = context;
+    public AttachmentAdapter(FragmentActivity fragmentActivity, String parentRecordID, List<AttachmentRecord> list) {
+        mContext = fragmentActivity;
         parentID = parentRecordID;
         attachList = list;
         List<Drawable> icons = new ArrayList<>();
@@ -50,9 +54,34 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         icons.toArray(iconDrawables);
     }
 
+    public void updateItem(final int recordIndex) {
+        mContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemChanged(recordIndex);
+            }
+        });
+    }
+
     public void addItem(AttachmentRecord record) {
         attachList.add(record);
-        notifyDataSetChanged();
+        mContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void removeItem(final int recordIndex) {
+        attachList.remove(recordIndex);
+        mContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemRemoved(recordIndex);
+                notifyItemRangeChanged(recordIndex, getItemCount());
+            }
+        });
     }
 
     @Override
@@ -72,8 +101,7 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                         new ActionSheet.OnClickListener() {
                             @Override
                             public void onClick(View view, int actionID) {
-                                doAttachAction(attachList.get(position), AttachAction.values()[actionID]);
-                                Log.i("ActionSheet", position + "  " + actionID + "press");
+                                doAttachAction(position, AttachAction.values()[actionID]);
                         }
                 });
             }
@@ -85,19 +113,31 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         return attachList.size();
     }
 
-    private void doAttachAction(final AttachmentRecord attachmentRecord, AttachAction action) {
+    private void doAttachAction(final int attachIndex, AttachAction action) {
+        final AttachmentRecord attachmentRecord = attachList.get(attachIndex);
         switch (action) {
             case Upload:
                 AttachmentService.uploadAttach(mContext, this.parentID, attachmentRecord, new AttachmentService.Callback() {
                     @Override
                     public void success() {
                         Toast.makeText(mContext, attachmentRecord.fileName + "上传成功", Toast.LENGTH_SHORT).show();
-                        AttachmentAdapter.this.notifyDataSetChanged();
+                        updateItem(attachIndex);
                     }
 
                     @Override
-                    public void failed() {
-                        Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
+                    public void failed(String msg) {
+                        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+            case View:
+                AttachmentService.viewAttach(mContext, attachmentRecord, new AttachmentService.Callback() {
+                    @Override
+                    public void success() {
+                    }
+                    @Override
+                    public void failed(String msg) {
+                        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;
@@ -105,11 +145,29 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 AttachmentService.renameAttach(mContext, attachmentRecord, new AttachmentService.Callback() {
                     @Override
                     public void success() {
-                        AttachmentAdapter.this.notifyDataSetChanged();
+                        updateItem(attachIndex);
                     }
                     @Override
-                    public void failed() {}
+                    public void failed(String msg) {}
                 });
+                break;
+            case Delete:
+                if(attachmentRecord.atLocal && !attachmentRecord.hasUpload) {
+                    removeItem(attachIndex);
+                } else {
+                    AttachmentService.removeAttach(mContext, attachmentRecord, new AttachmentService.Callback() {
+                        @Override
+                        public void success() {
+                            Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
+                            removeItem(attachIndex);
+                        }
+                        @Override
+                        public void failed(String msg) {
+                            Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
                 break;
         }
     }

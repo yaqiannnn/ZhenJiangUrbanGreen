@@ -1,9 +1,12 @@
 package com.nju.urbangreen.zhenjiangurbangreen.attachments;
 
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 import android.text.InputType;
 import android.util.Log;
 import android.widget.Toast;
@@ -11,6 +14,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 
@@ -28,6 +32,22 @@ import java.util.UUID;
  */
 
 public class AttachmentService {
+
+    public static void viewAttach(Context context, final AttachmentRecord attach, Callback cb) {
+        Intent viewIntent = FileUtil.getFileViewIntent(attach.localPath);
+        if(viewIntent != null) {
+            try {
+                if(FileUtil.isIntentAvailable(viewIntent))
+                    context.startActivity(viewIntent);
+                else
+                    cb.failed("本机不支持该类文件的查看");
+            } catch (Exception e) {
+                cb.failed(e.getMessage());
+            }
+        } else {
+            cb.failed("本机不支持该类文件的查看");
+        }
+    }
 
     public static void renameAttach(Context context, final AttachmentRecord attach,
                                     final AttachmentService.Callback cb) {
@@ -47,6 +67,28 @@ public class AttachmentService {
                     }
                 })
                 .show();
+    }
+
+    public static void removeAttach(Context context, final AttachmentRecord attach,
+                                    final Callback cb) {
+        final ProgressDialog loading = new ProgressDialog(context);
+        loading.setMessage("删除附件中，请稍候...");
+        loading.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String errorMsg[] = new String[1];
+                boolean res = WebServiceUtils.removeAttachment(attach.fileID, errorMsg);
+                loading.dismiss();
+                Looper.prepare();
+                if(res) {
+                    cb.success();
+                } else {
+                    cb.failed("删除失败");
+                }
+                Looper.loop();
+            }
+        }).start();
     }
 
     public static void uploadAttach(Context context, String parentID, final AttachmentRecord attach,
@@ -73,7 +115,7 @@ public class AttachmentService {
                         @Override
                         public void onError(Context context, UploadInfo uploadInfo, ServerResponse serverResponse, Exception exception) {
                             attach.hasUpload = false;
-                            cb.failed();
+                            cb.failed("上传失败");
                         }
                         @Override
                         public void onCompleted(Context context, UploadInfo uploadInfo, ServerResponse serverResponse) {
@@ -83,7 +125,7 @@ public class AttachmentService {
                         @Override
                         public void onCancelled(Context context, UploadInfo uploadInfo) {
                             attach.hasUpload = false;
-                            cb.failed();
+                            cb.failed("上传失败");
                         }
                     });
             request.startUpload();
@@ -118,6 +160,6 @@ public class AttachmentService {
 
     public interface Callback {
         void success();
-        void failed();
+        void failed(String msg);
     }
 }

@@ -410,3 +410,10 @@ Param中带"*"的为一定包含的参数
         UGO_Name
         UGO_Address
     }>
+
+
+//删除附件
+    Method: RemoveAttachment
+    Param: {
+    *   string file_id
+    }

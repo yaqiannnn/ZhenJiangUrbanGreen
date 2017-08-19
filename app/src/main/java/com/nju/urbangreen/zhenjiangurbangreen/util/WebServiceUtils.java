@@ -52,6 +52,7 @@ public class WebServiceUtils {
     public static final String Get_Record_Attachment = "GetRecordAttachment";
     public static final String Search_UGO_By_ID = "SearchUGOInfo_1";
     public static final String SEARCH_UGO_INFO = "SearchUGOInfo_2";
+    public static final String Remove_Attachment = "RemoveAttachment";
 
     public static final String KEY_REFLACT_OPERATION_NAME = "wmn";
     public static final String KEY_REFLACT_OPERATION_PARAM = "wmp";
@@ -324,6 +325,24 @@ public class WebServiceUtils {
                 Log.i("错误信息", "Get Attachment Info: " + errorMessage[0]);
             }
             return null;
+        }
+    }
+
+    public static boolean removeAttachment(String file_id, String errorMessage[]) {
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("file_id", file_id);
+        Map<String, Object> results = callMethod(Remove_Attachment, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return true;
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get Attachment Info: " + errorMessage[0]);
+            }
+            return false;
         }
     }
 
