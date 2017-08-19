@@ -165,17 +165,18 @@ public class UploadInfo implements Parcelable {
      * @return string representation of the upload rate (e.g. 234 Kbit/s)
      */
     public String getUploadRateString() {
-        double uploadRate = getUploadRate();
+        // Use Byte instead of bit
+        double uploadRate = getUploadRate() / 8.0;
 
         if (uploadRate < 1) {
-            return (int) (uploadRate * 1000) + " bit/s";
+            return (int) (uploadRate * 1000) + " B/s";
 
         } else if (uploadRate >= 1024) {
-            return (int) (uploadRate / 1024) + " Mbit/s";
+            return (int) (uploadRate / 1024) + " MB/s";
 
         }
 
-        return (int) uploadRate + " Kbit/s";
+        return (int) uploadRate + " KB/s";
     }
 
     /**

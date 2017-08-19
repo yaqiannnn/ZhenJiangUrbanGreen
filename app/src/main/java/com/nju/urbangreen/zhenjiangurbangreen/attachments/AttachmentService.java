@@ -64,34 +64,28 @@ public class AttachmentService {
             BinaryUploadRequest request = new BinaryUploadRequest(context, uploadId, serverUrl)
                     .setFileToUpload(attach.localPath)
                     .setMethod("POST")
-//                    .setNotificationConfig(null)
                     .setNotificationConfig(getNotificationConfig(context, attach.fileName))
                     .setMaxRetries(SPUtils.getInt("MAX_RETRIES", 2))
                     .setDelegate(new UploadStatusDelegate() {
                         @Override
                         public void onProgress(Context context, UploadInfo uploadInfo) {
-//                            UploadAttachNotification.updateNotificationProgress(uploadInfo);
                         }
                         @Override
                         public void onError(Context context, UploadInfo uploadInfo, ServerResponse serverResponse, Exception exception) {
-//                            UploadAttachNotification.updateErrorNotification(uploadInfo);
                             attach.hasUpload = false;
                             cb.failed();
                         }
                         @Override
                         public void onCompleted(Context context, UploadInfo uploadInfo, ServerResponse serverResponse) {
-//                            UploadAttachNotification.updateCompletedNotification(uploadInfo);
                             attach.hasUpload = true;
                             cb.success();
                         }
                         @Override
                         public void onCancelled(Context context, UploadInfo uploadInfo) {
-//                            UploadAttachNotification.updateCancelNotification(uploadInfo);
                             attach.hasUpload = false;
                             cb.failed();
                         }
                     });
-//            UploadAttachNotification.createNotification(uploadId, attach.fileName);
             request.startUpload();
 
         } catch (Exception exc) {

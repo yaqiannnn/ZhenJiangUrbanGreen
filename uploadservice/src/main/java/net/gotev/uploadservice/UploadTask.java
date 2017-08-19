@@ -23,6 +23,8 @@ import java.util.List;
  */
 public abstract class UploadTask implements Runnable {
 
+    private NotificationCompat.Builder progressNotificationBuilder = null;
+
     private static final String LOG_TAG = UploadTask.class.getSimpleName();
 
     /**
@@ -430,7 +432,7 @@ public abstract class UploadTask implements Runnable {
 
         UploadNotificationStatusConfig statusConfig = params.notificationConfig.getProgress();
 
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(service)
+        progressNotificationBuilder = new NotificationCompat.Builder(service)
                 .setContentTitle(Placeholders.replace(statusConfig.title, uploadInfo))
                 .setContentText(Placeholders.replace(statusConfig.message, uploadInfo))
                 .setContentIntent(statusConfig.getClickIntent(service))
@@ -441,9 +443,9 @@ public abstract class UploadTask implements Runnable {
                 .setProgress(100, 0, true)
                 .setOngoing(true);
 
-        statusConfig.addActionsToNotificationBuilder(notification);
+        statusConfig.addActionsToNotificationBuilder(progressNotificationBuilder);
 
-        Notification builtNotification = notification.build();
+        Notification builtNotification = progressNotificationBuilder.build();
 
         if (service.holdForegroundNotification(params.id, builtNotification)) {
             notificationManager.cancel(notificationId);
@@ -462,8 +464,7 @@ public abstract class UploadTask implements Runnable {
 
         UploadNotificationStatusConfig statusConfig = params.notificationConfig.getProgress();
 
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(service)
-                .setContentTitle(Placeholders.replace(statusConfig.title, uploadInfo))
+        progressNotificationBuilder.setContentTitle(Placeholders.replace(statusConfig.title, uploadInfo))
                 .setContentText(Placeholders.replace(statusConfig.message, uploadInfo))
                 .setContentIntent(statusConfig.getClickIntent(service))
                 .setSmallIcon(statusConfig.iconResourceID)
@@ -473,9 +474,9 @@ public abstract class UploadTask implements Runnable {
                 .setProgress((int)uploadInfo.getTotalBytes(), (int)uploadInfo.getUploadedBytes(), false)
                 .setOngoing(true);
 
-        statusConfig.addActionsToNotificationBuilder(notification);
+        statusConfig.addActionsToNotificationBuilder(progressNotificationBuilder);
 
-        Notification builtNotification = notification.build();
+        Notification builtNotification = progressNotificationBuilder.build();
 
         if (service.holdForegroundNotification(params.id, builtNotification)) {
             notificationManager.cancel(notificationId);
