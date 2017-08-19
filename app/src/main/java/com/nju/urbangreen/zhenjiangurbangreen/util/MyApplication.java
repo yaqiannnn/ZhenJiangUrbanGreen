@@ -3,6 +3,7 @@ package com.nju.urbangreen.zhenjiangurbangreen.util;
 import android.app.Application;
 import android.content.Context;
 
+import com.liulishuo.filedownloader.FileDownloader;
 import com.nju.urbangreen.zhenjiangurbangreen.BuildConfig;
 
 import net.gotev.uploadservice.UploadService;
@@ -28,6 +29,9 @@ public class MyApplication extends Application {
         Realm.setDefaultConfiguration(config);
         // Init Upload Service
         UploadService.NAMESPACE = BuildConfig.APPLICATION_ID;
+
+        // Init Download Service
+        FileDownloader.setupOnApplicationOnCreate(this);
 
         context = getApplicationContext();
     }

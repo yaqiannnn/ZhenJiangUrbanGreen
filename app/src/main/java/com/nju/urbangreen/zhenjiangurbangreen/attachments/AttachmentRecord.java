@@ -2,6 +2,7 @@ package com.nju.urbangreen.zhenjiangurbangreen.attachments;
 
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
+import com.nju.urbangreen.zhenjiangurbangreen.util.TimeFormatUtil;
 
 import java.io.File;
 import java.util.Date;
@@ -17,6 +18,7 @@ public class AttachmentRecord {
     public String fileName;
     public long fileSize; // 单位为字节
     public String uploadTime;
+    public String remotePath;
     public boolean atLocal; // 是否在本地
     public boolean hasUpload; // 是否上传到服务器
 
@@ -35,7 +37,8 @@ public class AttachmentRecord {
         fileID = recordInDB.File_ID;
         fileName = recordInDB.File_DigitalFileName;
         fileSize = recordInDB.File_DigitalFileSize;
-        uploadTime = recordInDB.File_RegistryTime;
+        remotePath = recordInDB.File_RemotePath;
+        uploadTime = TimeFormatUtil.format(recordInDB.File_RegistryTime);
         localPath = CacheUtil.getFileLocalPath(fileID);
         if(localPath == null) {
             atLocal = false;
@@ -51,6 +54,7 @@ public class AttachmentRecord {
         public String File_DigitalFileName;
         public long File_DigitalFileSize; // 单位为字节
         public String File_RegistryTime;
+        public String File_RemotePath;
     }
 }
 

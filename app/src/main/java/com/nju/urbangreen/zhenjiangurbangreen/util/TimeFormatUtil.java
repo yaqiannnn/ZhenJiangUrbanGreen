@@ -10,17 +10,19 @@ import java.util.Date;
 
 public class TimeFormatUtil {
 
-    public static final String TimeFormat = "yyyy-MM-dd HH:mm";
+    public static final String OutputTimeFormat = "yyyy-MM-dd HH:mm";
+    public static final String DBTimeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 
     public static String format(String timeStr) {
         if(timeStr == null || timeStr.equals("")) {
             return "";
         }
         if(timeStr.contains("GMT")) {
-            return new SimpleDateFormat(TimeFormat).format(new Date(timeStr));
+            return new SimpleDateFormat(OutputTimeFormat).format(new Date(timeStr));
         } else {
             try {
-                return new SimpleDateFormat(TimeFormat).parse(timeStr).toString();
+                Date time = new SimpleDateFormat(DBTimeFormat).parse(timeStr);
+                return new SimpleDateFormat(OutputTimeFormat).format(time);
             } catch (ParseException e) {
                 return timeStr;
             }

@@ -1,11 +1,13 @@
 package com.nju.urbangreen.zhenjiangurbangreen.attachments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,21 +22,21 @@ import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
 
 import java.io.File;
-import java.util.ArrayList;
 
 public class AttachmentListActivity extends BaseActivity {
 
     @BindView(R.id.Toolbar_simple)
     public Toolbar toolbar;
 
-    @BindView(R.id.rcv_attachments_list)
+    @BindView(R.id.rcv_attachment_list)
     public RecyclerView rcvAttachmentRecords;
     private AttachmentAdapter adapter;
 
     @BindView(R.id.floatingbtn_add_attach)
     public FloatingActionButton floatingbtnAddAttach;
 
-    private String recordID;
+    @BindView(R.id.refresh_attachment_list)
+    public SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +44,45 @@ public class AttachmentListActivity extends BaseActivity {
         setContentView(R.layout.activity_attachment_list);
         ButterKnife.bind(this);
 
+        initRefreshButton();
         initToolbar();
         setUploadButton();
 
-        ArrayList<AttachmentRecord> list = new ArrayList<>();
         rcvAttachmentRecords.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AttachmentAdapter(AttachmentListActivity.this, "0420b1b8-5b20-4213-9b5f-586dbca94ef7", list);
+        adapter = new AttachmentAdapter(AttachmentListActivity.this, "0420b1b8-5b20-4213-9b5f-586dbca94ef7");
         rcvAttachmentRecords.setAdapter(adapter);
+        // Init AttachList
+        final ProgressDialog loading = new ProgressDialog(AttachmentListActivity.this);
+        loading.setMessage("加载数据中，请稍候...");
+        loading.show();
+        adapter.refreshItems(new AttachmentAdapter.Callback(){
+            @Override
+            public void refreshDone() {
+                loading.dismiss();
+            }
+        });
     }
+
+    private void initRefreshButton() {
+        refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent, R.color.green_land_border);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.refreshItems(new AttachmentAdapter.Callback() {
+                    @Override
+                    public void refreshDone() {
+                        AttachmentListActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
 
     private void setUploadButton() {
         floatingbtnAddAttach.setOnClickListener(new View.OnClickListener() {

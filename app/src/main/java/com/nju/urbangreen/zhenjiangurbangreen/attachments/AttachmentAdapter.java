@@ -1,5 +1,6 @@
 package com.nju.urbangreen.zhenjiangurbangreen.attachments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
@@ -15,9 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.MyApplication;
 import com.nju.urbangreen.zhenjiangurbangreen.util.TimeFormatUtil;
+import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.ActionSheet.ActionItem;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.ActionSheet.ActionSheet;
 
@@ -42,10 +45,10 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
     private static Drawable[] iconDrawables;
 
 
-    public AttachmentAdapter(FragmentActivity fragmentActivity, String parentRecordID, List<AttachmentRecord> list) {
+    public AttachmentAdapter(FragmentActivity fragmentActivity, String parentRecordID) {
         mContext = fragmentActivity;
         parentID = parentRecordID;
-        attachList = list;
+        attachList = new ArrayList<>();
         List<Drawable> icons = new ArrayList<>();
         for(int id : iconIDs) {
             icons.add(mContext.getResources().getDrawable(id));
@@ -82,6 +85,28 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 notifyItemRangeChanged(recordIndex, getItemCount());
             }
         });
+    }
+
+    public void refreshItems(final AttachmentAdapter.Callback cb) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String errorMsg[] = new String[1];
+                List<AttachmentRecord.AttachmentRecordInDB> res = WebServiceUtils
+                        .getRecordAttachmentInfo(parentID, errorMsg);
+                attachList.clear();
+                for(AttachmentRecord.AttachmentRecordInDB recordInDB : res) {
+                    attachList.add(new AttachmentRecord(recordInDB));
+                }
+                cb.refreshDone();
+                mContext.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        notifyDataSetChanged();
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override
@@ -138,6 +163,7 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                     @Override
                     public void failed(String msg) {
                         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+                        CacheUtil.removeFileLocalPath(attachmentRecord.fileID);
                     }
                 });
                 break;
@@ -170,6 +196,10 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 }
                 break;
         }
+    }
+
+    public interface Callback {
+        void refreshDone();
     }
 
     public static List<ActionItem> getActionItemFromAttachmentRecord(AttachmentRecord attachmentRecord) {

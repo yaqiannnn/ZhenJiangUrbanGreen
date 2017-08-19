@@ -206,6 +206,7 @@ Param中带"*"的为一定包含的参数
         File_DigitalFileName
         File_DigitalFileSize
         File_RegistryTime
+        File_RemotePath
     }>
 
 
