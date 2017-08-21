@@ -39,8 +39,12 @@ public class WebServiceUtils {
     //public static final String OPERATION_NAME = "CheckUpdate";
     //public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
     public static final String WSDL_TARGET_NAMESPACE = "http://services.ui.webbos.sjf.org/";
-    public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLService.asmx";
-    public static final String UPLOAD_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLHandlerUploadAttachment.ashx";
+    public static final String SOAP_ADDRESS =
+            "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLService.asmx";
+    public static final String UPLOAD_ADDRESS =
+            "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLHandlerUploadAttachment.ashx";
+    public static final String DOWNLOAD_ADDRESS =
+            "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLHandlerDownloadAttachment.ashx";
     public static final int Timeout = 10000;
 
     public static final String Check_Update = "CheckUpdate";
@@ -413,6 +417,19 @@ public class WebServiceUtils {
                     URLEncoder.encode(ZipUtils.compress(gson.toJson(inputParam)), "utf-8");
         } catch( UnsupportedEncodingException e) {
             return UPLOAD_ADDRESS;
+        }
+    }
+
+    public static String getFileDownloadUrl(Map<String, Object> params) {
+        HashMap<String, Object> inputParam = new HashMap<>();
+        inputParam.put(KEY_USERNAME, SPUtils.getString("username", "xk"));
+        inputParam.put(KEY_PASSWORD, SPUtils.getString("password", "@"));
+        inputParam.put(KEY_UPLOAD_PARAM, params);
+        try {
+            return DOWNLOAD_ADDRESS + "?RequestInfo=" +
+                    URLEncoder.encode(ZipUtils.compress(gson.toJson(inputParam)), "utf-8");
+        } catch( UnsupportedEncodingException e) {
+            return DOWNLOAD_ADDRESS;
         }
     }
 }

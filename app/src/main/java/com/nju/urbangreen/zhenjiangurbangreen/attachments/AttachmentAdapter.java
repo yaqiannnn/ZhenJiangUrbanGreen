@@ -1,11 +1,14 @@
 package com.nju.urbangreen.zhenjiangurbangreen.attachments;
 
 import android.graphics.drawable.Drawable;
+import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +39,6 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
     private static int[] iconIDs = {R.drawable.ic_attach_upload, R.drawable.ic_attach_download,
             R.drawable.ic_attach_view, R.drawable.ic_attach_delete, R.drawable.ic_attach_rename};
     private static Drawable[] iconDrawables;
-
 
     public AttachmentAdapter(FragmentActivity fragmentActivity, String parentRecordID) {
         mContext = fragmentActivity;
@@ -99,11 +101,20 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 String errorMsg[] = new String[1];
                 List<AttachmentRecord.AttachmentRecordInDB> res = WebServiceUtils
                         .getRecordAttachmentInfo(parentID, errorMsg);
-                for(AttachmentRecord.AttachmentRecordInDB recordInDB : res) {
-                    attachList.add(new AttachmentRecord(recordInDB));
+                if(res != null) {
+                    for(AttachmentRecord.AttachmentRecordInDB recordInDB : res) {
+                        attachList.add(new AttachmentRecord(recordInDB));
+                    }
+                    attachList.addAll(unUploadRecord);
+                    cb.refreshDone();
+                } else {
+                    attachList.addAll(unUploadRecord);
+                    if(errorMsg[0] == null) {
+                        cb.refreshDone();
+                    }
+                    else
+                        cb.refreshError(errorMsg[0]);
                 }
-                attachList.addAll(unUploadRecord);
-                cb.refreshDone();
             }
         }).start();
     }
@@ -115,11 +126,19 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 String errorMsg[] = new String[1];
                 List<AttachmentRecord.AttachmentRecordInDB> res = WebServiceUtils
                         .getRecordAttachmentInfo(parentID, errorMsg);
-                for(AttachmentRecord.AttachmentRecordInDB recordInDB : res) {
-                    attachList.add(new AttachmentRecord(recordInDB));
+                if(res != null) {
+                    for(AttachmentRecord.AttachmentRecordInDB recordInDB : res) {
+                        attachList.add(new AttachmentRecord(recordInDB));
+                    }
+                    attachList.addAll(CacheUtil.getNotUploadAttachmentRecord(parentID));
+                    cb.refreshDone();
+                } else {
+                    attachList.addAll(CacheUtil.getNotUploadAttachmentRecord(parentID));
+                    if(errorMsg[0] == null)
+                        cb.refreshDone();
+                    else
+                        cb.refreshError(errorMsg[0]);
                 }
-                attachList.addAll(CacheUtil.getNotUploadAttachmentRecord(parentID));
-                cb.refreshDone();
             }
         }).start();
     }
@@ -132,8 +151,9 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
     }
 
     @Override
-    public void onBindViewHolder(AttachmentHolder holder, final int position) {
-        holder.setText(attachList.get(position));
+    public void onBindViewHolder(final AttachmentHolder holder, final int position) {
+        holder.bindObj(attachList.get(position));
+        holder.setText();
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,7 +161,7 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                         new ActionSheet.OnClickListener() {
                             @Override
                             public void onClick(View view, int actionID) {
-                                doAttachAction(position, AttachAction.values()[actionID]);
+                                doAttachAction(holder, AttachAction.values()[actionID]);
                         }
                 });
             }
@@ -153,59 +173,89 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         return attachList.size();
     }
 
-    private void doAttachAction(final int attachIndex, AttachAction action) {
-        final AttachmentRecord attachmentRecord = attachList.get(attachIndex);
+    private void doAttachAction(final AttachmentHolder holder, AttachAction action) {
+        final AttachmentRecord attachmentRecord = attachList.get(holder.getLayoutPosition());
         switch (action) {
             case Upload:
                 AttachmentService.uploadAttach(mContext, this.parentID, attachmentRecord, new AttachmentService.Callback() {
                     @Override
                     public void success() {
                         Toast.makeText(mContext, attachmentRecord.fileName + "上传成功", Toast.LENGTH_SHORT).show();
-                        updateItem(attachIndex);
+//                        updateItem(holder.getAdapterPosition());
+                        notifyDataSetChanged();
+                        Log.i("position", String.valueOf(holder.getLayoutPosition()));
                     }
 
                     @Override
                     public void failed(String msg) {
                         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
                     }
+
+                    @Override
+                    public void progress(int progress, String speed) {
+                        holder.setUploadProgress();
+                    }
+                });
+                break;
+            case Download:
+                AttachmentService.downloadAttach(mContext, attachmentRecord, new AttachmentService.Callback() {
+                    @Override
+                    public void success() {
+
+                    }
+
+                    @Override
+                    public void failed(String msg) {
+
+                    }
+
+                    @Override
+                    public void progress(int progress, String speed) {
+
+                    }
                 });
                 break;
             case View:
                 AttachmentService.viewAttach(mContext, attachmentRecord, new AttachmentService.Callback() {
                     @Override
-                    public void success() {
-                    }
+                    public void success() {}
                     @Override
                     public void failed(String msg) {
                         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
                         CacheUtil.removeFileLocalPath(attachmentRecord.fileID);
                     }
+                    @Override
+                    public void progress(int progress, String speed) {}
                 });
                 break;
             case Rename:
                 AttachmentService.renameAttach(mContext, attachmentRecord, new AttachmentService.Callback() {
                     @Override
                     public void success() {
-                        updateItem(attachIndex);
+                        updateItem(holder.getLayoutPosition());
                     }
                     @Override
                     public void failed(String msg) {}
+                    @Override
+                    public void progress(int progress, String speed) {}
                 });
                 break;
             case Delete:
                 if(attachmentRecord.atLocal && !attachmentRecord.hasUpload) {
-                    removeItemAndRefreshUI(attachIndex);
+                    removeItemAndRefreshUI(holder.getLayoutPosition());
                 } else {
                     AttachmentService.removeAttach(mContext, attachmentRecord, new AttachmentService.Callback() {
                         @Override
                         public void success() {
                             Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
-                            removeItemAndRefreshUI(attachIndex);
+                            removeItemAndRefreshUI(holder.getLayoutPosition());
                         }
                         @Override
                         public void failed(String msg) {
                             Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
                         }
+                        @Override
+                        public void progress(int progress, String speed) {}
                     });
 
                 }
@@ -215,6 +265,7 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
 
     public interface Callback {
         void refreshDone();
+        void refreshError(String msg);
     }
 
     public static List<ActionItem> getActionItemFromAttachmentRecord(AttachmentRecord attachmentRecord) {
@@ -255,12 +306,18 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         @BindView(R.id.tv_attach_item_status)
         public TextView tvFileStatus;
 
+        private AttachmentRecord record;
+
         public AttachmentHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void setText(AttachmentRecord record) {
+        public void bindObj(AttachmentRecord attachmentRecord) {
+            record = attachmentRecord;
+        }
+
+        public void setText() {
             tvFileName.setText(record.fileName);
             tvUpdateTime.setText(TimeFormatUtil.format(record.uploadTime));
             tvFileSize.setText(FileUtil.getSizeStr(record.fileSize));
@@ -277,6 +334,17 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
             }
         }
+
+        public void setUploadProgress() {
+            tvFileStatus.setText("上传中");
+            tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.green_land_border));
+        }
+
+        public void setDownloadProgress() {
+            tvFileStatus.setText("下载中");
+            tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.green_land_border));
+        }
+
     }
 
     enum AttachAction {

@@ -6,13 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.annotation.WorkerThread;
 import android.text.InputType;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.notification.BaseNotificationItem;
+import com.liulishuo.filedownloader.notification.FileDownloadNotificationListener;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
@@ -25,6 +27,7 @@ import net.gotev.uploadservice.UploadNotificationConfig;
 import net.gotev.uploadservice.UploadStatusDelegate;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -94,7 +97,7 @@ public class AttachmentService {
     public static void uploadAttach(Context context, String parentID, final AttachmentRecord attach,
                                     final AttachmentService.Callback cb) {
         try {
-            String uploadId = UUID.randomUUID().toString();
+            final String uploadId = UUID.randomUUID().toString();
             HashMap<String, Object> params = new HashMap<>();
             params.put("ParentID", parentID);
             params.put("FileName", attach.fileName);
@@ -106,11 +109,12 @@ public class AttachmentService {
             BinaryUploadRequest request = new BinaryUploadRequest(context, uploadId, serverUrl)
                     .setFileToUpload(attach.localPath)
                     .setMethod("POST")
-                    .setNotificationConfig(getNotificationConfig(context, attach.fileName))
+                    .setNotificationConfig(getUploadNotificationConfig(context, attach.fileName))
                     .setMaxRetries(SPUtils.getInt("MAX_RETRIES", 2))
                     .setDelegate(new UploadStatusDelegate() {
                         @Override
                         public void onProgress(Context context, UploadInfo uploadInfo) {
+                            cb.progress(uploadInfo.getProgressPercent(), uploadInfo.getUploadRateString());
                         }
                         @Override
                         public void onError(Context context, UploadInfo uploadInfo, ServerResponse serverResponse, Exception exception) {
@@ -135,8 +139,15 @@ public class AttachmentService {
         }
     }
 
+    public static void downloadAttach(Context context, final AttachmentRecord attach,
+                                      final AttachmentService.Callback cb) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("FAID", attach.fileID);
+        Log.i("Download", WebServiceUtils.getFileDownloadUrl(params));
+    }
 
-    private static UploadNotificationConfig getNotificationConfig(Context context, String filename) {
+
+    private static UploadNotificationConfig getUploadNotificationConfig(Context context, String filename) {
         UploadNotificationConfig config = new UploadNotificationConfig();
 
         PendingIntent clickIntent = PendingIntent.getActivity(context, 1,
@@ -161,5 +172,7 @@ public class AttachmentService {
     public interface Callback {
         void success();
         void failed(String msg);
+        void progress(int progress, String speed);
     }
+
 }

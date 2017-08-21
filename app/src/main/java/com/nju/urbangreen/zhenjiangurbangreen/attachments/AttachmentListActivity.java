@@ -68,6 +68,17 @@ public class AttachmentListActivity extends BaseActivity {
                     }
                 });
             }
+            @Override
+            public void refreshError(final String msg) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.dismiss();
+                        adapter.notifyDataSetChanged();
+                        Toast.makeText(AttachmentListActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         });
     }
 
@@ -90,6 +101,17 @@ public class AttachmentListActivity extends BaseActivity {
                             public void run() {
                                 adapter.notifyDataSetChanged();
                                 refreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }
+                    @Override
+                    public void refreshError(final String msg) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                                refreshLayout.setRefreshing(false);
+                                Toast.makeText(AttachmentListActivity.this, msg, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

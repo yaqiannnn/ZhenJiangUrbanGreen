@@ -55,6 +55,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
+import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.GeoJsonUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.PermissionsUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
@@ -162,8 +163,7 @@ public class MapActivity extends BaseActivity {
         ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
 
         //新建一个离线地图图层并添加到mapview中
-        tpkFileName = Environment.getExternalStorageDirectory().getPath() + File.separator
-                + "nju_greenland/tpk/" + tpkFileNames[curTpkFileNamesIndex];
+        tpkFileName = FileUtil.getAppFileDir() + "/tpk/" + tpkFileNames[curTpkFileNamesIndex];
         localTPKLayer = new ArcGISLocalTiledLayer(tpkFileName);
         map.addLayer(localTPKLayer);
 

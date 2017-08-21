@@ -23,6 +23,10 @@ import java.util.Locale;
  */
 
 public class FileUtil {
+    public static String getAppFileDir() {
+        return Environment.getExternalStorageDirectory().getPath() + File.separator + "nju_greenland";
+    }
+
     public static Intent getFileViewIntent(String path) {
         String extension = getFileExtension(getFileName(path));
         Intent fileIntent = null;
