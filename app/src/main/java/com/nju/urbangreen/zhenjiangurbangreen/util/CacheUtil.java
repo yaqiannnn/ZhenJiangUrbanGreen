@@ -2,10 +2,15 @@ package com.nju.urbangreen.zhenjiangurbangreen.util;
 
 import android.util.Log;
 
+import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentRecord;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by lxs on 17-8-10.
@@ -19,11 +24,8 @@ public class CacheUtil {
     private static ACache instance() {
         if(m_cache == null) {
             m_cache = ACache.get(MyApplication.getContext());
-            return m_cache;
         }
-        else {
-            return m_cache;
-        }
+        return m_cache;
     }
 
     public static boolean hasUGOs() {
@@ -95,6 +97,37 @@ public class CacheUtil {
 
     public static void removeFileLocalPath(String fileID) {
         instance().remove(fileID);
+    }
+
+    /**
+     * 只保存未上传的附件记录到本地
+     * @param allRecord 所有附件记录
+     */
+    public static void saveAttachmentRecord(List<AttachmentRecord> allRecord, String parentID) {
+        if(allRecord.size() == 0)
+            return;
+        final List<AttachmentRecord> unUploadRecord = new ArrayList<>();
+        for(AttachmentRecord record : allRecord) {
+            if(record.atLocal && !record.hasUpload)
+                unUploadRecord.add(record);
+        }
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        RealmResults<AttachmentRecord> res = realm.where(AttachmentRecord.class)
+                .equalTo("parentID", parentID).findAll();
+        res.deleteAllFromRealm();
+        realm.copyToRealm(unUploadRecord);
+        realm.commitTransaction();
+    }
+
+    /**
+     *  根据附件记录所属的记录ID来返回该记录下的未上传附件
+     */
+    public static List<AttachmentRecord> getNotUploadAttachmentRecord(String parentID) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<AttachmentRecord> res = realm.where(AttachmentRecord.class)
+                .equalTo("parentID", parentID).findAll();
+        return realm.copyFromRealm(res);
     }
 
 }

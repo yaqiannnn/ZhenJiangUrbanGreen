@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.widget.Toast;
 
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
+import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 
 /**
  * Created by lxs on 17-8-10.
@@ -43,7 +44,7 @@ public class BaseActivity extends AppCompatActivity {
             exitTime = System.currentTimeMillis();
         } else {
             ActivityCollector.finishAll();
-            System.exit(0);
+//            System.exit(0);
         }
     }
 }

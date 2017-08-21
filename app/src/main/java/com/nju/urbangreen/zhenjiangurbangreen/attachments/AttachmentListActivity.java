@@ -38,6 +38,8 @@ public class AttachmentListActivity extends BaseActivity {
     @BindView(R.id.refresh_attachment_list)
     public SwipeRefreshLayout refreshLayout;
 
+    private String parentID = "0420b1b8-5b20-4213-9b5f-586dbca94ef7";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,18 +51,30 @@ public class AttachmentListActivity extends BaseActivity {
         setUploadButton();
 
         rcvAttachmentRecords.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AttachmentAdapter(AttachmentListActivity.this, "0420b1b8-5b20-4213-9b5f-586dbca94ef7");
+        adapter = new AttachmentAdapter(AttachmentListActivity.this, parentID);
         rcvAttachmentRecords.setAdapter(adapter);
         // Init AttachList
         final ProgressDialog loading = new ProgressDialog(AttachmentListActivity.this);
         loading.setMessage("加载数据中，请稍候...");
         loading.show();
-        adapter.refreshItems(new AttachmentAdapter.Callback(){
+        adapter.initDataFromWeb(new AttachmentAdapter.Callback() {
             @Override
             public void refreshDone() {
-                loading.dismiss();
+                AttachmentListActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.dismiss();
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        adapter.saveAttachToLocal();
     }
 
     private void initRefreshButton() {
@@ -74,6 +88,7 @@ public class AttachmentListActivity extends BaseActivity {
                         AttachmentListActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                adapter.notifyDataSetChanged();
                                 refreshLayout.setRefreshing(false);
                             }
                         });
@@ -113,7 +128,7 @@ public class AttachmentListActivity extends BaseActivity {
             String path = FileUtil.getPath(uri);
             if(path != null) {
                 File file = new File(path);
-                adapter.addItem(new AttachmentRecord(file));
+                adapter.addItemAndRefreshUI(new AttachmentRecord(file, parentID));
             } else {
                 Toast.makeText(AttachmentListActivity.this, "文件损坏，请重新添加", Toast.LENGTH_SHORT).show();
             }

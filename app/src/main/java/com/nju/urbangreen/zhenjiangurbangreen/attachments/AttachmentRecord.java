@@ -8,22 +8,36 @@ import java.io.File;
 import java.util.Date;
 import java.util.UUID;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by lxs on 17-8-17.
  */
 
-public class AttachmentRecord {
+public class AttachmentRecord extends RealmObject{
+    @PrimaryKey
     public String fileID;
+
+    public String parentID;
     public String localPath;
     public String fileName;
     public long fileSize; // 单位为字节
     public String uploadTime;
     public String remotePath;
     public boolean atLocal; // 是否在本地
-    public boolean hasUpload; // 是否上传到服务器
+    public boolean hasUpload; // 是否上传到服务器、
 
-    public AttachmentRecord(File file) {
+    public AttachmentRecord() {
         fileID = UUID.randomUUID().toString();
+        atLocal = false;
+        hasUpload = false;
+    }
+
+    public AttachmentRecord(File file, String fileParentID) {
+        fileID = UUID.randomUUID().toString();
+        parentID = fileParentID;
         localPath = file.getPath();
         fileName = FileUtil.getFileName(localPath);
         fileSize = file.length();
@@ -35,6 +49,7 @@ public class AttachmentRecord {
 
     public AttachmentRecord(AttachmentRecordInDB recordInDB) {
         fileID = recordInDB.File_ID;
+        parentID = recordInDB.File_Parent_ID;
         fileName = recordInDB.File_DigitalFileName;
         fileSize = recordInDB.File_DigitalFileSize;
         remotePath = recordInDB.File_RemotePath;
@@ -51,6 +66,7 @@ public class AttachmentRecord {
 
     public class AttachmentRecordInDB {
         public String File_ID;
+        public String File_Parent_ID;
         public String File_DigitalFileName;
         public long File_DigitalFileSize; // 单位为字节
         public String File_RegistryTime;

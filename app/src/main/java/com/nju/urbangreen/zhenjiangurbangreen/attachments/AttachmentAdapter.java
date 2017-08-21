@@ -1,14 +1,8 @@
 package com.nju.urbangreen.zhenjiangurbangreen.attachments;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Looper;
-import android.support.annotation.UiThread;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +12,6 @@ import android.widget.Toast;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
-import com.nju.urbangreen.zhenjiangurbangreen.util.MyApplication;
 import com.nju.urbangreen.zhenjiangurbangreen.util.TimeFormatUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.ActionSheet.ActionItem;
@@ -57,6 +50,10 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         icons.toArray(iconDrawables);
     }
 
+    public void saveAttachToLocal() {
+        CacheUtil.saveAttachmentRecord(attachList, parentID);
+    }
+
     public void updateItem(final int recordIndex) {
         mContext.runOnUiThread(new Runnable() {
             @Override
@@ -66,7 +63,7 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         });
     }
 
-    public void addItem(AttachmentRecord record) {
+    public void addItemAndRefreshUI(AttachmentRecord record) {
         attachList.add(record);
         mContext.runOnUiThread(new Runnable() {
             @Override
@@ -76,7 +73,7 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         });
     }
 
-    public void removeItem(final int recordIndex) {
+    public void removeItemAndRefreshUI(final int recordIndex) {
         attachList.remove(recordIndex);
         mContext.runOnUiThread(new Runnable() {
             @Override
@@ -91,20 +88,38 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         new Thread(new Runnable() {
             @Override
             public void run() {
+                // save not upload attachment record
+                List<AttachmentRecord> unUploadRecord = new ArrayList<>();
+                for(AttachmentRecord record : attachList) {
+                    if(record.atLocal && !record.hasUpload)
+                        unUploadRecord.add(record);
+                }
+                attachList.clear();
+                // get attachment record from web service
                 String errorMsg[] = new String[1];
                 List<AttachmentRecord.AttachmentRecordInDB> res = WebServiceUtils
                         .getRecordAttachmentInfo(parentID, errorMsg);
-                attachList.clear();
                 for(AttachmentRecord.AttachmentRecordInDB recordInDB : res) {
                     attachList.add(new AttachmentRecord(recordInDB));
                 }
+                attachList.addAll(unUploadRecord);
                 cb.refreshDone();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyDataSetChanged();
-                    }
-                });
+            }
+        }).start();
+    }
+
+    public void initDataFromWeb(final AttachmentAdapter.Callback cb) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String errorMsg[] = new String[1];
+                List<AttachmentRecord.AttachmentRecordInDB> res = WebServiceUtils
+                        .getRecordAttachmentInfo(parentID, errorMsg);
+                for(AttachmentRecord.AttachmentRecordInDB recordInDB : res) {
+                    attachList.add(new AttachmentRecord(recordInDB));
+                }
+                attachList.addAll(CacheUtil.getNotUploadAttachmentRecord(parentID));
+                cb.refreshDone();
             }
         }).start();
     }
@@ -179,13 +194,13 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 break;
             case Delete:
                 if(attachmentRecord.atLocal && !attachmentRecord.hasUpload) {
-                    removeItem(attachIndex);
+                    removeItemAndRefreshUI(attachIndex);
                 } else {
                     AttachmentService.removeAttach(mContext, attachmentRecord, new AttachmentService.Callback() {
                         @Override
                         public void success() {
                             Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
-                            removeItem(attachIndex);
+                            removeItemAndRefreshUI(attachIndex);
                         }
                         @Override
                         public void failed(String msg) {
