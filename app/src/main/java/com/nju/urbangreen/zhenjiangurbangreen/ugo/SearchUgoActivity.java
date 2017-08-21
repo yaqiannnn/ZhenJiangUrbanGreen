@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +61,6 @@ public class SearchUgoActivity extends BaseActivity {
     private String sugIDs[];
     private String sugAddresses[];
     private ProgressDialog loadingDialog;
-    private boolean isSearchOptionsSelected = false;
     private UgoListAdapter adapter;
     private List<GreenObject> searchResult = new ArrayList<>();
     private List<GreenObject> selectResult = new ArrayList<>();
@@ -77,18 +79,8 @@ public class SearchUgoActivity extends BaseActivity {
         initToolbar();
         initSearchView();
         initSuggestionList();
-        initSnackbar();
-//        searchView.setSuggestions(sugIDs);
     }
 
-    private void initSnackbar() {
-        Snackbar.make(toolbar, "请在右上角菜单栏选择搜索选项", Snackbar.LENGTH_INDEFINITE)
-                .setAction("关闭", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    }
-                }).show();
-    }
 
     private void initToolbar() {
         toolbar.setTitle("搜索相关对象");
@@ -115,11 +107,17 @@ public class SearchUgoActivity extends BaseActivity {
                         String errorMsg[] = new String[1];
                         try {
                             searchResult = WebServiceUtils.searchUGOInfo_2(errorMsg, query, flag);
+//                            boolean[] type={true,true,true};
+//                            searchResult = WebServiceUtils.searchUGOByID(query,type,errorMsg);
+//                            for(GreenObject o : searchResult){
+//                                Log.d("tag",o.UGO_ID);
+//                            }
 //                            Log.d("tag", "searchresultbefore" + searchResult.size() + "");
 //                            Log.d("tag", "selectresult" + selectResult.size());
                             ACache mCache = ACache.get(SearchUgoActivity.this);
                             List<GreenObject> selectList = mCache.getAsObjectList("ugo_select");
-                            searchResult = ListUtil.trim(searchResult,selectList);  //去除已经选择的item
+                            searchResult = ListUtil.trim(searchResult, selectList);  //去除已经选择的item
+                            adapter.notifyDataSetChanged();
 //                            searchResult.removeAll(selectList); //去除已经选择的item
 //                            searchResult.removeAll(selectResult);     //去除已经选择的item
 //                            Log.d("tag", "searchresultafter" + searchResult.size() + "");
@@ -155,11 +153,7 @@ public class SearchUgoActivity extends BaseActivity {
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
             public void onSearchViewShown() {
-//                searchView.setSuggestions(sugIDs);
-                if (!isSearchOptionsSelected) {
-                    searchView.closeSearch();
-                    Toast.makeText(SearchUgoActivity.this, "请选择搜索条件", Toast.LENGTH_SHORT).show();
-                }
+
             }
 
             @Override
@@ -209,7 +203,7 @@ public class SearchUgoActivity extends BaseActivity {
 
         MultipleAdapter multipleAdapter = MultipleSelect.with(this)
                 .adapter(adapter)
-                .decorateFactory(new CheckBoxFactory(Color.BLUE))
+                .decorateFactory(new CheckBoxFactory(R.color.colorPrimary))
                 .stateChangeListener(new StateChangeListener() {
                     @Override
                     public void onSelectMode() {
@@ -258,25 +252,34 @@ public class SearchUgoActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_ugo_search, menu);
         MenuItem item = menu.findItem(R.id.menu_toolbar_item_search);
+        MenuItem spinnerItem = menu.findItem(R.id.spinner);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(spinnerItem);
+
+        String[] data = {"ID", "地址"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.my_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 0) {
+                    searchView.setSuggestions(sugIDs);
+                    flag = "id";
+                } else {
+                    searchView.setSuggestions(sugAddresses);
+                    flag = "address";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         searchView.setMenuItem(item);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        isSearchOptionsSelected = true;
-        switch (item.getItemId()) {
-            case R.id.menu_toolbar_item_uid:
-                searchView.setSuggestions(sugIDs);
-                flag = "id";
-                break;
-            case R.id.menu_toolbar_item_address:
-                searchView.setSuggestions(sugAddresses);
-                flag = "address";
-                break;
-            default:
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

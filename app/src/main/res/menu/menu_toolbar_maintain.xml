@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/attachment"
+        android:icon="@drawable/ic_attachments"
+        android:title="添加附件"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/greenObjects"
+        android:icon="@drawable/ic_greenobjects"
+        android:title="相关绿化对象"
+        app:showAsAction="ifRoom"/>
+</menu>
