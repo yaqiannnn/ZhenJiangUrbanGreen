@@ -13,7 +13,9 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.notification.BaseNotificationItem;
+import com.liulishuo.filedownloader.notification.FileDownloadNotificationHelper;
 import com.liulishuo.filedownloader.notification.FileDownloadNotificationListener;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
@@ -26,6 +28,7 @@ import net.gotev.uploadservice.UploadInfo;
 import net.gotev.uploadservice.UploadNotificationConfig;
 import net.gotev.uploadservice.UploadStatusDelegate;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -36,19 +39,30 @@ import java.util.UUID;
 
 public class AttachmentService {
 
+    private static FileDownloadNotificationHelper<DownloadNotificationItem> downloadNoticeHelper
+            = new FileDownloadNotificationHelper<>();
+
     public static void viewAttach(Context context, final AttachmentRecord attach, Callback cb) {
+        File file = new File(attach.localPath);
+        if(!file.exists()) {
+            cb.failed("文件不存在");
+            return;
+        }
         Intent viewIntent = FileUtil.getFileViewIntent(attach.localPath);
         if(viewIntent != null) {
             try {
                 if(FileUtil.isIntentAvailable(viewIntent))
                     context.startActivity(viewIntent);
-                else
-                    cb.failed("本机不支持该类文件的查看");
+                else {
+                    cb.success();
+                    Toast.makeText(context, "本机不支持该类文件的查看", Toast.LENGTH_SHORT).show();
+                }
             } catch (Exception e) {
                 cb.failed(e.getMessage());
             }
         } else {
-            cb.failed("本机不支持该类文件的查看");
+            cb.success();
+            Toast.makeText(context, "本机不支持该类文件的查看", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -136,11 +150,41 @@ public class AttachmentService {
         }
     }
 
-    public static void downloadAttach(Context context, final AttachmentRecord attach,
+    public static void downloadAttach(final Context context, final AttachmentRecord attach,
                                       final AttachmentService.Callback cb) {
         Map<String, Object> params = new HashMap<>();
         params.put("FAID", attach.fileID);
-        Log.i("Download", WebServiceUtils.getFileDownloadUrl(params));
+        String url = WebServiceUtils.getFileDownloadUrl(params);
+        final String savePath = FileUtil.getAttachSaveDir() + attach.parentID + File.separator + attach.fileName;
+        Log.i("Download", url);
+        FileDownloader.getImpl().create(url)
+                .setPath(savePath)
+                .setListener(new FileDownloadNotificationListener(downloadNoticeHelper) {
+                    @Override
+                    protected BaseNotificationItem create(BaseDownloadTask task) {
+                        return new DownloadNotificationItem(context, task.getId(), attach.fileName, "附件下载");
+                    }
+
+                    @Override
+                    protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        super.progress(task, soFarBytes, totalBytes);
+                        int progress = (int)((float)soFarBytes / totalBytes * 100.f);
+                        cb.progress(progress, task.getSpeed() + "KB/s");
+                    }
+
+                    @Override
+                    protected void completed(BaseDownloadTask task) {
+                        super.completed(task);
+                        attach.localPath = savePath;
+                        cb.success();
+                    }
+
+                    @Override
+                    protected void error(BaseDownloadTask task, Throwable e) {
+                        super.error(task, e);
+                        cb.failed(e.getMessage());
+                    }
+                }).start();
     }
 
 

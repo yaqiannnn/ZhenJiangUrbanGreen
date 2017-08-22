@@ -14,6 +14,8 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentRecord;
+
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
@@ -23,8 +25,28 @@ import java.util.Locale;
  */
 
 public class FileUtil {
+    public static String getAttachSaveDir() {
+        return getAppFileDir() + File.separator + "attaches" + File.separator;
+    }
+
     public static String getAppFileDir() {
         return Environment.getExternalStorageDirectory().getPath() + File.separator + "nju_greenland";
+    }
+
+    public static void deleteFile(String path) {
+        File deleteFile = new File(path);
+        if (deleteFile.isDirectory()) {
+            File[] files = deleteFile.listFiles();
+            for (File file : files) {
+                deleteFile(file.getPath());
+                if(file.exists())
+                    file.delete();
+            }
+
+        } else
+        if(deleteFile.exists())
+            deleteFile.delete();
+
     }
 
     public static Intent getFileViewIntent(String path) {

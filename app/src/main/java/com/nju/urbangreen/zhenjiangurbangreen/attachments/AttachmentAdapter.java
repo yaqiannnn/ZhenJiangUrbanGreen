@@ -173,7 +173,7 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         return attachList.size();
     }
 
-    private void doAttachAction(final AttachmentHolder holder, AttachAction action) {
+    private void doAttachAction(final AttachmentHolder holder, final AttachAction action) {
         final AttachmentRecord attachmentRecord = attachList.get(holder.getLayoutPosition());
         switch (action) {
             case Upload:
@@ -205,17 +205,24 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 AttachmentService.downloadAttach(mContext, attachmentRecord, new AttachmentService.Callback() {
                     @Override
                     public void success() {
-
+                        holder.isUploadOrDownload = false;
+                        attachmentRecord.atLocal = true;
+                        CacheUtil.putFileLocalPath(attachmentRecord.fileID, attachmentRecord.localPath);
+                        notifyDataSetChanged();
+                        Toast.makeText(mContext, attachmentRecord.fileName + "下载成功", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void failed(String msg) {
-
+                        holder.isUploadOrDownload = false;
+                        attachmentRecord.atLocal = false;
+                        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void progress(int progress, String speed) {
-
+                        holder.isUploadOrDownload = true;
+                        holder.setText();
                     }
                 });
                 break;
@@ -226,7 +233,9 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                     @Override
                     public void failed(String msg) {
                         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+                        attachmentRecord.atLocal = false;
                         CacheUtil.removeFileLocalPath(attachmentRecord.fileID);
+                        notifyDataSetChanged();
                     }
                     @Override
                     public void progress(int progress, String speed) {}
@@ -248,6 +257,9 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 if(attachmentRecord.atLocal && !attachmentRecord.hasUpload) {
                     removeItemAndRefreshUI(holder.getLayoutPosition());
                 } else {
+                    if(attachmentRecord.atLocal && attachmentRecord.localPath != null) {
+                        FileUtil.deleteFile(attachmentRecord.localPath);
+                    }
                     AttachmentService.removeAttach(mContext, attachmentRecord, new AttachmentService.Callback() {
                         @Override
                         public void success() {
@@ -337,7 +349,7 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 }
             }
             else if(record.atLocal && record.hasUpload) {
-                tvFileStatus.setText("已上传");
+                tvFileStatus.setText("已同步");
                 tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
             }
             else {
