@@ -200,9 +200,10 @@ public class AttachmentService {
                 .setClearOnActionForAllStatuses(true);
 
         config.getProgress().message = context.getResources().getString(R.string.uploading);
+        config.getProgress().iconColorResourceID = context.getResources().getColor(R.color.colorPrimary);
 
         config.getCompleted().message = context.getResources().getString(R.string.upload_success);
-        config.getCompleted().iconColorResourceID = context.getResources().getColor(R.color.colorPrimary);
+        config.getCompleted().iconColorResourceID = context.getResources().getColor(R.color.green_land_border);
 
         config.getError().message = context.getResources().getString(R.string.upload_error);
         config.getError().iconColorResourceID = context.getResources().getColor(R.color.colorAccent);
