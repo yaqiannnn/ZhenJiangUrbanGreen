@@ -33,5 +33,7 @@ public class GreenObject implements Serializable {
     public String UGO_DateOfDestroyed;
     public String UGO_DateOfDestroyRecord;
     public String UGO_LoggerPIDOfDestroyRecord;
+    public String UGO_LoggerName;
+    public String UGO_LastEditorName;
 
 }

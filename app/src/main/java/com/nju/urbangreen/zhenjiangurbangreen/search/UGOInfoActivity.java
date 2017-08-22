@@ -94,9 +94,9 @@ public class UGOInfoActivity extends BaseActivity {
         tvAddress.setText(obj.UGO_Address);
         tvArea.setText(String.valueOf(obj.UGO_CurrentArea));
         tvOwner.setText(obj.UGO_CurrentOwner);
-        tvLogger.setText(obj.UGO_LoggerPID);
+        tvLogger.setText(obj.UGO_LoggerName);
         tvLoggerTime.setText(TimeFormatUtil.format(obj.UGO_LogTime));
-        tvEditor.setText(obj.UGO_LastEditorPID);
+        tvEditor.setText(obj.UGO_LastEditorName);
         tvEditorTime.setText(TimeFormatUtil.format(obj.UGO_LastEditTime));
     }
 
