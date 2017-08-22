@@ -118,17 +118,14 @@ public class AttachmentService {
                         }
                         @Override
                         public void onError(Context context, UploadInfo uploadInfo, ServerResponse serverResponse, Exception exception) {
-                            attach.hasUpload = false;
                             cb.failed("上传失败");
                         }
                         @Override
                         public void onCompleted(Context context, UploadInfo uploadInfo, ServerResponse serverResponse) {
-                            attach.hasUpload = true;
                             cb.success();
                         }
                         @Override
                         public void onCancelled(Context context, UploadInfo uploadInfo) {
-                            attach.hasUpload = false;
                             cb.failed("上传失败");
                         }
                     });

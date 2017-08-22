@@ -180,20 +180,24 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 AttachmentService.uploadAttach(mContext, this.parentID, attachmentRecord, new AttachmentService.Callback() {
                     @Override
                     public void success() {
-                        Toast.makeText(mContext, attachmentRecord.fileName + "上传成功", Toast.LENGTH_SHORT).show();
-//                        updateItem(holder.getAdapterPosition());
+                        holder.isUploadOrDownload = false;
+                        attachmentRecord.hasUpload = true;
                         notifyDataSetChanged();
-                        Log.i("position", String.valueOf(holder.getLayoutPosition()));
+                        Toast.makeText(mContext, attachmentRecord.fileName + "上传成功", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void failed(String msg) {
+                        holder.isUploadOrDownload = false;
+                        attachmentRecord.hasUpload = false;
+                        notifyDataSetChanged();
                         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void progress(int progress, String speed) {
-                        holder.setUploadProgress();
+                        holder.isUploadOrDownload = true;
+                        holder.setText();
                     }
                 });
                 break;
@@ -308,6 +312,8 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
 
         private AttachmentRecord record;
 
+        public boolean isUploadOrDownload = false;
+
         public AttachmentHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -322,27 +328,27 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
             tvUpdateTime.setText(TimeFormatUtil.format(record.uploadTime));
             tvFileSize.setText(FileUtil.getSizeStr(record.fileSize));
             if(record.atLocal && !record.hasUpload) {
-                tvFileStatus.setText("未上传");
-                tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+                if(isUploadOrDownload) {
+                    tvFileStatus.setText("上传中");
+                    tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.green_land_border));
+                } else {
+                    tvFileStatus.setText("未上传");
+                    tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+                }
             }
             else if(record.atLocal && record.hasUpload) {
                 tvFileStatus.setText("已上传");
                 tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
             }
             else {
-                tvFileStatus.setText("未下载");
-                tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+                if(isUploadOrDownload) {
+                    tvFileStatus.setText("下载中");
+                    tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.green_land_border));
+                } else {
+                    tvFileStatus.setText("未下载");
+                    tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+                }
             }
-        }
-
-        public void setUploadProgress() {
-            tvFileStatus.setText("上传中");
-            tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.green_land_border));
-        }
-
-        public void setDownloadProgress() {
-            tvFileStatus.setText("下载中");
-            tvFileStatus.setTextColor(mContext.getResources().getColor(R.color.green_land_border));
         }
 
     }
