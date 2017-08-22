@@ -1,1 +1,1 @@
-include ':app', ':uploadservice'
+include ':app', ':uploadservice', ':downloader'
