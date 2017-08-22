@@ -337,39 +337,40 @@ Param中带"*"的为一定包含的参数
 1. 获得所有绿化对象
     Method: GetUGOSuggest
     Return: List<{
-        string UGO_ID,
+        string UGO_Code,
         string UGO_Address
     }>
 
 2. 获得所有管养记录
     Method: GetMRSuggest
     Return: List<{
-        string MR_ID
+        string MR_Code
     }>
 
 3. 获得所有巡查记录
     Method: GetIRSuggest
     Return: List<{
-        string MR_ID
+        string MR_Code
     }>
 
 4. 获得所有事件记录
     Method: GetEventSuggest
     Return: List<{
-        string MR_ID
+        string MR_Code
     }>
 
 // 搜索记录信息
 1.搜索绿化对象
     Method: SearchUGOInfo_1
     Param: {
-    *   string id 绿化对象UGO_ID(模糊搜索)
+    *   string code 绿化对象UGO_Code(模糊搜索)
     *   bool is_green_land
     *   bool is_ancient_tree
     *   bool is_street_tree
     }
     Return: List<{
         UGO_ID
+        UGO_Code
         UGO_ClassType_ID
         UGO_Name
         UGO_Name_PinYinAbbrevation
@@ -402,11 +403,12 @@ Param中带"*"的为一定包含的参数
 2.搜索绿化对象
     Method: SearchUGOInfo_2
     Param: {
-        string id 绿化对象UGO_ID(精确搜索)
+        string code 绿化对象UGO_Code(精确搜索)
         string address 绿化对象UGO_Adress(模糊搜索)
     }
     Return: List<{
         UGO_ID
+        UGO_Code
         UGO_ClassType_ID
         UGO_Name
         UGO_Address

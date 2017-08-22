@@ -249,7 +249,7 @@ public class MapActivity extends BaseActivity {
                                     Map<String,Object> greenObj = new HashMap<>();
                                     if (obj.UGO_ClassType_ID.equals(StreetTreeType)){
                                         streetTreeList.add(obj);
-                                        greenObj.put("UGO_ID", obj.UGO_ID);
+                                        greenObj.put("UGO_Ucode", obj.UGO_ID);
                                         greenObj.put("GraphicType", 2);
                                         Graphic graphic = new Graphic(geometry, symbolMap.get(StreetTreeType), greenObj);
                                         streetTreeLayer.addGraphic(graphic);
@@ -364,7 +364,7 @@ public class MapActivity extends BaseActivity {
     private void highlightGraphic(Graphic graphic){
         int[] ids = new int[]{(int)graphic.getId()};
         int graphicType = (Integer)graphic.getAttributeValue("GraphicType");
-        curUGOID = (String)graphic.getAttributeValue("UGO_ID");
+        curUGOID = (String)graphic.getAttributeValue("UGO_Ucode");
         if(graphicType == 0){
             greenLandLayer.setSelectedGraphics(ids, true);
             tvUGOInfo.setText("绿地: " + curUGOID);
@@ -450,7 +450,7 @@ public class MapActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MapActivity.this, MaintainListActivity.class);
-                intent.putExtra("UGO_ID", curUGOID);
+                intent.putExtra("UGO_Ucode", curUGOID);
                 startActivity(intent);
             }
         });
@@ -459,7 +459,7 @@ public class MapActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MapActivity.this, InspectListActivity.class);
-                intent.putExtra("UGO_ID", curUGOID);
+                intent.putExtra("UGO_Ucode", curUGOID);
                 startActivity(intent);
             }
         });
@@ -468,7 +468,7 @@ public class MapActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MapActivity.this, EventListActivity.class);
-                intent.putExtra("UGO_ID", curUGOID);
+                intent.putExtra("UGO_Ucode", curUGOID);
                 startActivity(intent);
             }
         });
@@ -524,21 +524,21 @@ public class MapActivity extends BaseActivity {
                 Map<String,Object> greenObj = new HashMap<>();
                 if (obj.UGO_ClassType_ID.equals(GreenLandType)) {
                     greenLandList.add(obj);
-                    greenObj.put("UGO_ID", obj.UGO_ID);
+                    greenObj.put("UGO_Ucode", obj.UGO_ID);
                     greenObj.put("GraphicType", 0);
                     Graphic graphic = new Graphic(geometry, symbolMap.get(GreenLandType), greenObj);
                     greenLandLayer.addGraphic(graphic);
                 }
                 else if (obj.UGO_ClassType_ID.equals(AncientTreeType)) {
                     ancientTreeList.add(obj);
-                    greenObj.put("UGO_ID", obj.UGO_ID);
+                    greenObj.put("UGO_Ucode", obj.UGO_ID);
                     greenObj.put("GraphicType", 1);
                     Graphic graphic = new Graphic(geometry, symbolMap.get(AncientTreeType), greenObj);
                     ancientTreeLayer.addGraphic(graphic);
                 }
                 else if (obj.UGO_ClassType_ID.equals(StreetTreeType)){
                     streetTreeList.add(obj);
-                    greenObj.put("UGO_ID", obj.UGO_ID);
+                    greenObj.put("UGO_Ucode", obj.UGO_ID);
                     greenObj.put("GraphicType", 2);
                     Graphic graphic = new Graphic(geometry, symbolMap.get(StreetTreeType), greenObj);
                     streetTreeLayer.addGraphic(graphic);

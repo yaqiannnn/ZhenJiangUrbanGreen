@@ -54,15 +54,15 @@ public class CacheUtil {
     }
 
     public static void putUGOSug(List<GreenObjectSug> objs) {
-        String IDs[] = new String[objs.size()];
+        String Codes[] = new String[objs.size()];
         String Addresses[] = new String[objs.size()];
         int i = 0;
         for(GreenObjectSug obj : objs) {
-            IDs[i] = obj.UGO_ID;
+            Codes[i] = obj.UGO_Ucode;
             Addresses[i] = obj.UGO_Address;
             i++;
         }
-        instance().put(UGO_SUG_KEY + "UGO_ID", IDs);
+        instance().put(UGO_SUG_KEY + "UGO_Code", Codes);
         instance().put(UGO_SUG_KEY + "UGO_Address", Addresses);
         SPUtils.put(UGO_SUG_KEY, true);
     }
@@ -72,8 +72,8 @@ public class CacheUtil {
             return null;
         }
         switch (column) {
-            case "UGO_ID":
-                return (String[]) instance().<String>getAsObjectList(UGO_SUG_KEY + "UGO_ID").toArray();
+            case "UGO_Code":
+                return (String[]) instance().<String>getAsObjectList(UGO_SUG_KEY + "UGO_Code").toArray();
             case "UGO_Address":
                 return (String[]) instance().<String>getAsObjectList(UGO_SUG_KEY + "UGO_Address").toArray();
             default:
@@ -82,7 +82,7 @@ public class CacheUtil {
     }
 
     public static void removeUGOSug() {
-        instance().remove(UGO_SUG_KEY + "UGO_ID");
+        instance().remove(UGO_SUG_KEY + "UGO_Code");
         instance().remove(UGO_SUG_KEY + "UGO_Address");
         SPUtils.put(UGO_SUG_KEY, false);
     }

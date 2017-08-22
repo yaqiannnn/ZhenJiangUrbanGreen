@@ -45,7 +45,7 @@ public class SearchActivity extends BaseActivity {
     private LayerSwitchPopupWindow popupWindow;
     private boolean searchType[]; // 0: GreenLand, 1: AncientTree, 2: StreetTree
 
-    private String sugIDs[] = null;
+    private String sugCodes[] = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,7 +110,7 @@ public class SearchActivity extends BaseActivity {
                     @Override
                     public void run() {
                         String errorMsg[] = new String[1];
-                        List<GreenObject> res = WebServiceUtils.searchUGOByID(query, searchType, errorMsg);
+                        List<GreenObject> res = WebServiceUtils.searchUGOByCode(query, searchType, errorMsg);
                         loadingDialog.dismiss();
                         if(res != null) {
                             m_adapter.addUGOs(res);
@@ -144,13 +144,13 @@ public class SearchActivity extends BaseActivity {
                 return false;
             }
         });
-        searchView.setSuggestions(sugIDs);
+        searchView.setSuggestions(sugCodes);
     }
     private void initSuggestionList()
     {
         loadingDialog.show();
         if(CacheUtil.hasUGOSug()) {
-            sugIDs = CacheUtil.getUGOSug("UGO_ID");
+            sugCodes = CacheUtil.getUGOSug("UGO_Code");
             loadingDialog.dismiss();
         } else {
             new Thread(new Runnable() {
@@ -160,7 +160,7 @@ public class SearchActivity extends BaseActivity {
                     List<GreenObjectSug> res = WebServiceUtils.getUGOSug(errorMsg);
                     if(res != null) {
                         CacheUtil.putUGOSug(res);
-                        sugIDs = CacheUtil.getUGOSug("UGO_ID");
+                        sugCodes = CacheUtil.getUGOSug("UGO_Code");
                     } else if(errorMsg[0] != null && !errorMsg[0].equals("")) {
                         Looper.prepare();
                         Toast.makeText(SearchActivity.this, errorMsg[0], Toast.LENGTH_SHORT).show();

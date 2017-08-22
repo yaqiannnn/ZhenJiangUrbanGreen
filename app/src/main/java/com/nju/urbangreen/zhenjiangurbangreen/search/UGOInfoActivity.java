@@ -13,9 +13,6 @@ import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.map.SimpleMapActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.TimeFormatUtil;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -86,7 +83,7 @@ public class UGOInfoActivity extends BaseActivity {
 
     private void bindText() {
         tvUGOID.setText(obj.UGO_ID);
-        tvUGOCode.setText(obj.UGO_UCode);
+        tvUGOCode.setText(obj.UGO_Ucode);
         if(obj.UGO_ClassType_ID.equals("000"))
             tvType.setText("绿地");
         else if(obj.UGO_ClassType_ID.equals("001"))

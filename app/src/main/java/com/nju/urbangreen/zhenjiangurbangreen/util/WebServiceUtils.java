@@ -351,12 +351,12 @@ public class WebServiceUtils {
     }
 
 
-    public static List<GreenObject> searchUGOByID(String id, boolean[] type, String[] errorMessage) {
+    public static List<GreenObject> searchUGOByCode(String code, boolean[] type, String[] errorMessage) {
         if(is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
         }
         Map<String, Object> params = new HashMap<>();
-        params.put("id", id);
+        params.put("code", code);
         params.put("is_green_land", type[0]);
         params.put("is_ancient_tree", type[1]);
         params.put("is_street_tree", type[2]);

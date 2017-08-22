@@ -31,10 +31,10 @@
         </activity>
         <activity android:name=".search.SearchActivity">
 
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN"/>-->
-             <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-             <!--</intent-filter>-->
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN"/>
+             <category android:name="android.intent.category.LAUNCHER"/>
+             </intent-filter>
         </activity>
         <activity android:name=".navigation.NaviActivity"/>
         <activity android:name=".settings.SettingsActivity">
@@ -79,10 +79,10 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".attachments.AttachmentListActivity">
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN"/>
-             <category android:name="android.intent.category.LAUNCHER"/>
-             </intent-filter>
+             <!--<intent-filter>-->
+             <!--<action android:name="android.intent.action.MAIN"/>-->
+             <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+             <!--</intent-filter>-->
         </activity>
         <activity android:name=".inspectRecord.InspectListActivity"/>
         <activity android:name=".maintainRecord.MaintainListActivity" android:exported="true"/>
