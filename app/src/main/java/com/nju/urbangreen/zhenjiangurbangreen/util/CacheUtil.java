@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 /**
@@ -97,6 +98,21 @@ public class CacheUtil {
 
     public static void removeFileLocalPath(String fileID) {
         instance().remove(fileID);
+    }
+
+    /**
+     * 删除本地已上传的的附件记录
+     */
+    public static void removeAttachRecord(String fileID) {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+        AttachmentRecord res = realm.where(AttachmentRecord.class)
+                .equalTo("fileID", fileID)
+                .findFirst();
+        Log.i("remove record", res.fileID);
+        res.deleteFromRealm();
+        realm.commitTransaction();
     }
 
     /**

@@ -184,6 +184,7 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                         attachmentRecord.hasUpload = true;
                         notifyDataSetChanged();
                         Toast.makeText(mContext, attachmentRecord.fileName + "上传成功", Toast.LENGTH_SHORT).show();
+                        CacheUtil.removeAttachRecord(attachmentRecord.fileID);
                     }
 
                     @Override
@@ -257,7 +258,8 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
                 if(attachmentRecord.atLocal && !attachmentRecord.hasUpload) {
                     removeItemAndRefreshUI(holder.getLayoutPosition());
                 } else {
-                    if(attachmentRecord.atLocal && attachmentRecord.localPath != null) {
+                    if(attachmentRecord.atLocal && attachmentRecord.localPath != null
+                            && attachmentRecord.localPath.contains(FileUtil.getAttachSaveDir())) {
                         FileUtil.deleteFile(attachmentRecord.localPath);
                     }
                     AttachmentService.removeAttach(mContext, attachmentRecord, new AttachmentService.Callback() {

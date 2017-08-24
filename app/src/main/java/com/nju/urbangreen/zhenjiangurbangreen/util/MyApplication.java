@@ -31,7 +31,8 @@ public class MyApplication extends Application {
         UploadService.NAMESPACE = BuildConfig.APPLICATION_ID;
 
         // Init Download Service
-        FileDownloader.setupOnApplicationOnCreate(this);
+        FileDownloader.setupOnApplicationOnCreate(this)
+            .maxNetworkThreadCount(10);
 
         context = getApplicationContext();
     }
