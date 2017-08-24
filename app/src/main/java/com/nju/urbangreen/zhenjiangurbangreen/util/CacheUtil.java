@@ -5,6 +5,7 @@ import android.util.Log;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentRecord;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
+import com.nju.urbangreen.zhenjiangurbangreen.settings.SystemFileItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,6 +145,23 @@ public class CacheUtil {
         RealmResults<AttachmentRecord> res = realm.where(AttachmentRecord.class)
                 .equalTo("parentID", parentID).findAll();
         return realm.copyFromRealm(res);
+    }
+
+
+    /**
+     * 获取本地缓存的系统文件信息
+     */
+    public static List<SystemFileItem> getSystemFiles() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<SystemFileItem> res = realm.where(SystemFileItem.class).findAll();
+        return realm.copyFromRealm(res);
+    }
+
+    public static void saveSystemFiles(List<SystemFileItem> files) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.copyToRealm(files);
+        realm.commitTransaction();
     }
 
 }

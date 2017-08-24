@@ -25,12 +25,17 @@ import java.util.Locale;
  */
 
 public class FileUtil {
+    public static String getBaseMapTPKDir() {
+        return getAttachSaveDir() + "tpk" + File.separator;
+    }
+
     public static String getAttachSaveDir() {
-        return getAppFileDir() + File.separator + "attaches" + File.separator;
+        return getAppFileDir() + "attaches" + File.separator;
     }
 
     public static String getAppFileDir() {
-        return Environment.getExternalStorageDirectory().getPath() + File.separator + "nju_greenland";
+        return Environment.getExternalStorageDirectory().getPath() + File.separator
+                + "nju_greenland" + File.separator;
     }
 
     public static void deleteFile(String path) {
@@ -47,6 +52,17 @@ public class FileUtil {
         if(deleteFile.exists())
             deleteFile.delete();
 
+    }
+
+    public static String byte2SizeStr(float byteValue) {
+        String str[] = {"B", "KB", "MB", "GB"};
+        for(int i = 0, n = str.length; i < n; i++) {
+            if(byteValue < 1024)
+                return String.format("%.2f", byteValue) + str[i];
+            else
+                byteValue /= 1024;
+        }
+        return String.format("%.2f", byteValue * 1024) + str[str.length - 1];
     }
 
     public static Intent getFileViewIntent(String path) {

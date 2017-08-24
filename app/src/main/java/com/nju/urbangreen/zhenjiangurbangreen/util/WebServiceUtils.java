@@ -45,6 +45,9 @@ public class WebServiceUtils {
             "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLHandlerUploadAttachment.ashx";
     public static final String DOWNLOAD_ADDRESS =
             "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLHandlerDownloadAttachment.ashx";
+    public static final String RESOURCE_ADDRESS =
+            "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Resources/";
+    public static final String BaseMapFileNames[] = {"Vector.tpk", "Image.tpk"};
     public static final int Timeout = 10000;
 
     public static final String Check_Update = "CheckUpdate";

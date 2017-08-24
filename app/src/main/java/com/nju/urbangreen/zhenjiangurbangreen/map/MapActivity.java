@@ -18,10 +18,8 @@ import android.location.LocationManager;
 import android.os.Environment;
 import android.os.Looper;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.view.Window;
@@ -54,12 +52,10 @@ import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
+import com.nju.urbangreen.zhenjiangurbangreen.settings.SystemFileActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.GeoJsonUtil;
-import com.nju.urbangreen.zhenjiangurbangreen.util.PermissionsUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
-import com.nju.urbangreen.zhenjiangurbangreen.util.WGSTOZhenjiang;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 
@@ -145,7 +141,7 @@ public class MapActivity extends BaseActivity {
     GraphicsLayer locationLayer;
 
     private ArrayList<GreenObject> greenLandList, ancientTreeList, streetTreeList;
-    private final String[] tpkFileNames = {"vector.tpk", "base.tpk"};
+    private final String[] tpkFileNames = WebServiceUtils.BaseMapFileNames;
     private final String[] tpkLayerNames = {"矢量图层", "影像图层"};
     private int curTpkFileNamesIndex = 0;
 
@@ -163,7 +159,21 @@ public class MapActivity extends BaseActivity {
         ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
 
         //新建一个离线地图图层并添加到mapview中
-        tpkFileName = FileUtil.getAppFileDir() + "/tpk/" + tpkFileNames[curTpkFileNamesIndex];
+        tpkFileName = FileUtil.getAppFileDir() + "tpk/" + tpkFileNames[curTpkFileNamesIndex];
+        if(!new File(tpkFileName).exists()) {
+            new MaterialDialog.Builder(this)
+                    .title("地图图层文件未下载，是否前往下载界面")
+                    .positiveText("确认")
+                    .negativeText("取消")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Intent intent = new Intent(MapActivity.this, SystemFileActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .show();
+        }
         localTPKLayer = new ArcGISLocalTiledLayer(tpkFileName);
         map.addLayer(localTPKLayer);
 
@@ -209,20 +219,14 @@ public class MapActivity extends BaseActivity {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                                 curTpkFileNamesIndex = which;
+                                map.removeLayer(0);
+                                tpkFileName = FileUtil.getAppFileDir() + "tpk/" + tpkFileNames[curTpkFileNamesIndex];
+                                localTPKLayer = new ArcGISLocalTiledLayer(tpkFileName);
+                                map.addLayer(localTPKLayer, 0);
                                 return true;
                             }
                         })
                         .positiveText("确认")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                map.removeLayer(0);
-                                tpkFileName = Environment.getExternalStorageDirectory().getPath() + File.separator
-                                        + "nju_greenland/tpk/" + tpkFileNames[curTpkFileNamesIndex];
-                                localTPKLayer = new ArcGISLocalTiledLayer(tpkFileName);
-                                map.addLayer(localTPKLayer, 0);
-                            }
-                        })
                         .show();
             }
         });

@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="大事记"
+                    android:text="事件记录"
                     android:textSize="14sp" />
             </LinearLayout>
             <LinearLayout
@@ -144,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="附件管理"
+                    android:text="系统文件"
                     android:textSize="14sp" />
             </LinearLayout>
             <LinearLayout

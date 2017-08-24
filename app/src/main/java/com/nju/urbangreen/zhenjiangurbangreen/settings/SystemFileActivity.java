@@ -21,6 +21,7 @@ public class SystemFileActivity extends BaseActivity {
     public RecyclerView rcvFiles;
 
     private SystemFileAdapter adapter;
+    private DownloadTaskManager taskManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +30,38 @@ public class SystemFileActivity extends BaseActivity {
         ButterKnife.bind(this);
         initToolbar();
 
+        taskManager = DownloadTaskManager.instance();
+        taskManager.onCreate(new DownloadTaskManager.ConnectCallback() {
+            @Override
+            public void connect() {
+               runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+
+            @Override
+            public void disconnect() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+
         rcvFiles.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SystemFileAdapter(this);
+        adapter = new SystemFileAdapter(this, taskManager);
         rcvFiles.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        taskManager.onDestroy();
     }
 
     private void initToolbar() {

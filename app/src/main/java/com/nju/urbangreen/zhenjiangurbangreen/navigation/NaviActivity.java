@@ -14,6 +14,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.settings.SettingsActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.settings.SystemFileActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
@@ -82,6 +83,10 @@ public class NaviActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.imgbtn_inspection_record:
                 intent = new Intent(NaviActivity.this, InspectListActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.imgbtn_file_mag:
+                intent = new Intent(NaviActivity.this, SystemFileActivity.class);
                 startActivity(intent);
                 break;
             default:
