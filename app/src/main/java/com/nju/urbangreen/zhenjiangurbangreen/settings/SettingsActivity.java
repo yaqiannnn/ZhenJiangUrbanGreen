@@ -12,6 +12,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -71,6 +72,8 @@ public class SettingsActivity extends BaseActivity {
         setSaveButton();
         setHandUpdateButton();
         setClearButton();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private void setSaveButton() {
