@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Created by Liwei on 2016/12/25.
@@ -39,14 +40,15 @@ public class WebServiceUtils {
     //public static final String OPERATION_NAME = "CheckUpdate";
     //public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
     public static final String WSDL_TARGET_NAMESPACE = "http://services.ui.webbos.sjf.org/";
+    private static String Server_Address = SPUtils.getString("Server_Address", "http://114.212.112.41/GreenLand_test");
     public static final String SOAP_ADDRESS =
-            "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLService.asmx";
+            Server_Address + "/EXT_GreenLand/Mobile/Services/GLService.asmx";
     public static final String UPLOAD_ADDRESS =
-            "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLHandlerUploadAttachment.ashx";
+            Server_Address + "/EXT_GreenLand/Mobile/Services/GLHandlerUploadAttachment.ashx";
     public static final String DOWNLOAD_ADDRESS =
-            "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLHandlerDownloadAttachment.ashx";
+            Server_Address + "/EXT_GreenLand/Mobile/Services/GLHandlerDownloadAttachment.ashx";
     public static final String RESOURCE_ADDRESS =
-            "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Resources/";
+            Server_Address + "/EXT_GreenLand/Mobile/Resources/";
     public static final String BaseMapFileNames[] = {"Vector.tpk", "Image.tpk"};
     public static final int Timeout = 10000;
 
@@ -433,6 +435,28 @@ public class WebServiceUtils {
                     URLEncoder.encode(ZipUtils.compress(gson.toJson(inputParam)), "utf-8");
         } catch( UnsupportedEncodingException e) {
             return DOWNLOAD_ADDRESS;
+        }
+    }
+
+    public static String getServerAddress() {
+        return Server_Address;
+    }
+
+    public static void putServerAddress(String address) throws Exception{
+        String pattern = "^(https://|http://)?"
+                + "(([0-9]{1,3}\\.){3}[0-9]{1,3}" // IP形式的URL- 199.194.52.184
+                + "|" // 允许IP和DOMAIN（域名）
+                + "([0-9a-z_!~*'()-]+\\.)*" // 域名- www.
+                + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\." // 二级域名
+                + "[a-z]{2,6})" // first level domain- .com or .museum
+                + "(:[0-9]{1,4})?" // 端口- :80
+                + "((/?)|" // a slash isn't required if there is no file name
+                + "(/[0-9a-zA-Z_!~*'().;?:@&=+$,%#-]+)+/?)$";
+        if(Pattern.matches(pattern, address)) {
+            SPUtils.put("Server_Address", address);
+            Server_Address = address;
+        } else {
+            throw new Exception("服务器地址有误");
         }
     }
 }

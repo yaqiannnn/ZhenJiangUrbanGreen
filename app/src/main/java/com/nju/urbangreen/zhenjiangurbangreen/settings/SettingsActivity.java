@@ -41,6 +41,9 @@ public class SettingsActivity extends BaseActivity {
         }
     };
 
+    @BindView(R.id.et_settings_URL)
+    public EditText etURL;
+
     @BindView(R.id.et_settings_radius)
     public EditText etRaduis;
 
@@ -62,6 +65,7 @@ public class SettingsActivity extends BaseActivity {
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
+        setURL();
         setTitleBar();
         setSettingValue();
         setSaveButton();
@@ -77,9 +81,21 @@ public class SettingsActivity extends BaseActivity {
                     SPUtils.put("NearRadius", Float.parseFloat(etRaduis.getText().toString()));
                 } catch(Exception e) {
                     showFormatErrorToast("行道树缓冲区半径");
+                    return;
                 }
+                try {
+                    WebServiceUtils.putServerAddress(etURL.getText().toString());
+                } catch (Exception e) {
+                    Toast.makeText(SettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(SettingsActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void setURL() {
+        etURL.setText(WebServiceUtils.getServerAddress());
     }
 
     private void showFormatErrorToast(String key) {
