@@ -111,8 +111,8 @@ public class CacheUtil {
         AttachmentRecord res = realm.where(AttachmentRecord.class)
                 .equalTo("fileID", fileID)
                 .findFirst();
-        Log.i("remove record", res.fileID);
-        res.deleteFromRealm();
+        if(res != null)
+            res.deleteFromRealm();
         realm.commitTransaction();
     }
 

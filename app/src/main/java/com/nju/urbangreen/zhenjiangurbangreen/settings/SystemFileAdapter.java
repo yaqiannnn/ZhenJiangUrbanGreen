@@ -97,6 +97,8 @@ public class SystemFileAdapter extends RecyclerView.Adapter<SystemFileAdapter.Sy
             // not start
             holder.updateNotDownloaded(status, taskManager.getSoFar(file.ID), taskManager.getTotal(file.ID));
         }
+        if(new File(file.savePath).exists())
+            holder.updateDownloadedStatus();
     }
 
     @Override
