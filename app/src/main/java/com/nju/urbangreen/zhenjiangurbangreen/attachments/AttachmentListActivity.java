@@ -1,53 +1,127 @@
 package com.nju.urbangreen.zhenjiangurbangreen.attachments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
-import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
-import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 
-import net.gotev.uploadservice.BinaryUploadRequest;
-import net.gotev.uploadservice.UploadNotificationConfig;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.UUID;
+import java.io.File;
 
 public class AttachmentListActivity extends BaseActivity {
 
     @BindView(R.id.Toolbar_simple)
     public Toolbar toolbar;
 
-    @BindView(R.id.lv_attachments_list)
-    public ListView lvAttachmentRecords;
+    @BindView(R.id.rcv_attachment_list)
+    public RecyclerView rcvAttachmentRecords;
+    private AttachmentAdapter adapter;
 
     @BindView(R.id.floatingbtn_add_attach)
     public FloatingActionButton floatingbtnAddAttach;
+
+    @BindView(R.id.refresh_attachment_list)
+    public SwipeRefreshLayout refreshLayout;
+
+    private String parentID = "0420b1b8-5b20-4213-9b5f-586dbca94ef7";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attachment_list);
-
         ButterKnife.bind(this);
+
+        initRefreshButton();
         initToolbar();
+        setUploadButton();
+
+        rcvAttachmentRecords.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new AttachmentAdapter(AttachmentListActivity.this, parentID);
+        rcvAttachmentRecords.setAdapter(adapter);
+        // Init AttachList
+        final ProgressDialog loading = new ProgressDialog(AttachmentListActivity.this);
+        loading.setMessage("加载数据中，请稍候...");
+        loading.show();
+        adapter.initDataFromWeb(new AttachmentAdapter.Callback() {
+            @Override
+            public void refreshDone() {
+                AttachmentListActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.dismiss();
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+            @Override
+            public void refreshError(final String msg) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.dismiss();
+                        adapter.notifyDataSetChanged();
+                        Toast.makeText(AttachmentListActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        adapter.saveAttachToLocal();
+    }
+
+    private void initRefreshButton() {
+        refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent, R.color.green_land_border);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.refreshItems(new AttachmentAdapter.Callback() {
+                    @Override
+                    public void refreshDone() {
+                        AttachmentListActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                                refreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }
+                    @Override
+                    public void refreshError(final String msg) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                                refreshLayout.setRefreshing(false);
+                                Toast.makeText(AttachmentListActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+
+    private void setUploadButton() {
         floatingbtnAddAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,13 +136,9 @@ public class AttachmentListActivity extends BaseActivity {
                 }
             }
         });
-        //以下是用来测试附件列表的数据
-        ArrayList<OneAttachmentRecord> list = new ArrayList<OneAttachmentRecord>();
-        list.add(new OneAttachmentRecord("what doesn't kill you","0kb"));
-        AttachmentRecordAdapter adapter = new AttachmentRecordAdapter(this,R.layout.attachment_list_item,list);
-        lvAttachmentRecords.setAdapter(adapter);
     }
 
+    //选择完文件后的回调函数
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -78,21 +148,13 @@ public class AttachmentListActivity extends BaseActivity {
         if (requestCode == 1) {
             Uri uri = data.getData();
             String path = FileUtil.getPath(uri);
-            String filename = path.substring(path.lastIndexOf('/') + 1);
-            fileNameInputDialog(filename);
+            if(path != null) {
+                File file = new File(path);
+                adapter.addItemAndRefreshUI(new AttachmentRecord(file, parentID));
+            } else {
+                Toast.makeText(AttachmentListActivity.this, "文件损坏，请重新添加", Toast.LENGTH_SHORT).show();
+            }
         }
-    }
-
-    private void fileNameInputDialog(String filename) {
-        new MaterialDialog.Builder(this)
-                .title("重命名文件")
-                .inputType(InputType.TYPE_CLASS_TEXT)
-                .input("文件名", filename, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        Toast.makeText(AttachmentListActivity.this, "Done", Toast.LENGTH_SHORT).show();
-                    }
-                }).show();
     }
 
     private void initToolbar() {
@@ -105,25 +167,5 @@ public class AttachmentListActivity extends BaseActivity {
                 finish();
             }
         });
-    }
-
-    private void doUpload() {
-
-        try {
-            final String uploadId = UUID.randomUUID().toString();
-            final String serverUrl = WebServiceUtils.UPLOAD_ADDRESS;
-
-            final BinaryUploadRequest request =
-                    new BinaryUploadRequest(this, uploadId, serverUrl)
-                    .setMethod("POST")
-                    .setNotificationConfig(new UploadNotificationConfig())
-                    .setMaxRetries(SPUtils.getInt("MAX_RETRIES", 2));
-
-            request.startUpload();
-            finish();
-
-        } catch (Exception exc) {
-            Toast.makeText(this, exc.getMessage(), Toast.LENGTH_LONG).show();
-        }
     }
 }

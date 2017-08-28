@@ -11,12 +11,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ListView
-            android:id="@+id/lv_attachments_list"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_attachment_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
-
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcv_attachment_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v4.widget.SwipeRefreshLayout>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/floatingbtn_add_attach"
             android:layout_width="wrap_content"
@@ -30,7 +34,9 @@
             app:elevation="6dp"
             app:pressedTranslationZ="16dp"
             app:rippleColor="#33728dff" />
+
     </RelativeLayout>
+
 
 
 </LinearLayout>

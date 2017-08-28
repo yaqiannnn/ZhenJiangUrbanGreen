@@ -29,14 +29,12 @@ Param中带"*"的为一定包含的参数
         MR_SubmitStatus
         MR_SubmitorPID
         MR_SubmitTime
-++++++++++++++++++++++++++
         MR_LoggerName
         MR_LastEditorName
         MR_SubmitorName
-++++++++++++++++++++++++++
     }>
 
-++++++++++++++++++++++++++
+
 2.获取管养记录涉及绿化对象(所有种类，包括绿地、古树名木、行道树)
     Method: GetMaintainRecordUGO
     Param: {
@@ -47,7 +45,7 @@ Param中带"*"的为一定包含的参数
         UGO_Address
         UGO_ClassType_ID
     }>
-++++++++++++++++++++++++++
+
 
 3.获取养护巡查记录
     Method: GetInspectRecord
@@ -71,13 +69,11 @@ Param中带"*"的为一定包含的参数
         IR_LogTime
         IR_LastEditorPID
         IR_LastEditTime
-++++++++++++++++++++++++++
         IR_LoggerName
         IR_LastEditorName
-++++++++++++++++++++++++++
     }>
 
-++++++++++++++++++++++++++
+
 4.获取养护巡查记录涉及绿化对象(所有种类，包括绿地、古树名木、行道树)
     Method: GetInspectRecordUGO
     Param: {
@@ -88,7 +84,7 @@ Param中带"*"的为一定包含的参数
         UGO_Address
         UGO_ClassType_ID
     }>
-++++++++++++++++++++++++++
+
 
 5.获取事件记录
     Method: GetEvent
@@ -128,14 +124,12 @@ Param中带"*"的为一定包含的参数
         UGE_RelevantAddress
         UGE_RelevantDescription
         UGE_LastStateID
-++++++++++++++++++++++++++
         UGE_LoggerName
         UGE_LastEditorName
         UGE_ConcludeName
-++++++++++++++++++++++++++
     }>
 
-++++++++++++++++++++++++++
+
 6.获取事件记录涉及绿化对象(所有种类，包括绿地、古树名木、行道树)
     Method: GetInspectRecordUGO
     Param: {
@@ -146,7 +140,7 @@ Param中带"*"的为一定包含的参数
         UGO_Address
         UGO_ClassType_ID
     }>
-++++++++++++++++++++++++++
+
 
 7.获取绿化对象(除行道树以外)
     Method: GetUGOInfoExceptST
@@ -182,10 +176,8 @@ Param中带"*"的为一定包含的参数
         UGO_DateOfDestroyRecord
         UGO_DescriptionOfDestroy
         UGO_LoggerPIDOfDestroyRecord
-++++++++++++++++++++++++++
         UGO_LoggerName
         UGO_LastEditorName
-++++++++++++++++++++++++++
     }>
 
 8.获取行道树(某个点周围)
@@ -201,6 +193,20 @@ Param中带"*"的为一定包含的参数
         UGO_Name_PinYinAbbrevation
         UGO_Geo_Location
         UGO_Address
+    }>
+
+9.获取记录的附件信息
+    Method: GetRecordAttachment
+    Param: {
+    *   string id
+    }
+    Return: List<{
+        File_ID
+        File_Parent_ID
+        File_DigitalFileName
+        File_DigitalFileSize
+        File_RegistryTime
+        File_RemotePath
     }>
 
 
@@ -331,39 +337,40 @@ Param中带"*"的为一定包含的参数
 1. 获得所有绿化对象
     Method: GetUGOSuggest
     Return: List<{
-        string UGO_ID,
+        string UGO_Code,
         string UGO_Address
     }>
 
 2. 获得所有管养记录
     Method: GetMRSuggest
     Return: List<{
-        string MR_ID
+        string MR_Code
     }>
 
 3. 获得所有巡查记录
     Method: GetIRSuggest
     Return: List<{
-        string MR_ID
+        string MR_Code
     }>
 
 4. 获得所有事件记录
     Method: GetEventSuggest
     Return: List<{
-        string MR_ID
+        string MR_Code
     }>
 
 // 搜索记录信息
 1.搜索绿化对象
     Method: SearchUGOInfo_1
     Param: {
-    *   string id 绿化对象UGO_ID(模糊搜索)
+    *   string code 绿化对象UGO_Code(模糊搜索)
     *   bool is_green_land
     *   bool is_ancient_tree
     *   bool is_street_tree
     }
     Return: List<{
         UGO_ID
+        UGO_Code
         UGO_ClassType_ID
         UGO_Name
         UGO_Name_PinYinAbbrevation
@@ -389,21 +396,27 @@ Param中带"*"的为一定包含的参数
         UGO_DateOfDestroyRecord
         UGO_DescriptionOfDestroy
         UGO_LoggerPIDOfDestroyRecord
-++++++++++++++++++++++++++
         UGO_LoggerName
         UGO_LastEditorName
-++++++++++++++++++++++++++
     }>
 
 2.搜索绿化对象
     Method: SearchUGOInfo_2
     Param: {
-        string id 绿化对象UGO_ID(精确搜索)
+        string code 绿化对象UGO_Code(精确搜索)
         string address 绿化对象UGO_Adress(模糊搜索)
     }
     Return: List<{
         UGO_ID
+        UGO_Code
         UGO_ClassType_ID
         UGO_Name
         UGO_Address
     }>
+
+
+//删除附件
+    Method: RemoveAttachment
+    Param: {
+    *   string file_id
+    }

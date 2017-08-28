@@ -70,7 +70,7 @@ public class UrbanGreenDB {
     public boolean saveOneUGOInfo(Map<String, Object> ugo) {
         if (ugo != null) {
             ContentValues values = new ContentValues();
-            values.put("code", ugo.get("UGO_ID").toString());
+            values.put("code", ugo.get("UGO_Ucode").toString());
             values.put("parent_id", ugo.get("UGO_ParentID").toString());
             values.put("type_id", ugo.get("UGO_ClassType_ID").toString());
             values.put("name", ugo.get("UGO_Name").toString());

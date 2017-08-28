@@ -35,6 +35,20 @@
                 <TableRow style="@style/RecordItem">
                     <TextView
                         style="@style/RecordItemTitle"
+                        android:text="服务器地址" />
+                    <EditText
+                        android:id="@+id/et_settings_URL"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext"  />
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginLeft="8dp"/>
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+                    <TextView
+                        style="@style/RecordItemTitle"
                         android:text="行道树缓冲区半径" />
                     <EditText
                         android:id="@+id/et_settings_radius"

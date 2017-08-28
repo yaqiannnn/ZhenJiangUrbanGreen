@@ -14,7 +14,7 @@ import io.realm.annotations.PrimaryKey;
 public class GreenObject implements Serializable {
     private static final long serialVersionUID = 21455356667888L;
     public String UGO_ID;
-    public String UGO_UCode;
+    public String UGO_Ucode;
     public String UGO_ParentID;
     public String UGO_ClassType_ID;
     public String UGO_Name;
@@ -33,5 +33,7 @@ public class GreenObject implements Serializable {
     public String UGO_DateOfDestroyed;
     public String UGO_DateOfDestroyRecord;
     public String UGO_LoggerPIDOfDestroyRecord;
+    public String UGO_LoggerName;
+    public String UGO_LastEditorName;
 
 }

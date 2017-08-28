@@ -25,6 +25,18 @@ public class SearchResultHolder extends RecyclerView.ViewHolder{
     private GreenObject obj;
     private CardView mCardView;
 
+    @BindView(R.id.tv_search_item_id)
+    public TextView tvCode;
+
+    @BindView(R.id.tv_search_item_type)
+    public TextView tvType;
+
+    @BindView(R.id.tv_search_item_name)
+    public TextView tvName;
+
+    @BindView(R.id.tv_search_item_address)
+    public TextView tvAddress;
+
     @BindView(R.id.btn_search_item_MR)
     public AppCompatButton btnMaintainRecord;
 
@@ -55,7 +67,7 @@ public class SearchResultHolder extends RecyclerView.ViewHolder{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), MaintainListActivity.class);
-//                intent.putExtra("UGO_ID", obj.getID());
+//                intent.putExtra("UGO_Ucode", obj.getID());
                 v.getContext().startActivity(intent);
             }
         });
@@ -63,7 +75,7 @@ public class SearchResultHolder extends RecyclerView.ViewHolder{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EventListActivity.class);
-//                intent.putExtra("UGO_ID", obj.getID());
+//                intent.putExtra("UGO_Ucode", obj.getID());
                 v.getContext().startActivity(intent);
             }
         });
@@ -71,7 +83,7 @@ public class SearchResultHolder extends RecyclerView.ViewHolder{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), InspectListActivity.class);
-//                intent.putExtra("UGO_ID", obj.getID());
+//                intent.putExtra("UGO_Ucode", obj.getID());
                 v.getContext().startActivity(intent);
             }
         });
@@ -80,16 +92,16 @@ public class SearchResultHolder extends RecyclerView.ViewHolder{
     public void bindObj(GreenObject object) {
         this.obj = object;
         if(obj.UGO_Address != null) {
-            ((TextView)mCardView.findViewById(R.id.tv_search_item_address)).setText("地址: " + obj.UGO_Address);
+            tvAddress.setText("地址: " + obj.UGO_Address);
         }
         String type = "类型: 行道树";
         if(obj.UGO_ClassType_ID.equals("000"))
             type = "类型: 绿地";
         else if(obj.UGO_ClassType_ID.equals("001"))
             type = "类型: 古树名木";
-        ((TextView)mCardView.findViewById(R.id.tv_search_item_type)).setText(type);
-        ((TextView)mCardView.findViewById(R.id.tv_search_item_id)).setText(obj.UGO_ID);
-        ((TextView)mCardView.findViewById(R.id.tv_search_item_name)).setText("名字: " + obj.UGO_Name);
+        tvType.setText(type);
+        tvCode.setText(obj.UGO_Ucode);
+        tvName.setText("名字: " + obj.UGO_Name);
     }
 
 

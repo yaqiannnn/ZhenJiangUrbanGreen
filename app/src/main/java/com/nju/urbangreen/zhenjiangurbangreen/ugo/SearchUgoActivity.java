@@ -1,33 +1,25 @@
 package com.nju.urbangreen.zhenjiangurbangreen.ugo;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goyourfly.multiple.adapter.MultipleAdapter;
 import com.goyourfly.multiple.adapter.MultipleSelect;
 import com.goyourfly.multiple.adapter.StateChangeListener;
-import com.goyourfly.multiple.adapter.menu.SimpleDoneMenuBar;
 import com.goyourfly.multiple.adapter.viewholder.view.CheckBoxFactory;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
@@ -58,7 +50,7 @@ public class SearchUgoActivity extends BaseActivity {
     @BindView(R.id.recycler_ugo_search_result)
     RecyclerView recyclerUgoSearchResult;
 
-    private String sugIDs[];
+    private String sugCodes[];
     private String sugAddresses[];
     private ProgressDialog loadingDialog;
     private UgoListAdapter adapter;
@@ -108,9 +100,9 @@ public class SearchUgoActivity extends BaseActivity {
                         try {
                             searchResult = WebServiceUtils.searchUGOInfo_2(errorMsg, query, flag);
 //                            boolean[] type={true,true,true};
-//                            searchResult = WebServiceUtils.searchUGOByID(query,type,errorMsg);
+//                            searchResult = WebServiceUtils.searchUGOByCode(query,type,errorMsg);
 //                            for(GreenObject o : searchResult){
-//                                Log.d("tag",o.UGO_ID);
+//                                Log.d("tag",o.UGO_Ucode);
 //                            }
 //                            Log.d("tag", "searchresultbefore" + searchResult.size() + "");
 //                            Log.d("tag", "selectresult" + selectResult.size());
@@ -130,7 +122,7 @@ public class SearchUgoActivity extends BaseActivity {
                             public void run() {
                                 loadingDialog.dismiss();
                                 if (searchResult == null) {
-                                    Toast.makeText(SearchUgoActivity.this, "找不到结果(是否没输入完整的ID号？)", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SearchUgoActivity.this, "找不到结果(是否没输入完整的Code？)", Toast.LENGTH_SHORT).show();
                                     searchView.clearFocus();
                                 } else {
                                     initRecyclerView();
@@ -167,8 +159,8 @@ public class SearchUgoActivity extends BaseActivity {
 
     private void initSuggestionList() {
         if (CacheUtil.hasUGOSug()) {
-            sugIDs = CacheUtil.getUGOSug("UGO_ID");
-//            Log.d("tag", "size=" + sugIDs.length);
+            sugCodes = CacheUtil.getUGOSug("UGO_Code");
+//            Log.d("tag", "size=" + sugCodes.length);
             sugAddresses = CacheUtil.getUGOSug("UGO_Address");
         } else {
             loadingDialog.show();
@@ -180,7 +172,7 @@ public class SearchUgoActivity extends BaseActivity {
                     loadingDialog.dismiss();
                     if (res != null) {
                         CacheUtil.putUGOSug(res);
-                        sugIDs = CacheUtil.getUGOSug("UGO_ID");
+                        sugCodes = CacheUtil.getUGOSug("UGO_Code");
                         sugAddresses = CacheUtil.getUGOSug("UGO_Address");
                     } else if (errorMsg[0] != null && !errorMsg[0].equals("")) {
                         Looper.prepare();
@@ -255,7 +247,7 @@ public class SearchUgoActivity extends BaseActivity {
         MenuItem spinnerItem = menu.findItem(R.id.spinner);
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(spinnerItem);
 
-        String[] data = {"ID", "地址"};
+        String[] data = {"Code", "地址"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.my_spinner_item, data);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -264,8 +256,8 @@ public class SearchUgoActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 0) {
-                    searchView.setSuggestions(sugIDs);
-                    flag = "id";
+                    searchView.setSuggestions(sugCodes);
+                    flag = "code";
                 } else {
                     searchView.setSuggestions(sugAddresses);
                     flag = "address";

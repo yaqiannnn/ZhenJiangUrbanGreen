@@ -18,9 +18,8 @@ import android.location.LocationManager;
 import android.os.Environment;
 import android.os.Looper;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.view.Window;
@@ -31,6 +30,8 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.LocationDisplayManager;
 import com.esri.android.map.MapView;
@@ -51,11 +52,10 @@ import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
+import com.nju.urbangreen.zhenjiangurbangreen.settings.SystemFileActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.GeoJsonUtil;
-import com.nju.urbangreen.zhenjiangurbangreen.util.PermissionsUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.SPUtils;
-import com.nju.urbangreen.zhenjiangurbangreen.util.WGSTOZhenjiang;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 
@@ -93,6 +93,10 @@ public class MapActivity extends BaseActivity {
     //定位按钮
     @BindView(R.id.imgbtn_locate)
     public ImageButton imgBtnLocate;
+
+    //地图底图图层切换
+    @BindView(R.id.imgbtn_map_layer)
+    public ImageButton imgBtnMapLayer;
 
     //图层控制按钮
     @BindView(R.id.imgbtn_layer_switch)
@@ -137,6 +141,9 @@ public class MapActivity extends BaseActivity {
     GraphicsLayer locationLayer;
 
     private ArrayList<GreenObject> greenLandList, ancientTreeList, streetTreeList;
+    private final String[] tpkFileNames = WebServiceUtils.BaseMapFileNames;
+    private final String[] tpkLayerNames = {"矢量图层", "影像图层"};
+    private int curTpkFileNamesIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +159,21 @@ public class MapActivity extends BaseActivity {
         ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
 
         //新建一个离线地图图层并添加到mapview中
-        tpkFileName = Environment.getExternalStorageDirectory().getPath() + File.separator + "nju_greenland/tpk/vector.tpk";
+        tpkFileName = FileUtil.getAppFileDir() + "tpk/" + tpkFileNames[curTpkFileNamesIndex];
+        if(!new File(tpkFileName).exists()) {
+            new MaterialDialog.Builder(this)
+                    .title("地图图层文件未下载，是否前往下载界面")
+                    .positiveText("确认")
+                    .negativeText("取消")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Intent intent = new Intent(MapActivity.this, SystemFileActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .show();
+        }
         localTPKLayer = new ArcGISLocalTiledLayer(tpkFileName);
         map.addLayer(localTPKLayer);
 
@@ -164,6 +185,9 @@ public class MapActivity extends BaseActivity {
 
         //设置全局显示按钮
         setGlobalViewButton();
+
+        //设置地图底图切换开关
+        setMapLayerSwitchButton();
 
         //设置图层开关按钮
         setLayerSwitchPopupWindow();
@@ -184,6 +208,30 @@ public class MapActivity extends BaseActivity {
 
     }
 
+    private void setMapLayerSwitchButton() {
+        imgBtnMapLayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(MapActivity.this)
+                        .title("切换地图图层")
+                        .items(tpkLayerNames)
+                        .itemsCallbackSingleChoice(curTpkFileNamesIndex, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                                curTpkFileNamesIndex = which;
+                                map.removeLayer(0);
+                                tpkFileName = FileUtil.getAppFileDir() + "tpk/" + tpkFileNames[curTpkFileNamesIndex];
+                                localTPKLayer = new ArcGISLocalTiledLayer(tpkFileName);
+                                map.addLayer(localTPKLayer, 0);
+                                return true;
+                            }
+                        })
+                        .positiveText("确认")
+                        .show();
+            }
+        });
+    }
+
     private void setNearTreeButton() {
         imgBtnNearby.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +243,7 @@ public class MapActivity extends BaseActivity {
                         Location cur_loc = locationDisplayManager.getLocation();
                         String errorMsg[] = new String[1];
                         List<GreenObject> res = WebServiceUtils.getNearStreetTree(cur_loc.getLongitude(),
-                                cur_loc.getLatitude(), SPUtils.getFloat("NearRadius", 50.f), errorMsg);
+                                cur_loc.getLatitude(), SPUtils.getFloat("NearRadius", 500.f), errorMsg);
                         if(res != null) {
                             streetTreeList.clear();
                             streetTreeLayer.removeAll();
@@ -205,7 +253,7 @@ public class MapActivity extends BaseActivity {
                                     Map<String,Object> greenObj = new HashMap<>();
                                     if (obj.UGO_ClassType_ID.equals(StreetTreeType)){
                                         streetTreeList.add(obj);
-                                        greenObj.put("UGO_ID", obj.UGO_ID);
+                                        greenObj.put("UGO_Ucode", obj.UGO_ID);
                                         greenObj.put("GraphicType", 2);
                                         Graphic graphic = new Graphic(geometry, symbolMap.get(StreetTreeType), greenObj);
                                         streetTreeLayer.addGraphic(graphic);
@@ -320,7 +368,7 @@ public class MapActivity extends BaseActivity {
     private void highlightGraphic(Graphic graphic){
         int[] ids = new int[]{(int)graphic.getId()};
         int graphicType = (Integer)graphic.getAttributeValue("GraphicType");
-        curUGOID = (String)graphic.getAttributeValue("UGO_ID");
+        curUGOID = (String)graphic.getAttributeValue("UGO_Ucode");
         if(graphicType == 0){
             greenLandLayer.setSelectedGraphics(ids, true);
             tvUGOInfo.setText("绿地: " + curUGOID);
@@ -406,7 +454,7 @@ public class MapActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MapActivity.this, MaintainListActivity.class);
-                intent.putExtra("UGO_ID", curUGOID);
+                intent.putExtra("UGO_Ucode", curUGOID);
                 startActivity(intent);
             }
         });
@@ -415,7 +463,7 @@ public class MapActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MapActivity.this, InspectListActivity.class);
-                intent.putExtra("UGO_ID", curUGOID);
+                intent.putExtra("UGO_Ucode", curUGOID);
                 startActivity(intent);
             }
         });
@@ -424,7 +472,7 @@ public class MapActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MapActivity.this, EventListActivity.class);
-                intent.putExtra("UGO_ID", curUGOID);
+                intent.putExtra("UGO_Ucode", curUGOID);
                 startActivity(intent);
             }
         });
@@ -480,21 +528,21 @@ public class MapActivity extends BaseActivity {
                 Map<String,Object> greenObj = new HashMap<>();
                 if (obj.UGO_ClassType_ID.equals(GreenLandType)) {
                     greenLandList.add(obj);
-                    greenObj.put("UGO_ID", obj.UGO_ID);
+                    greenObj.put("UGO_Ucode", obj.UGO_ID);
                     greenObj.put("GraphicType", 0);
                     Graphic graphic = new Graphic(geometry, symbolMap.get(GreenLandType), greenObj);
                     greenLandLayer.addGraphic(graphic);
                 }
                 else if (obj.UGO_ClassType_ID.equals(AncientTreeType)) {
                     ancientTreeList.add(obj);
-                    greenObj.put("UGO_ID", obj.UGO_ID);
+                    greenObj.put("UGO_Ucode", obj.UGO_ID);
                     greenObj.put("GraphicType", 1);
                     Graphic graphic = new Graphic(geometry, symbolMap.get(AncientTreeType), greenObj);
                     ancientTreeLayer.addGraphic(graphic);
                 }
                 else if (obj.UGO_ClassType_ID.equals(StreetTreeType)){
                     streetTreeList.add(obj);
-                    greenObj.put("UGO_ID", obj.UGO_ID);
+                    greenObj.put("UGO_Ucode", obj.UGO_ID);
                     greenObj.put("GraphicType", 2);
                     Graphic graphic = new Graphic(geometry, symbolMap.get(StreetTreeType), greenObj);
                     streetTreeLayer.addGraphic(graphic);

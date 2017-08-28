@@ -26,7 +26,9 @@ import com.esri.core.symbol.SimpleLineSymbol;
 import com.esri.core.symbol.Symbol;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.util.FileUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.GeoJsonUtil;
+import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 
 import java.io.File;
 
@@ -81,7 +83,7 @@ public class SimpleMapActivity extends BaseActivity {
 
     private void setMap() {
         ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
-        String tpkFileName = Environment.getExternalStorageDirectory().getPath() + File.separator + "nju_greenland/tpk/vector.tpk";
+        String tpkFileName = FileUtil.getBaseMapTPKDir() + WebServiceUtils.BaseMapFileNames[0];
         localTPKLayer = new ArcGISLocalTiledLayer(tpkFileName);
         map.addLayer(localTPKLayer);
         curUGOLayer = new GraphicsLayer();

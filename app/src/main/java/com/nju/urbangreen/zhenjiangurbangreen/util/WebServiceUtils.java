@@ -10,6 +10,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentRecord;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.Maintain;
@@ -21,12 +22,15 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.io.EOFException;
+import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Created by Liwei on 2016/12/25.
@@ -36,8 +40,16 @@ public class WebServiceUtils {
     //public static final String OPERATION_NAME = "CheckUpdate";
     //public static final String WSDL_TARGET_NAMESPACE = "http://tempuri.org/";
     public static final String WSDL_TARGET_NAMESPACE = "http://services.ui.webbos.sjf.org/";
-    public static final String SOAP_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/GLService.asmx";
-    public static final String UPLOAD_ADDRESS = "http://114.212.112.41/GreenLand_test/EXT_GreenLand/Mobile/Services/TCHandlerUploadAttachment.ashx";
+    private static String Server_Address = SPUtils.getString("Server_Address", "http://114.212.112.41/GreenLand_test");
+    public static final String SOAP_ADDRESS =
+            Server_Address + "/EXT_GreenLand/Mobile/Services/GLService.asmx";
+    public static final String UPLOAD_ADDRESS =
+            Server_Address + "/EXT_GreenLand/Mobile/Services/GLHandlerUploadAttachment.ashx";
+    public static final String DOWNLOAD_ADDRESS =
+            Server_Address + "/EXT_GreenLand/Mobile/Services/GLHandlerDownloadAttachment.ashx";
+    public static final String RESOURCE_ADDRESS =
+            Server_Address + "/EXT_GreenLand/Mobile/Resources/";
+    public static final String BaseMapFileNames[] = {"Vector.tpk", "Image.tpk"};
     public static final int Timeout = 10000;
 
     public static final String Check_Update = "CheckUpdate";
@@ -46,11 +58,14 @@ public class WebServiceUtils {
     public static final String Get_UGO_Info_Except_ST = "GetUGOInfoExceptST";//ST表示行道树
     public static final String Get_Near_Street_Tree = "GetNearStreetTree";
     public static final String GET_UGO_Suggest = "GetUGOSuggest";
+    public static final String Get_Record_Attachment = "GetRecordAttachment";
     public static final String Search_UGO_By_ID = "SearchUGOInfo_1";
     public static final String SEARCH_UGO_INFO = "SearchUGOInfo_2";
+    public static final String Remove_Attachment = "RemoveAttachment";
 
     public static final String KEY_REFLACT_OPERATION_NAME = "wmn";
     public static final String KEY_REFLACT_OPERATION_PARAM = "wmp";
+    public static final String KEY_UPLOAD_PARAM = "whp";
     public static final String OPERATION_NAME = "RequestServices";
     public static final String OPERATION_NAME_WITHOUT_USERINFO = "RequestServicesWithoutUserInfo";
     public static final String KEY_OPERATION_PARAM = "RequestInfo";
@@ -302,13 +317,51 @@ public class WebServiceUtils {
         }
     }
 
-
-    public static List<GreenObject> searchUGOByID(String id, boolean[] type, String[] errorMessage) {
+    public static List<AttachmentRecord.AttachmentRecordInDB> getRecordAttachmentInfo(
+            String record_id, String errorMessage[]) {
         if(is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
         }
         Map<String, Object> params = new HashMap<>();
-        params.put("id", id);
+        params.put("id", record_id);
+        Map<String, Object> results = callMethod(Get_Record_Attachment, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<AttachmentRecord.AttachmentRecordInDB>>(){}.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get Attachment Info: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
+    public static boolean removeAttachment(String file_id, String errorMessage[]) {
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("file_id", file_id);
+        Map<String, Object> results = callMethod(Remove_Attachment, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return true;
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get Attachment Info: " + errorMessage[0]);
+            }
+            return false;
+        }
+    }
+
+
+    public static List<GreenObject> searchUGOByCode(String code, boolean[] type, String[] errorMessage) {
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("code", code);
         params.put("is_green_land", type[0]);
         params.put("is_ancient_tree", type[1]);
         params.put("is_street_tree", type[2]);
@@ -356,6 +409,54 @@ public class WebServiceUtils {
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
+        }
+    }
+
+    public static String getFileUploadUrl(Map<String, Object> params) {
+        HashMap<String, Object> inputParam = new HashMap<>();
+        inputParam.put(KEY_USERNAME, SPUtils.getString("username", "xk"));
+        inputParam.put(KEY_PASSWORD, SPUtils.getString("password", "@"));
+        inputParam.put(KEY_UPLOAD_PARAM, params);
+        try {
+            return UPLOAD_ADDRESS + "?RequestInfo=" +
+                    URLEncoder.encode(ZipUtils.compress(gson.toJson(inputParam)), "utf-8");
+        } catch( UnsupportedEncodingException e) {
+            return UPLOAD_ADDRESS;
+        }
+    }
+
+    public static String getFileDownloadUrl(Map<String, Object> params) {
+        HashMap<String, Object> inputParam = new HashMap<>();
+        inputParam.put(KEY_USERNAME, SPUtils.getString("username", "xk"));
+        inputParam.put(KEY_PASSWORD, SPUtils.getString("password", "@"));
+        inputParam.put(KEY_UPLOAD_PARAM, params);
+        try {
+            return DOWNLOAD_ADDRESS + "?RequestInfo=" +
+                    URLEncoder.encode(ZipUtils.compress(gson.toJson(inputParam)), "utf-8");
+        } catch( UnsupportedEncodingException e) {
+            return DOWNLOAD_ADDRESS;
+        }
+    }
+
+    public static String getServerAddress() {
+        return Server_Address;
+    }
+
+    public static void putServerAddress(String address) throws Exception{
+        String pattern = "^(https://|http://)?"
+                + "(([0-9]{1,3}\\.){3}[0-9]{1,3}" // IP形式的URL- 199.194.52.184
+                + "|" // 允许IP和DOMAIN（域名）
+                + "([0-9a-z_!~*'()-]+\\.)*" // 域名- www.
+                + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\." // 二级域名
+                + "[a-z]{2,6})" // first level domain- .com or .museum
+                + "(:[0-9]{1,4})?" // 端口- :80
+                + "((/?)|" // a slash isn't required if there is no file name
+                + "(/[0-9a-zA-Z_!~*'().;?:@&=+$,%#-]+)+/?)$";
+        if(Pattern.matches(pattern, address)) {
+            SPUtils.put("Server_Address", address);
+            Server_Address = address;
+        } else {
+            throw new Exception("服务器地址有误");
         }
     }
 }

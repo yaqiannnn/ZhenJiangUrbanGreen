@@ -2,10 +2,17 @@ package com.nju.urbangreen.zhenjiangurbangreen.util;
 
 import android.util.Log;
 
+import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentRecord;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
+import com.nju.urbangreen.zhenjiangurbangreen.settings.SystemFileItem;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 /**
  * Created by lxs on 17-8-10.
@@ -19,11 +26,8 @@ public class CacheUtil {
     private static ACache instance() {
         if(m_cache == null) {
             m_cache = ACache.get(MyApplication.getContext());
-            return m_cache;
         }
-        else {
-            return m_cache;
-        }
+        return m_cache;
     }
 
     public static boolean hasUGOs() {
@@ -52,15 +56,15 @@ public class CacheUtil {
     }
 
     public static void putUGOSug(List<GreenObjectSug> objs) {
-        String IDs[] = new String[objs.size()];
+        String Codes[] = new String[objs.size()];
         String Addresses[] = new String[objs.size()];
         int i = 0;
         for(GreenObjectSug obj : objs) {
-            IDs[i] = obj.UGO_ID;
+            Codes[i] = obj.UGO_Ucode;
             Addresses[i] = obj.UGO_Address;
             i++;
         }
-        instance().put(UGO_SUG_KEY + "UGO_ID", IDs);
+        instance().put(UGO_SUG_KEY + "UGO_Code", Codes);
         instance().put(UGO_SUG_KEY + "UGO_Address", Addresses);
         SPUtils.put(UGO_SUG_KEY, true);
     }
@@ -70,8 +74,8 @@ public class CacheUtil {
             return null;
         }
         switch (column) {
-            case "UGO_ID":
-                return (String[]) instance().<String>getAsObjectList(UGO_SUG_KEY + "UGO_ID").toArray();
+            case "UGO_Code":
+                return (String[]) instance().<String>getAsObjectList(UGO_SUG_KEY + "UGO_Code").toArray();
             case "UGO_Address":
                 return (String[]) instance().<String>getAsObjectList(UGO_SUG_KEY + "UGO_Address").toArray();
             default:
@@ -80,9 +84,84 @@ public class CacheUtil {
     }
 
     public static void removeUGOSug() {
-        instance().remove(UGO_SUG_KEY + "UGO_ID");
+        instance().remove(UGO_SUG_KEY + "UGO_Code");
         instance().remove(UGO_SUG_KEY + "UGO_Address");
         SPUtils.put(UGO_SUG_KEY, false);
+    }
+
+    public static String getFileLocalPath(String fileID) {
+        return instance().getAsString(fileID);
+    }
+
+    public static void putFileLocalPath(String fileID, String localPath) {
+        instance().put(fileID, localPath);
+    }
+
+    public static void removeFileLocalPath(String fileID) {
+        instance().remove(fileID);
+    }
+
+    /**
+     * 删除本地已上传的的附件记录
+     */
+    public static void removeAttachRecord(String fileID) {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+        AttachmentRecord res = realm.where(AttachmentRecord.class)
+                .equalTo("fileID", fileID)
+                .findFirst();
+        if(res != null)
+            res.deleteFromRealm();
+        realm.commitTransaction();
+    }
+
+    /**
+     * 只保存未上传的附件记录到本地
+     * @param allRecord 所有附件记录
+     */
+    public static void saveAttachmentRecord(List<AttachmentRecord> allRecord, String parentID) {
+        if(allRecord.size() == 0)
+            return;
+        final List<AttachmentRecord> unUploadRecord = new ArrayList<>();
+        for(AttachmentRecord record : allRecord) {
+            if(record.atLocal && !record.hasUpload)
+                unUploadRecord.add(record);
+        }
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        RealmResults<AttachmentRecord> res = realm.where(AttachmentRecord.class)
+                .equalTo("parentID", parentID).findAll();
+        res.deleteAllFromRealm();
+        realm.copyToRealm(unUploadRecord);
+        realm.commitTransaction();
+    }
+
+    /**
+     *  根据附件记录所属的记录ID来返回该记录下的未上传附件
+     */
+    public static List<AttachmentRecord> getNotUploadAttachmentRecord(String parentID) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<AttachmentRecord> res = realm.where(AttachmentRecord.class)
+                .equalTo("parentID", parentID).findAll();
+        return realm.copyFromRealm(res);
+    }
+
+
+    /**
+     * 获取本地缓存的系统文件信息
+     */
+    public static List<SystemFileItem> getSystemFiles() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<SystemFileItem> res = realm.where(SystemFileItem.class).findAll();
+        return realm.copyFromRealm(res);
+    }
+
+    public static void saveSystemFiles(List<SystemFileItem> files) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.copyToRealm(files);
+        realm.commitTransaction();
     }
 
 }
