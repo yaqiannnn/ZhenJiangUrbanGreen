@@ -92,7 +92,7 @@ public class UgoListActivity extends BaseActivity {
     }
 
     private void initToolbar() {
-        toolbar.setTitle("养护对象列表");
+        toolbar.setTitle("绿化对象列表");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

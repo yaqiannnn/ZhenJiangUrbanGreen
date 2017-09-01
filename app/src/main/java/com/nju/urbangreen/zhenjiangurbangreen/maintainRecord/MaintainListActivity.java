@@ -72,7 +72,7 @@ public class MaintainListActivity extends BaseActivity {
     //初始化控件
     public void initViews() {
         ButterKnife.bind(this);
-        toolbar.setTitle("管养对象列表");
+        toolbar.setTitle("管养记录列表");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

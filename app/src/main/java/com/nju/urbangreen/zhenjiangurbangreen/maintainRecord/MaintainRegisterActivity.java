@@ -147,7 +147,7 @@ public class MaintainRegisterActivity extends BaseActivity {
     }
 
     private void initToolbar() {
-        toolbar.setTitle("养护记录登记");
+        toolbar.setTitle("管养记录登记");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

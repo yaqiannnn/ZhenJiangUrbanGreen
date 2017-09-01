@@ -39,7 +39,7 @@ public class UgoListAdapter extends RecyclerView.Adapter<UgoListAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         GreenObject ugObject = mUgoList.get(position);
-        holder.ugoIdName.setText(ugObject.UGO_ID + "/" + ugObject.UGO_Name);
+        holder.ugoIdName.setText(ugObject.UGO_Ucode + "/" + ugObject.UGO_Name);
         holder.ugoAddress.setText(ugObject.UGO_Address);
     }
 
