@@ -10,9 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -41,8 +44,8 @@ import butterknife.ButterKnife;
 
 public class UgoListActivity extends BaseActivity {
 
-    @BindView(R.id.add_ugo_title_bar)
-    TitleBarLayout addUgoTitleBarLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.recycler_ugo_list)
     RecyclerView recyclerUgoList;
     @BindView(R.id.swipe_refresh)
@@ -61,38 +64,45 @@ public class UgoListActivity extends BaseActivity {
         setContentView(R.layout.activity_ugo_list);
         ButterKnife.bind(this);
 
-        addUgoTitleBarLayout.setTitleText("养护对象列表");
-        addUgoTitleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+//        addUgoTitleBarLayout.setTitleText("养护对象列表");
+//        addUgoTitleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
 //                Intent intent = new Intent();
 //                intent.putExtra("selectUgoList", (Serializable) ugObjectList);
 //                setResult(RESULT_OK, intent);
-                writeToCache();
+//                writeToCache();
 //                CacheUtil.putUGOs(ugObjectList);
-                finish();
-            }
-        });
-        addUgoTitleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_add);
-        addUgoTitleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(UgoListActivity.this, SearchUgoActivity.class);
-                startActivityForResult(intent, 1);
-            }
-        });
+//                finish();
+//            }
+//        });
+//        addUgoTitleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_add);
+//        addUgoTitleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(UgoListActivity.this, SearchUgoActivity.class);
+//                startActivityForResult(intent, 1);
+//            }
+//        });
 //        initUgos();
+        initToolbar();
         initRecyclerView();
         readFromCache();
 //        CacheUtil.getUGOs();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (addUgoTitleBarLayout.recoverReceiver != null) {
-            unregisterReceiver(addUgoTitleBarLayout.recoverReceiver);
-        }
+    private void initToolbar() {
+        toolbar.setTitle("养护对象列表");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                writeToCache();
+                finish();
+            }
+        });
     }
 
     @Override
@@ -183,6 +193,24 @@ public class UgoListActivity extends BaseActivity {
                 refreshUgos();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar_ugo_list, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add_ugo:
+                Intent intent = new Intent(UgoListActivity.this, SearchUgoActivity.class);
+                startActivityForResult(intent, 1);
+                break;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void writeToCache() {

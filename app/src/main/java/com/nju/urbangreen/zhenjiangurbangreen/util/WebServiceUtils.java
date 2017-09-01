@@ -55,6 +55,7 @@ public class WebServiceUtils {
     public static final String Check_Update = "CheckUpdate";
     public static final String Login = "Login";
     public static final String Get_Maintain_Record = "GetMaintainRecord";
+    public static final String Add_Maintain_Record = "AddMaintainRecord";
     public static final String Get_UGO_Info_Except_ST = "GetUGOInfoExceptST";//ST表示行道树
     public static final String Get_Near_Street_Tree = "GetNearStreetTree";
     public static final String GET_UGO_Suggest = "GetUGOSuggest";
@@ -225,6 +226,37 @@ public class WebServiceUtils {
             }
             return null;
         }
+    }
+
+
+    public static void AddMaintainRecord(Maintain maintainObject){
+
+    }
+
+    public static void AddMaintainRecord(String[] errorMessage,String type,String date,String staff,String UGO_ID,String content) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("type", type);
+        params.put("date",date);
+        params.put("staff",staff);
+        params.put("UGO_ID",UGO_ID);
+        params.put("content",content);
+
+//        Map<String, Object> results = callMethod(Check_Update, params);
+//        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+//            String jsonResults = results.get(KEY_RESULT).toString();
+//            return gson.fromJson(jsonResults, new TypeToken<Map<String, Object>>() {
+//            }.getType());
+//        } else {
+//            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+//                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+//                Log.i("错误消息", "checkUpdate: " + errorMessage[0]);
+//            }
+//            return null;
+//        }
+
     }
 
     public static List<GreenObject> getUGOInfoExceptST(String[] errorMessage) {

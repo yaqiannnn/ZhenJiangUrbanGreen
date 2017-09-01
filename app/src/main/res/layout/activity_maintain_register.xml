@@ -170,14 +170,14 @@
             </TableLayout>
             <android.support.v7.widget.AppCompatButton
                 android:background="@drawable/button_shape"
-                android:id="@+id/btn_maintain_register_add_files"
+                android:id="@+id/btn_maintain_register_submit"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="8dp"
-                android:text="上传"
+                android:text="提交"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>

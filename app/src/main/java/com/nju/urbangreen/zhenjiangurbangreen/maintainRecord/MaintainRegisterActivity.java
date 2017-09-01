@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,12 +20,16 @@ import android.widget.Toast;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.ugo.UgoListActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.util.ACache;
+import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,12 +50,14 @@ public class MaintainRegisterActivity extends BaseActivity {
     TableLayout lyMaintainInfoTable;
     @BindView(R.id.Toolbar)
     Toolbar toolbar;
-    @BindView(R.id.btn_maintain_register_add_files)
-    AppCompatButton btnUpload;
+    @BindView(R.id.btn_maintain_register_submit)
+    AppCompatButton btnMaintainRegisterSubmit;
+
 
     public DatePickerDialog dtpckMaintainDate;
     private Maintain myObject;
     private int updateState;
+    private String ugoIds;
 
     public static int CLICK_BACK_BUTTON = 0;
     public static int CLICK_UPLOAD_BUTTON = 1;
@@ -174,30 +181,35 @@ public class MaintainRegisterActivity extends BaseActivity {
         etMaintainDate.setText(year + "-" + (month + 1) + "-" + day);
     }
 
-    //上传表单
+    //上传（提交）表单
     private void upload() {
-        btnUpload.setOnClickListener(new View.OnClickListener() {
+        btnMaintainRegisterSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (validateEmpty(CLICK_UPLOAD_BUTTON)) {
-                    DoUpload();
+                    outputObject();
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            WebServiceUtils.AddMaintainRecord(myObject);
+                        }
+                    });
                 }
                 //如果成功，返回上一级，否则提示错误信息
             }
         });
     }
 
-    //执行上传操作
-    private void DoUpload() {
 
+    private void outputObject() {
+        myObject.MR_MaintainType = dropdownMaintainType.getText();
+        myObject.MR_MaintainDate = etMaintainDate.getText().toString();
+        myObject.MR_MaintainStaff = etMaintainStaff.getText().toString();
+        myObject.MR_MaintainContent = etMaintainContent.getText().toString();
+        myObject.UGO_IDs=getUGOIDs();
     }
 
-    private void outputObject(){
-        myObject.MR_MaintainType=dropdownMaintainType.getText();
-        myObject.MR_MaintainDate=etMaintainDate.getText().toString();
-        myObject.MR_MaintainStaff=etMaintainStaff.getText().toString();
-        myObject.MR_MaintainContent=etMaintainContent.getText().toString();
-    }
 
     //验证是否为空
     private boolean validateEmpty(int flag) {
@@ -248,6 +260,24 @@ public class MaintainRegisterActivity extends BaseActivity {
         } else {
             Toast.makeText(this, "有必填项为空，无法提交", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    //从缓存中读取相关对象
+    private String getUGOIDs() {
+        ACache mCache = ACache.get(this);
+        List<GreenObject> ugoSelectedList = mCache.getAsObjectList("ugo_select");
+        StringBuilder builder = new StringBuilder();
+
+        if (ugoSelectedList != null) {
+            for (GreenObject o : ugoSelectedList) {
+                if (builder.length() != 0) {
+                    builder.append(",");
+                }
+                builder.append(o.UGO_ID);
+            }
+            Log.d("tag", builder.toString());
+        }
+        return builder.toString();
     }
 
 }
