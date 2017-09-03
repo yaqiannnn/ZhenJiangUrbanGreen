@@ -100,17 +100,8 @@ public class MaintainListActivity extends BaseActivity {
         swipeToLoadLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<Maintain> tempList= getMaintainList(page, 8);
-//                        Log.d("tag",page+"");
-//                        for(Maintain o : tempList){
-//                            Log.d("tag",o.MR_Code);
-//                        }
-                        page++;
-                    }
-                }).start();
+                List<Maintain> tempList = getMaintainList(page, 8);
+                page++;
             }
         });
     }
@@ -133,7 +124,7 @@ public class MaintainListActivity extends BaseActivity {
                 query.put("page", 1);
                 query.put("limit", 8);
                 maintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
-                Log.d("tag",maintainList.size()+"");
+                Log.d("tag", maintainList.size() + "");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -155,7 +146,7 @@ public class MaintainListActivity extends BaseActivity {
                 query.put("limit", limit);
                 List newMaintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
                 maintainList.addAll(newMaintainList);
-                Log.d("tag",maintainList.size()+"");
+                Log.d("tag", maintainList.size() + "");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

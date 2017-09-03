@@ -26,6 +26,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.util.ACache;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -55,7 +56,7 @@ public class MaintainRegisterActivity extends BaseActivity {
 
 
     public DatePickerDialog dtpckMaintainDate;
-    private Maintain myObject;
+    private Maintain maintainObject;
     private int updateState;
     private String ugoIds;
 
@@ -66,19 +67,16 @@ public class MaintainRegisterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        if (intent.getSerializableExtra("MaintainInfo") == null) {
-            //todo add new Object
-//            myObject=new Maintain("保存时自动生成","MR201701030002");
-        } else
-            myObject = (Maintain) intent.getSerializableExtra("MaintainInfo");
-
-
+//        Intent intent = getIntent();
+//        if (intent.getSerializableExtra("MaintainInfo") == null) {
+//            //todo add new Object
+////            myObject=new Maintain("保存时自动生成","MR201701030002");
+//        } else
+//            myObject = (Maintain) intent.getSerializableExtra("MaintainInfo");
         setContentView(R.layout.activity_maintain_register);
         ButterKnife.bind(this);
 //        tvMaintainID.setText(myObject.getID());
 //        tvMaintainCode.setText(myObject.getCode());
-
         initToolbar();
 
         ArrayList<String> dropdownList = new ArrayList<>();
@@ -87,7 +85,7 @@ public class MaintainRegisterActivity extends BaseActivity {
 //        dropdownMaintainType.setText(myObject.getMaintainType());
 
         initDatePicker();
-
+        getMaintainObject();
         upload();
 
 //        etMaintainStaff.setText(myObject.getMaintainStaff());
@@ -116,6 +114,18 @@ public class MaintainRegisterActivity extends BaseActivity {
 //                updateState = 1;
 //            }
 //        });
+    }
+
+    private void getMaintainObject() {
+        Intent intent = getIntent();
+        Serializable serializableObject = intent.getSerializableExtra("maintain_object");
+        if(serializableObject!=null){
+            maintainObject = (Maintain)serializableObject;
+            dropdownMaintainType.setText(maintainObject.MR_MaintainType);
+            etMaintainDate.setText(maintainObject.MR_MaintainDate);
+            etMaintainStaff.setText(maintainObject.MR_MaintainStaff);
+            etMaintainContent.setText(maintainObject.MR_MaintainContent);
+        }
     }
 
 
@@ -192,7 +202,7 @@ public class MaintainRegisterActivity extends BaseActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            WebServiceUtils.AddMaintainRecord(myObject);
+                            WebServiceUtils.AddMaintainRecord(maintainObject);
                         }
                     });
                 }
@@ -203,11 +213,11 @@ public class MaintainRegisterActivity extends BaseActivity {
 
 
     private void outputObject() {
-        myObject.MR_MaintainType = dropdownMaintainType.getText();
-        myObject.MR_MaintainDate = etMaintainDate.getText().toString();
-        myObject.MR_MaintainStaff = etMaintainStaff.getText().toString();
-        myObject.MR_MaintainContent = etMaintainContent.getText().toString();
-        myObject.UGO_IDs=getUGOIDs();
+        maintainObject.MR_MaintainType = dropdownMaintainType.getText();
+        maintainObject.MR_MaintainDate = etMaintainDate.getText().toString();
+        maintainObject.MR_MaintainStaff = etMaintainStaff.getText().toString();
+        maintainObject.MR_MaintainContent = etMaintainContent.getText().toString();
+        maintainObject.UGO_IDs=getUGOIDs();
     }
 
 

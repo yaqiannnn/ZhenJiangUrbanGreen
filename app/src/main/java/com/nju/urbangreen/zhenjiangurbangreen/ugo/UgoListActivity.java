@@ -64,31 +64,9 @@ public class UgoListActivity extends BaseActivity {
         setContentView(R.layout.activity_ugo_list);
         ButterKnife.bind(this);
 
-//        addUgoTitleBarLayout.setTitleText("养护对象列表");
-//        addUgoTitleBarLayout.setBtnBackClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent();
-//                intent.putExtra("selectUgoList", (Serializable) ugObjectList);
-//                setResult(RESULT_OK, intent);
-//                writeToCache();
-//                CacheUtil.putUGOs(ugObjectList);
-//                finish();
-//            }
-//        });
-//        addUgoTitleBarLayout.setBtnSelfDefBkg(R.drawable.ic_btn_self_def_add);
-//        addUgoTitleBarLayout.setBtnSelfDefClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(UgoListActivity.this, SearchUgoActivity.class);
-//                startActivityForResult(intent, 1);
-//            }
-//        });
-//        initUgos();
         initToolbar();
         initRecyclerView();
         readFromCache();
-//        CacheUtil.getUGOs();
     }
 
     private void initToolbar() {

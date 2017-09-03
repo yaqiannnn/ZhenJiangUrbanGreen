@@ -18,7 +18,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.settings.SystemFileActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
-public class NaviActivity extends BaseActivity implements View.OnClickListener{
+public class NaviActivity extends AppCompatActivity implements View.OnClickListener{
 
     @BindView(R.id.ly_navi_title_bar)
     public TitleBarLayout titleBarLayout;
