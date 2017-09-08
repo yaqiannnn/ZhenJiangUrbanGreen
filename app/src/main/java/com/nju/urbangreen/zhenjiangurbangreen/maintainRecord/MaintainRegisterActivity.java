@@ -59,6 +59,7 @@ public class MaintainRegisterActivity extends BaseActivity {
     private Maintain maintainObject;
     private int updateState;
     private String ugoIds;
+    private String maintainId;
 
     public static int CLICK_BACK_BUTTON = 0;
     public static int CLICK_UPLOAD_BUTTON = 1;
@@ -119,12 +120,13 @@ public class MaintainRegisterActivity extends BaseActivity {
     private void getMaintainObject() {
         Intent intent = getIntent();
         Serializable serializableObject = intent.getSerializableExtra("maintain_object");
-        if(serializableObject!=null){
-            maintainObject = (Maintain)serializableObject;
+        if (serializableObject != null) {
+            maintainObject = (Maintain) serializableObject;
             dropdownMaintainType.setText(maintainObject.MR_MaintainType);
             etMaintainDate.setText(maintainObject.MR_MaintainDate);
             etMaintainStaff.setText(maintainObject.MR_MaintainStaff);
             etMaintainContent.setText(maintainObject.MR_MaintainContent);
+            maintainId = maintainObject.MR_ID;
         }
     }
 
@@ -140,10 +142,14 @@ public class MaintainRegisterActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.attachment:
                 Intent intent = new Intent(MaintainRegisterActivity.this, AttachmentListActivity.class);
+                if (maintainId != null)
+                    intent.putExtra("id", maintainId);
                 startActivity(intent);
                 break;
             case R.id.greenObjects:
                 Intent intent2 = new Intent(MaintainRegisterActivity.this, UgoListActivity.class);
+                if(maintainId !=null)
+                    intent2.putExtra("id",maintainId);
                 startActivity(intent2);
                 break;
             default:
@@ -217,7 +223,7 @@ public class MaintainRegisterActivity extends BaseActivity {
         maintainObject.MR_MaintainDate = etMaintainDate.getText().toString();
         maintainObject.MR_MaintainStaff = etMaintainStaff.getText().toString();
         maintainObject.MR_MaintainContent = etMaintainContent.getText().toString();
-        maintainObject.UGO_IDs=getUGOIDs();
+        maintainObject.UGO_IDs = getUGOIDs();
     }
 
 

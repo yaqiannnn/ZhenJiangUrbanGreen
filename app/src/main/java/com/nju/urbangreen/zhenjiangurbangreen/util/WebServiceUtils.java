@@ -56,6 +56,7 @@ public class WebServiceUtils {
     public static final String Check_Update = "CheckUpdate";
     public static final String Login = "Login";
     public static final String Get_Maintain_Record = "GetMaintainRecord";
+    public static final String Get_Maintain_Record_UGO = "GetMaintainRecordUGO";
     public static final String Add_Maintain_Record = "AddMaintainRecord";
     public static final String Get_UGO_Info_Except_ST = "GetUGOInfoExceptST";//ST表示行道树
     public static final String Get_Near_Street_Tree = "GetNearStreetTree";
@@ -230,6 +231,26 @@ public class WebServiceUtils {
             }
             return null;
         }
+    }
+
+    public static List<GreenObject> GetMaintainRecordUGO(String record_id,String[] errorMessage){
+        if(is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", record_id);
+        Map<String, Object> results = callMethod(Get_Record_Attachment, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<AttachmentRecord.AttachmentRecordInDB>>(){}.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get Attachment Info: " + errorMessage[0]);
+            }
+            return null;
+        }
+
     }
     public static  List<Message> getAllMessages(String[] errorMessage, String UserName, Boolean isRead){
         if (is_offline()) {

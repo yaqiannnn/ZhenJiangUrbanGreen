@@ -1,5 +1,6 @@
 package com.nju.urbangreen.zhenjiangurbangreen.maintainRecord;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
@@ -90,17 +92,12 @@ public class MaintainListActivity extends BaseActivity {
             }
         });
 
-        swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-            }
-        });
+        swipeToLoadLayout.setRefreshEnabled(false);
 
         swipeToLoadLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                List<Maintain> tempList = getMaintainList(page, 8);
+                getMaintainList(page, 8);
                 page++;
             }
         });
@@ -116,6 +113,10 @@ public class MaintainListActivity extends BaseActivity {
 
     //获得列表第一页数据
     private void getMaintainList() {
+        final ProgressDialog loading = new ProgressDialog(this);
+        loading.setMessage("加载数据中，请稍候...");
+        loading.show();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -124,10 +125,13 @@ public class MaintainListActivity extends BaseActivity {
                 query.put("page", 1);
                 query.put("limit", 8);
                 maintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
-                Log.d("tag", maintainList.size() + "");
+
+//                Log.d("tag", maintainList.size() + "");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        loading.dismiss();
                         initRecyclerView();
                     }
                 });
@@ -144,18 +148,25 @@ public class MaintainListActivity extends BaseActivity {
                 String[] errMsg = new String[1];
                 query.put("page", page);
                 query.put("limit", limit);
-                List newMaintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
-                maintainList.addAll(newMaintainList);
-                Log.d("tag", maintainList.size() + "");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter2.notifyDataSetChanged();
-                        swipeToLoadLayout.setLoadingMore(false);
-                    }
-                });
+                final List newMaintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
+                if (newMaintainList != null) {
+                    maintainList.addAll(newMaintainList);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter2.notifyDataSetChanged();
+                            swipeToLoadLayout.setLoadingMore(false);
+                            if (newMaintainList.size() < limit) {
+                                swipeToLoadLayout.setLoadMoreEnabled(false);
+                                Toast.makeText(MaintainListActivity.this, "加载完毕", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+
+
             }
-        });
+        }).start();
         return maintainList;
     }
 
