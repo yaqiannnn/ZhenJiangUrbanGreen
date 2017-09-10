@@ -56,6 +56,7 @@ public class UgoListActivity extends BaseActivity {
     private UgoListAdapter adapter;
     private ProgressDialog progressDialog;
     private MultipleAdapter multipleAdapter;
+    private String maintainId;
 
 
     @Override
@@ -66,7 +67,15 @@ public class UgoListActivity extends BaseActivity {
 
         initToolbar();
         initRecyclerView();
-        readFromCache();
+
+        Intent intent = getIntent();
+        maintainId = intent.getStringExtra("id");
+
+        if (maintainId != null) {
+            initUgos();
+        } else {
+            readFromCache();
+        }
     }
 
     private void initToolbar() {
@@ -129,17 +138,29 @@ public class UgoListActivity extends BaseActivity {
             public void run() {
                 String[] errMsg = new String[1];
                 try {
-                    ugObjectList = WebServiceUtils.getUGOInfoExceptST(errMsg);
-                    Log.d("test", ugObjectList + "");
+                    List<GreenObject> tempList = WebServiceUtils.GetMaintainRecordUGO(maintainId, errMsg);
+                    if (tempList != null) {
+                        ugObjectList.addAll(tempList);
+                        multipleAdapter.notifyDataSetChanged();
+                        readFromCache();
+                    }
+//                    Log.d("test", ugObjectList + "");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                progressDialog.dismiss();
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        progressDialog.dismiss();
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                });
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initRecyclerView();
+                        progressDialog.dismiss();
+//                        initRecyclerView();
+
                     }
                 });
             }
@@ -181,7 +202,7 @@ public class UgoListActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.add_ugo:
                 Intent intent = new Intent(UgoListActivity.this, SearchUgoActivity.class);
                 startActivityForResult(intent, 1);

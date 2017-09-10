@@ -239,10 +239,10 @@ public class WebServiceUtils {
         }
         Map<String, Object> params = new HashMap<>();
         params.put("id", record_id);
-        Map<String, Object> results = callMethod(Get_Record_Attachment, params);
+        Map<String, Object> results = callMethod(Get_Maintain_Record_UGO, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<AttachmentRecord.AttachmentRecordInDB>>(){}.getType());
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>(){}.getType());
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
