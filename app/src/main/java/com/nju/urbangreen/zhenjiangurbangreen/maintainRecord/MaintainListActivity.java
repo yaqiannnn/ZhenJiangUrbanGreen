@@ -56,6 +56,7 @@ public class MaintainListActivity extends BaseActivity {
     @BindView(R.id.swipe_load_more_footer)
     LoadMoreFooterView swipeLoadMoreFooter;
 
+    public static final int GET_REGISTER_RESULT = 1;
     private MaintainListAdapter2 adapter2;
     private List<Maintain> maintainList = new ArrayList<>();
     private int page = 2;
@@ -67,9 +68,22 @@ public class MaintainListActivity extends BaseActivity {
         setContentView(R.layout.activity_maintain_list);
         ButterKnife.bind(this);
         initViews();
+        initRecyclerView();
         getMaintainList();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case GET_REGISTER_RESULT:
+                if(resultCode == RESULT_OK){
+                    getMaintainList();
+                }
+                break;
+            default:
+        }
+
+    }
 
     //初始化控件
     public void initViews() {
@@ -88,11 +102,17 @@ public class MaintainListActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MaintainListActivity.this, MaintainRegisterActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, GET_REGISTER_RESULT);
             }
         });
 
-        swipeToLoadLayout.setRefreshEnabled(false);
+//        swipeToLoadLayout.setRefreshEnabled(false);
+        swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMaintainList();
+            }
+        });
 
         swipeToLoadLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -124,15 +144,19 @@ public class MaintainListActivity extends BaseActivity {
                 String[] errMsg = new String[1];
                 query.put("page", 1);
                 query.put("limit", 8);
-                maintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
+                List<Maintain> tempList = WebServiceUtils.getMaintainRecord(query, errMsg);
+                if (tempList != null) {
+                    maintainList.clear();
+                    maintainList.addAll(tempList);
+                }
 
-//                Log.d("tag", maintainList.size() + "");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
                         loading.dismiss();
-                        initRecyclerView();
+                        adapter2.notifyDataSetChanged();
+                        swipeToLoadLayout.setRefreshing(false);
                     }
                 });
             }
@@ -148,7 +172,7 @@ public class MaintainListActivity extends BaseActivity {
                 String[] errMsg = new String[1];
                 query.put("page", page);
                 query.put("limit", limit);
-                final List newMaintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
+                final List<Maintain> newMaintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
                 if (newMaintainList != null) {
                     maintainList.addAll(newMaintainList);
                     runOnUiThread(new Runnable() {
@@ -163,8 +187,6 @@ public class MaintainListActivity extends BaseActivity {
                         }
                     });
                 }
-
-
             }
         }).start();
         return maintainList;
