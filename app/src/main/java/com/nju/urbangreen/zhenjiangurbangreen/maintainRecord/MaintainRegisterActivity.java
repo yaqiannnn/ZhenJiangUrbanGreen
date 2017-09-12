@@ -122,6 +122,7 @@ public class MaintainRegisterActivity extends BaseActivity {
         Serializable serializableObject = intent.getSerializableExtra("maintain_object");
         if (serializableObject != null) {
             maintainObject = (Maintain) serializableObject;
+            tvMaintainID.setText(maintainObject.MR_ID);
             dropdownMaintainType.setText(maintainObject.MR_MaintainType);
             etMaintainDate.setText(maintainObject.MR_MaintainDate);
             etMaintainStaff.setText(maintainObject.MR_MaintainStaff);
@@ -148,8 +149,8 @@ public class MaintainRegisterActivity extends BaseActivity {
                 break;
             case R.id.greenObjects:
                 Intent intent2 = new Intent(MaintainRegisterActivity.this, UgoListActivity.class);
-                if(maintainId !=null)
-                    intent2.putExtra("id",maintainId);
+                if (maintainId != null)
+                    intent2.putExtra("id", maintainId);
                 startActivity(intent2);
                 break;
             default:
@@ -202,27 +203,54 @@ public class MaintainRegisterActivity extends BaseActivity {
         btnMaintainRegisterSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final String[] errMsg = new String[1];
                 if (validateEmpty(CLICK_UPLOAD_BUTTON)) {
                     outputObject();
 
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            WebServiceUtils.AddMaintainRecord(maintainObject);
+                            final Boolean res;
+                            if (tvMaintainID.getText() == "") {
+                                res = WebServiceUtils.AddMaintainRecord(errMsg, maintainObject);
+                            } else {
+                                res = WebServiceUtils.UpdateMaintainRecord(errMsg, maintainObject);
+                            }
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (res) {
+                                        Toast.makeText(MaintainRegisterActivity.this, "上传成功!", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent();
+                                        intent.putExtra("upload_status",true);
+                                        setResult(RESULT_OK,intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(MaintainRegisterActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
-                    });
+                    }
+                    ).start();
                 }
-                //如果成功，返回上一级，否则提示错误信息
             }
         });
     }
 
 
     private void outputObject() {
+        maintainObject = new Maintain();
         maintainObject.MR_MaintainType = dropdownMaintainType.getText();
         maintainObject.MR_MaintainDate = etMaintainDate.getText().toString();
         maintainObject.MR_MaintainStaff = etMaintainStaff.getText().toString();
-        maintainObject.MR_MaintainContent = etMaintainContent.getText().toString();
+        if (etMaintainContent.getText() != null) {
+            maintainObject.MR_MaintainContent = etMaintainContent.getText().toString();
+        }
+        if(tvMaintainID.getText()!=null){
+            maintainObject.MR_ID = tvMaintainID.getText().toString();
+        }
         maintainObject.UGO_IDs = getUGOIDs();
     }
 
