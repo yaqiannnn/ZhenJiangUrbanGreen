@@ -21,6 +21,7 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.LoadMoreFooterView;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.RefreshHeaderView;
@@ -70,6 +71,12 @@ public class MaintainListActivity extends BaseActivity {
         initViews();
         initRecyclerView();
         getMaintainList();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        CacheUtil.removeRelatedUgos();
     }
 
     @Override

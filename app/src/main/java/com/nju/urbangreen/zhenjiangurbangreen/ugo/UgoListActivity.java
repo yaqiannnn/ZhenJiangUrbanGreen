@@ -2,40 +2,28 @@ package com.nju.urbangreen.zhenjiangurbangreen.ugo;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.goyourfly.multiple.adapter.MultipleAdapter;
 import com.goyourfly.multiple.adapter.MultipleSelect;
-import com.goyourfly.multiple.adapter.StateChangeListener;
 import com.goyourfly.multiple.adapter.menu.SimpleDeleteMenuBar;
 import com.goyourfly.multiple.adapter.viewholder.view.CheckBoxFactory;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
-import com.nju.urbangreen.zhenjiangurbangreen.search.SearchActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ACache;
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
-import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +45,7 @@ public class UgoListActivity extends BaseActivity {
     private ProgressDialog progressDialog;
     private MultipleAdapter multipleAdapter;
     private String maintainId;
+    ACache mCache;
 
 
     @Override
@@ -70,12 +59,14 @@ public class UgoListActivity extends BaseActivity {
 
         Intent intent = getIntent();
         maintainId = intent.getStringExtra("id");
+//        mCache = ACache.get(this);
 
-        if (maintainId != null) {
-            initUgos();
-        } else {
-            readFromCache();
+        if (CacheUtil.hasRelatedUgos() && maintainId !=null) {
+            getUgosFromCache();
+        } else if (maintainId != null) {
+            getUgosFromWeb();
         }
+
     }
 
     private void initToolbar() {
@@ -86,7 +77,8 @@ public class UgoListActivity extends BaseActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeToCache();
+                CacheUtil.putRelatedUgos(ugObjectList);
+//                mCache.put("ugo_select", ugObjectList.toArray());
                 finish();
             }
         });
@@ -128,44 +120,40 @@ public class UgoListActivity extends BaseActivity {
         }).start();
     }
 
-    //本函数在从服务端获取数据时有用
-    private void initUgos() {
+    //从服务端获取数据
+    private void getUgosFromWeb() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("正在加载列表");
         progressDialog.show();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 String[] errMsg = new String[1];
-                try {
-                    List<GreenObject> tempList = WebServiceUtils.GetMaintainRecordUGO(maintainId, errMsg);
-                    if (tempList != null) {
-                        ugObjectList.addAll(tempList);
-                        multipleAdapter.notifyDataSetChanged();
-                        readFromCache();
-                    }
-//                    Log.d("test", ugObjectList + "");
-                } catch (Exception e) {
-                    e.printStackTrace();
+                List<GreenObject> tempList = WebServiceUtils.GetMaintainRecordUGO(maintainId, errMsg);
+                if (tempList != null) {
+                    ugObjectList.addAll(tempList);
                 }
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        progressDialog.dismiss();
-//                        adapter.notifyDataSetChanged();
-//                    }
-//                });
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        multipleAdapter.notifyDataSetChanged();
                         progressDialog.dismiss();
-//                        initRecyclerView();
-
                     }
                 });
             }
         }).start();
 
+    }
+
+    //从cache获取数据
+    private void getUgosFromCache() {
+        List<GreenObject> tempList = CacheUtil.getRelatedUgos();
+        if (tempList != null) {
+            ugObjectList.addAll(tempList);
+            multipleAdapter.notifyDataSetChanged();
+        }
     }
 
     private void initRecyclerView() {
@@ -212,17 +200,7 @@ public class UgoListActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void writeToCache() {
-        ACache mCache = ACache.get(this);
-        mCache.put("ugo_select", ugObjectList.toArray());
-    }
-
-    private void readFromCache() {
-        ACache mCache = ACache.get(this);
-        List<GreenObject> tempList = mCache.getAsObjectList("ugo_select");
-        if (tempList != null) {
-            ugObjectList.addAll(tempList);
-            multipleAdapter.notifyDataSetChanged();
-        }
+    private boolean hasCache() {
+        return mCache.getAsObjectList("ugo_select") != null;
     }
 }

@@ -60,7 +60,7 @@ public class MaintainListAdapter2 extends RecyclerView.Adapter<BaseItemViewHolde
 
     private void resolveClick(BaseItemViewHolder viewHolder, View view) {
         int position = viewHolder.getAdapterPosition();
-        Toast.makeText(view.getContext(), position + "", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(view.getContext(), position + "", Toast.LENGTH_SHORT).show();
         Maintain maintain = maintainList.get(position);
 
         Intent intent = new Intent(view.getContext(), MaintainRegisterActivity.class);

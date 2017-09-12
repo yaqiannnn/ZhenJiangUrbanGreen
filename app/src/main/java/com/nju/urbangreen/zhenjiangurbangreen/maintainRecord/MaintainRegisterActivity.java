@@ -23,6 +23,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.ugo.UgoListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ACache;
+import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText;
 
@@ -63,6 +64,7 @@ public class MaintainRegisterActivity extends BaseActivity {
 
     public static int CLICK_BACK_BUTTON = 0;
     public static int CLICK_UPLOAD_BUTTON = 1;
+    private static final String TAG = "MaintainRegisterActivit";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -308,8 +310,9 @@ public class MaintainRegisterActivity extends BaseActivity {
 
     //从缓存中读取相关对象
     private String getUGOIDs() {
-        ACache mCache = ACache.get(this);
-        List<GreenObject> ugoSelectedList = mCache.getAsObjectList("ugo_select");
+//        ACache mCache = ACache.get(this);
+//        List<GreenObject> ugoSelectedList = mCache.getAsObjectList("ugo_select");
+        List<GreenObject> ugoSelectedList = CacheUtil.getRelatedUgos();
         StringBuilder builder = new StringBuilder();
 
         if (ugoSelectedList != null) {
