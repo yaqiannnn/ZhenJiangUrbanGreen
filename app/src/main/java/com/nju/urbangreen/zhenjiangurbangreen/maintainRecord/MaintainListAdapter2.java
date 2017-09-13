@@ -1,13 +1,16 @@
 package com.nju.urbangreen.zhenjiangurbangreen.maintainRecord;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
+import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseItemViewHolder;
 
 import java.util.List;
 
@@ -15,25 +18,39 @@ import java.util.List;
  * Created by tommy on 2017/8/17.
  */
 
-public class MaintainListAdapter2 extends RecyclerView.Adapter<MaintainListAdapter2.ViewHolder> {
+public class MaintainListAdapter2 extends RecyclerView.Adapter<BaseItemViewHolder>{
     private List<Maintain> maintainList;
+//    private BaseItemViewHolder viewHolder;
 
     public MaintainListAdapter2(List<Maintain> maintainList) {
         this.maintainList = maintainList;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+    public BaseItemViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_list_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        final BaseItemViewHolder viewHolder = new BaseItemViewHolder(view);
+        viewHolder.itemTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resolveClick(viewHolder,view);
+            }
+        });
+        viewHolder.itemContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resolveClick(viewHolder,view);
+            }
+        });
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(BaseItemViewHolder viewHolder, int i) {
         Maintain maintain = maintainList.get(i);
-        viewHolder.maintainCodeType.setText(maintain.MR_Code + "/" + maintain.MR_MaintainType);
-        viewHolder.maintainContent.setText(maintain.MR_MaintainContent);
+        viewHolder.itemTitle.setText(maintain.MR_Code + "/" + maintain.MR_MaintainType);
+        viewHolder.itemContent.setText(maintain.MR_MaintainContent);
+
     }
 
     @Override
@@ -41,16 +58,14 @@ public class MaintainListAdapter2 extends RecyclerView.Adapter<MaintainListAdapt
         return maintainList.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        View maintainView;
-        EditText maintainCodeType;
-        EditText maintainContent;
+    private void resolveClick(BaseItemViewHolder viewHolder, View view) {
+        int position = viewHolder.getAdapterPosition();
+//        Toast.makeText(view.getContext(), position + "", Toast.LENGTH_SHORT).show();
+        Maintain maintain = maintainList.get(position);
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            maintainView = itemView;
-            maintainCodeType = (EditText) itemView.findViewById(R.id.recycler_title);
-            maintainContent = (EditText) itemView.findViewById(R.id.recycler_content);
-        }
+        Intent intent = new Intent(view.getContext(), MaintainRegisterActivity.class);
+        intent.putExtra("maintain_object", maintain);
+
+        view.getContext().startActivity(intent);
     }
 }
