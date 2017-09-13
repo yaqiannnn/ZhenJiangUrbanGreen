@@ -1,13 +1,16 @@
 package com.nju.urbangreen.zhenjiangurbangreen.message;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,11 +32,13 @@ import butterknife.ButterKnife;
  */
 
 public class MessageListActivity extends BaseActivity {
-   @BindView(R.id.Toolbar_simple)
+    @BindView(R.id.Toolbar_simple)
     public Toolbar toolbar;
     public TitleBarLayout titleBarLayout;//标题栏
+    @BindView(R.id.list)
+    ListView listView;
 
-    private List<Message> messageList=new ArrayList<>();
+    private List<Message> messageList = new ArrayList<>();
     AlertDialog viewMessageDialog;
     AlertDialog deleteDialog;
     MessageAdapter adapter;
@@ -46,7 +51,7 @@ public class MessageListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_main_activity);
         ButterKnife.bind(this);
-       // setTitleBarLayout();
+        // setTitleBarLayout();
         initToolbar();
         spinner = (Spinner) findViewById(R.id.message_spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -54,18 +59,18 @@ public class MessageListActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
 
-                TextView tv = (TextView)view;
-                tv.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
+                TextView tv = (TextView) view;
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
                 String[] languages = getResources().getStringArray(R.array.messageTypeDropList);
-                if(pos==0){
-                    readflag=true;
+                if (pos == 0) {
+                    readflag = true;
                     getMessageList(readflag);
-                }
-                else{
-                    readflag=false;
+                } else {
+                    readflag = false;
                     getMessageList(readflag);
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Another interface callback
@@ -74,6 +79,7 @@ public class MessageListActivity extends BaseActivity {
 
 
     }
+
     public void setTitleBarLayout() {
         //初始化TitleBarLayout
         titleBarLayout.setTitleText("xiaoxi");
@@ -113,12 +119,16 @@ public class MessageListActivity extends BaseActivity {
             @Override
             public void run() {
                 String[] errMsg = new String[1];
-                messageList = WebServiceUtils.getAllMessages(errMsg,"xk",readflag);
+                messageList = WebServiceUtils.getAllMessages(errMsg, "xk", readflag);
                 //messageList = WebServiceUtils.getAllMessages(errMsg,SPUtils.getString("username", ""),true);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initListView(readflag);
+                        if (messageList == null) {
+                            initEmptyListView();
+                        } else {
+                            initListView(readflag);
+                        }
                     }
                 });
             }
@@ -126,32 +136,38 @@ public class MessageListActivity extends BaseActivity {
     }
 
     private void initListView(final boolean readflag) {
-        MessageAdapter adapter=new MessageAdapter(MessageListActivity.this, R.layout.message_list_item,messageList);
-        ListView listview=(ListView)findViewById(R.id.list);
-        swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.swipe_refresh);
+        MessageAdapter adapter = new MessageAdapter(MessageListActivity.this, R.layout.message_list_item, messageList);
+        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeColors(2);
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
-            public void onRefresh(){
+            public void onRefresh() {
                 refreshMessage(readflag);
             }
         });
-        listview.setAdapter(adapter);
+        listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        listview.setOnItemClickListener(new MessageListOnItemClickListener());
-        listview.setOnItemLongClickListener(new MessageListOnItemLongClickListener());
+        listView.setOnItemClickListener(new MessageListOnItemClickListener());
+        listView.setOnItemLongClickListener(new MessageListOnItemLongClickListener());
+    }
+
+    private void initEmptyListView() {
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,new String[]{"没有内容"});
+        listView.setAdapter(adapter);
     }
 
 
-    private void refreshMessage(final boolean readflag){
+    private void refreshMessage(final boolean readflag) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
+                try {
                     Thread.sleep(1000);
 
-                }catch (InterruptedException e){
-                    e.printStackTrace();;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    ;
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -180,7 +196,7 @@ public class MessageListActivity extends BaseActivity {
             tmp.findViewById(R.id.title_delete).setVisibility(View.GONE);
 
             final Message message = messageList.get(position);
-            String time= message.getQM_CreateTime().substring(0,19).replace("T"," ");
+            String time = message.getQM_CreateTime().substring(0, 19).replace("T", " ");
             TextView textView1 = (TextView) tmp.findViewById(R.id.Time);
             textView1.setText(time);
             TextView textView2 = (TextView) tmp.findViewById(R.id.Sender);
@@ -199,19 +215,18 @@ public class MessageListActivity extends BaseActivity {
                         public void run() {
                             String[] errMsg = new String[1];
                             //boolean isDelete=WebServiceUtils.DeleteMessage(errMsg,"xk",true);
-                           final boolean isDelete= WebServiceUtils.DeleteMessage(errMsg,message.getQM_ID());
+                            final boolean isDelete = WebServiceUtils.DeleteMessage(errMsg, message.getQM_ID());
                             Looper.prepare();
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     getMessageList(readflag);
                                     //initListView(readflag);
-                                    if(isDelete==true){
-                                         Toast.makeText(MessageListActivity.this,"删除成功",Toast.LENGTH_SHORT).show();
-                                         // getMessageList(readflag);
-                                    }
-                                    else{
-                                         Toast.makeText(MessageListActivity.this,"删除失败！",Toast.LENGTH_SHORT).show();
+                                    if (isDelete == true) {
+                                        Toast.makeText(MessageListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                                        // getMessageList(readflag);
+                                    } else {
+                                        Toast.makeText(MessageListActivity.this, "删除失败！", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -226,13 +241,13 @@ public class MessageListActivity extends BaseActivity {
 
                 @Override
                 public void onClick(View v) {
-                    if(message.getQM_IsShown()==false){
+                    if (message.getQM_IsShown() == false) {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 String[] errMsg = new String[1];
                                 //boolean isDelete=WebServiceUtils.DeleteMessage(errMsg,"xk",true);
-                                final boolean changeReadState= WebServiceUtils.UpdateMessage(errMsg,message.getQM_ID());
+                                final boolean changeReadState = WebServiceUtils.UpdateMessage(errMsg, message.getQM_ID());
                                 Looper.prepare();
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -244,7 +259,7 @@ public class MessageListActivity extends BaseActivity {
                             }
                         }).start();
                     }
-                        viewMessageDialog.dismiss();
+                    viewMessageDialog.dismiss();
 
 
                 }
@@ -253,21 +268,22 @@ public class MessageListActivity extends BaseActivity {
             viewMessageDialog.show();
         }
     }
+
     class MessageListOnItemLongClickListener implements AdapterView.OnItemLongClickListener {
 
         @SuppressWarnings("unchecked")
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position,
-                                long id) {
+                                       long id) {
             final AlertDialog.Builder dialog = new AlertDialog.Builder(MessageListActivity.this);
             final Message message = messageList.get(position);
             dialog.setMessage("确定删除此条通知吗？");
-            dialog.setPositiveButton("删除",new DialogInterface.OnClickListener(){
+            dialog.setPositiveButton("删除", new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 //
-              //      new Thread(new Runnable() {
+                    //      new Thread(new Runnable() {
 //                        @Override
 //                        public void run() {
 //                            String[] errMsg = new String[1];
@@ -295,19 +311,18 @@ public class MessageListActivity extends BaseActivity {
                         public void run() {
                             String[] errMsg = new String[1];
                             //boolean isDelete=WebServiceUtils.DeleteMessage(errMsg,"xk",true);
-                            final boolean isDelete= WebServiceUtils.DeleteMessage(errMsg,message.getQM_ID());
+                            final boolean isDelete = WebServiceUtils.DeleteMessage(errMsg, message.getQM_ID());
                             Looper.prepare();
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     getMessageList(readflag);
                                     //initListView(readflag);
-                                    if(isDelete==true){
-                                        Toast.makeText(MessageListActivity.this,"删除成功",Toast.LENGTH_SHORT).show();
+                                    if (isDelete == true) {
+                                        Toast.makeText(MessageListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                                         // getMessageList(readflag);
-                                    }
-                                    else{
-                                        Toast.makeText(MessageListActivity.this,"删除失败！",Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(MessageListActivity.this, "删除失败！", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -318,11 +333,11 @@ public class MessageListActivity extends BaseActivity {
 
                 }
             });
-            dialog.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+            dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                 deleteDialog.dismiss();
+                    deleteDialog.dismiss();
                 }
             });
             deleteDialog = dialog.create();

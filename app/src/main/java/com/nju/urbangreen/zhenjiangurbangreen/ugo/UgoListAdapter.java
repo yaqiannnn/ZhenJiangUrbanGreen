@@ -59,7 +59,7 @@ public class UgoListAdapter extends RecyclerView.Adapter<BaseItemViewHolder> {
 
     private void resolveClickEvent(View view,BaseItemViewHolder viewHolder) {
         int position = viewHolder.getAdapterPosition();
-        Toast.makeText(view.getContext(), position + "", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(view.getContext(), position + "", Toast.LENGTH_SHORT).show();
         GreenObject object = mUgoList.get(position);
         Intent intent = new Intent(view.getContext(), SimpleMapActivity.class);
         intent.putExtra("type", object.UGO_ClassType_ID);
