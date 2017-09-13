@@ -23,9 +23,11 @@ import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.ugo.UgoListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ACache;
+import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -55,30 +57,29 @@ public class MaintainRegisterActivity extends BaseActivity {
 
 
     public DatePickerDialog dtpckMaintainDate;
-    private Maintain myObject;
+    private Maintain maintainObject;
     private int updateState;
     private String ugoIds;
+    private String maintainId;
 
     public static int CLICK_BACK_BUTTON = 0;
     public static int CLICK_UPLOAD_BUTTON = 1;
+    private static final String TAG = "MaintainRegisterActivit";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        if (intent.getSerializableExtra("MaintainInfo") == null) {
-            //todo add new Object
-//            myObject=new Maintain("保存时自动生成","MR201701030002");
-        } else
-            myObject = (Maintain) intent.getSerializableExtra("MaintainInfo");
-
-
+//        Intent intent = getIntent();
+//        if (intent.getSerializableExtra("MaintainInfo") == null) {
+//            //todo add new Object
+////            myObject=new Maintain("保存时自动生成","MR201701030002");
+//        } else
+//            myObject = (Maintain) intent.getSerializableExtra("MaintainInfo");
         setContentView(R.layout.activity_maintain_register);
         ButterKnife.bind(this);
 //        tvMaintainID.setText(myObject.getID());
 //        tvMaintainCode.setText(myObject.getCode());
-
         initToolbar();
 
         ArrayList<String> dropdownList = new ArrayList<>();
@@ -87,7 +88,7 @@ public class MaintainRegisterActivity extends BaseActivity {
 //        dropdownMaintainType.setText(myObject.getMaintainType());
 
         initDatePicker();
-
+        getMaintainObject();
         upload();
 
 //        etMaintainStaff.setText(myObject.getMaintainStaff());
@@ -118,6 +119,20 @@ public class MaintainRegisterActivity extends BaseActivity {
 //        });
     }
 
+    private void getMaintainObject() {
+        Intent intent = getIntent();
+        Serializable serializableObject = intent.getSerializableExtra("maintain_object");
+        if (serializableObject != null) {
+            maintainObject = (Maintain) serializableObject;
+            tvMaintainID.setText(maintainObject.MR_ID);
+            dropdownMaintainType.setText(maintainObject.MR_MaintainType);
+            etMaintainDate.setText(maintainObject.MR_MaintainDate);
+            etMaintainStaff.setText(maintainObject.MR_MaintainStaff);
+            etMaintainContent.setText(maintainObject.MR_MaintainContent);
+            maintainId = maintainObject.MR_ID;
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -130,10 +145,14 @@ public class MaintainRegisterActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.attachment:
                 Intent intent = new Intent(MaintainRegisterActivity.this, AttachmentListActivity.class);
+                if (maintainId != null)
+                    intent.putExtra("id", maintainId);
                 startActivity(intent);
                 break;
             case R.id.greenObjects:
                 Intent intent2 = new Intent(MaintainRegisterActivity.this, UgoListActivity.class);
+                if (maintainId != null)
+                    intent2.putExtra("id", maintainId);
                 startActivity(intent2);
                 break;
             default:
@@ -186,28 +205,55 @@ public class MaintainRegisterActivity extends BaseActivity {
         btnMaintainRegisterSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final String[] errMsg = new String[1];
                 if (validateEmpty(CLICK_UPLOAD_BUTTON)) {
                     outputObject();
 
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            WebServiceUtils.AddMaintainRecord(myObject);
+                            final Boolean res;
+                            if (tvMaintainID.getText() == "") {
+                                res = WebServiceUtils.AddMaintainRecord(errMsg, maintainObject);
+                            } else {
+                                res = WebServiceUtils.UpdateMaintainRecord(errMsg, maintainObject);
+                            }
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (res) {
+                                        Toast.makeText(MaintainRegisterActivity.this, "上传成功!", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent();
+                                        intent.putExtra("upload_status",true);
+                                        setResult(RESULT_OK,intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(MaintainRegisterActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
-                    });
+                    }
+                    ).start();
                 }
-                //如果成功，返回上一级，否则提示错误信息
             }
         });
     }
 
 
     private void outputObject() {
-        myObject.MR_MaintainType = dropdownMaintainType.getText();
-        myObject.MR_MaintainDate = etMaintainDate.getText().toString();
-        myObject.MR_MaintainStaff = etMaintainStaff.getText().toString();
-        myObject.MR_MaintainContent = etMaintainContent.getText().toString();
-        myObject.UGO_IDs=getUGOIDs();
+        maintainObject = new Maintain();
+        maintainObject.MR_MaintainType = dropdownMaintainType.getText();
+        maintainObject.MR_MaintainDate = etMaintainDate.getText().toString();
+        maintainObject.MR_MaintainStaff = etMaintainStaff.getText().toString();
+        if (etMaintainContent.getText() != null) {
+            maintainObject.MR_MaintainContent = etMaintainContent.getText().toString();
+        }
+        if(tvMaintainID.getText()!=null){
+            maintainObject.MR_ID = tvMaintainID.getText().toString();
+        }
+        maintainObject.UGO_IDs = getUGOIDs();
     }
 
 
@@ -264,8 +310,9 @@ public class MaintainRegisterActivity extends BaseActivity {
 
     //从缓存中读取相关对象
     private String getUGOIDs() {
-        ACache mCache = ACache.get(this);
-        List<GreenObject> ugoSelectedList = mCache.getAsObjectList("ugo_select");
+//        ACache mCache = ACache.get(this);
+//        List<GreenObject> ugoSelectedList = mCache.getAsObjectList("ugo_select");
+        List<GreenObject> ugoSelectedList = CacheUtil.getRelatedUgos();
         StringBuilder builder = new StringBuilder();
 
         if (ugoSelectedList != null) {

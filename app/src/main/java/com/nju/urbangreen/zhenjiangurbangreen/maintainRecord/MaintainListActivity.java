@@ -1,5 +1,6 @@
 package com.nju.urbangreen.zhenjiangurbangreen.maintainRecord;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
@@ -19,6 +21,7 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.LoadMoreFooterView;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.RefreshHeaderView;
@@ -54,6 +57,7 @@ public class MaintainListActivity extends BaseActivity {
     @BindView(R.id.swipe_load_more_footer)
     LoadMoreFooterView swipeLoadMoreFooter;
 
+    public static final int GET_REGISTER_RESULT = 1;
     private MaintainListAdapter2 adapter2;
     private List<Maintain> maintainList = new ArrayList<>();
     private int page = 2;
@@ -65,9 +69,28 @@ public class MaintainListActivity extends BaseActivity {
         setContentView(R.layout.activity_maintain_list);
         ButterKnife.bind(this);
         initViews();
+        initRecyclerView();
         getMaintainList();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        CacheUtil.removeRelatedUgos();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case GET_REGISTER_RESULT:
+                if(resultCode == RESULT_OK){
+                    getMaintainList();
+                }
+                break;
+            default:
+        }
+
+    }
 
     //初始化控件
     public void initViews() {
@@ -86,31 +109,23 @@ public class MaintainListActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MaintainListActivity.this, MaintainRegisterActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, GET_REGISTER_RESULT);
             }
         });
 
+//        swipeToLoadLayout.setRefreshEnabled(false);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                getMaintainList();
             }
         });
 
         swipeToLoadLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<Maintain> tempList= getMaintainList(page, 8);
-//                        Log.d("tag",page+"");
-//                        for(Maintain o : tempList){
-//                            Log.d("tag",o.MR_Code);
-//                        }
-                        page++;
-                    }
-                }).start();
+                getMaintainList(page, 8);
+                page++;
             }
         });
     }
@@ -125,6 +140,10 @@ public class MaintainListActivity extends BaseActivity {
 
     //获得列表第一页数据
     private void getMaintainList() {
+        final ProgressDialog loading = new ProgressDialog(this);
+        loading.setMessage("加载数据中，请稍候...");
+        loading.show();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -132,12 +151,19 @@ public class MaintainListActivity extends BaseActivity {
                 String[] errMsg = new String[1];
                 query.put("page", 1);
                 query.put("limit", 8);
-                maintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
-                Log.d("tag",maintainList.size()+"");
+                List<Maintain> tempList = WebServiceUtils.getMaintainRecord(query, errMsg);
+                if (tempList != null) {
+                    maintainList.clear();
+                    maintainList.addAll(tempList);
+                }
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initRecyclerView();
+
+                        loading.dismiss();
+                        adapter2.notifyDataSetChanged();
+                        swipeToLoadLayout.setRefreshing(false);
                     }
                 });
             }
@@ -153,18 +179,23 @@ public class MaintainListActivity extends BaseActivity {
                 String[] errMsg = new String[1];
                 query.put("page", page);
                 query.put("limit", limit);
-                List newMaintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
-                maintainList.addAll(newMaintainList);
-                Log.d("tag",maintainList.size()+"");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter2.notifyDataSetChanged();
-                        swipeToLoadLayout.setLoadingMore(false);
-                    }
-                });
+                final List<Maintain> newMaintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
+                if (newMaintainList != null) {
+                    maintainList.addAll(newMaintainList);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter2.notifyDataSetChanged();
+                            swipeToLoadLayout.setLoadingMore(false);
+                            if (newMaintainList.size() < limit) {
+                                swipeToLoadLayout.setLoadMoreEnabled(false);
+                                Toast.makeText(MaintainListActivity.this, "加载完毕", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
             }
-        });
+        }).start();
         return maintainList;
     }
 

@@ -7,10 +7,10 @@
     <com.nju.urbangreen.zhenjiangurbangreen.widget.RefreshHeaderView
         android:id="@id/swipe_refresh_header"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="40dp"
         android:gravity="center"
-        app:refresh_complete_delay_duration="2000"
         />
+        <!--app:refresh_complete_delay_duration="2000"-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/swipe_target"
@@ -22,6 +22,6 @@
     <com.nju.urbangreen.zhenjiangurbangreen.widget.LoadMoreFooterView
         android:id="@id/swipe_load_more_footer"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:gravity="center" />
 </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>

@@ -35,9 +35,9 @@ public class RefreshHeaderView extends android.support.v7.widget.AppCompatTextVi
 
     @Override
     public void onMove(int yScrolled, boolean isComplete, boolean automatic) {
-        if(isComplete){
-            setText("正在刷新");
-        }
+//        if(isComplete){
+//            setText("正在刷新");
+//        }
     }
 
     @Override
@@ -47,7 +47,7 @@ public class RefreshHeaderView extends android.support.v7.widget.AppCompatTextVi
 
     @Override
     public void onComplete() {
-        setText("刷新完成");
+//        setText("刷新完成");
     }
 
     @Override
