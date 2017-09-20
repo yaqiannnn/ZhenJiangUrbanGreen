@@ -13,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentRecord;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
+import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.Inspect;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.Maintain;
 import com.nju.urbangreen.zhenjiangurbangreen.message.Message;
 
@@ -57,6 +58,7 @@ public class WebServiceUtils {
     public static final String Login = "Login";
     public static final String Get_Maintain_Record = "GetMaintainRecord";
     public static final String Get_Maintain_Record_UGO = "GetMaintainRecordUGO";
+    public static final String Get_Inspect_Record = "GetInspectRecord";
     public static final String Add_Maintain_Record = "AddMaintainRecord";
     public static final String Get_UGO_Info_Except_ST = "GetUGOInfoExceptST";//ST表示行道树
     public static final String Get_Near_Street_Tree = "GetNearStreetTree";
@@ -225,6 +227,24 @@ public class WebServiceUtils {
         if (Integer.parseInt(res.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             return gson.fromJson(res.get(KEY_RESULT).toString(),
                     new TypeToken<List<Maintain>>() {
+                    }.getType());
+        } else {
+            if (errorMessage != null && res.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = res.get(KEY_ERRMESSAGE).toString();
+            }
+            return null;
+        }
+    }
+
+    public static List<Inspect> getInspectRecord(Map<String, Object> query, String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> res = callMethod(Get_Inspect_Record, query);
+        if (Integer.parseInt(res.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return gson.fromJson(res.get(KEY_RESULT).toString(),
+                    new TypeToken<List<Inspect>>() {
                     }.getType());
         } else {
             if (errorMessage != null && res.get(KEY_ERRMESSAGE) != null) {

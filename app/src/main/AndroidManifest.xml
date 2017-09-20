@@ -60,7 +60,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".inspectRecord.InspectInfoActivity" />
+        <activity android:name=".inspectRecord.InspectRegisterActivity" />
         <activity android:name=".maintainRecord.MaintainRegisterActivity" />
         <activity
             android:name=".events.EventListActivity"

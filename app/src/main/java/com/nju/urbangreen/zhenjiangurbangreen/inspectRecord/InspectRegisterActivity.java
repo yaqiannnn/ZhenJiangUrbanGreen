@@ -3,7 +3,6 @@ package com.nju.urbangreen.zhenjiangurbangreen.inspectRecord;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.AppCompatTextView;
@@ -21,13 +20,12 @@ import butterknife.ButterKnife;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class InspectInfoActivity extends BaseActivity {
+public class InspectRegisterActivity extends BaseActivity {
 
     @BindView(R.id.tv_inspectInfo_ID)
     public AppCompatTextView tvInspectID;
@@ -150,7 +148,7 @@ public class InspectInfoActivity extends BaseActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InspectInfoActivity.this.finish();
+                InspectRegisterActivity.this.finish();
             }
         });
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
