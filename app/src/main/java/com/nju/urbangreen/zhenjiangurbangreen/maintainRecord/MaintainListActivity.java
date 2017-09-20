@@ -114,6 +114,7 @@ public class MaintainListActivity extends BaseActivity {
                 startActivityForResult(intent, GET_REGISTER_RESULT);
             }
         });
+
         spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
@@ -203,9 +204,11 @@ public class MaintainListActivity extends BaseActivity {
 
     //获得列表第一页数据
     private void getMaintainList(final Map<String, Object> query) {
+        page = 2;
         final ProgressDialog loading = new ProgressDialog(this);
         loading.setMessage("加载数据中，请稍候...");
         loading.show();
+
 
         new Thread(new Runnable() {
             @Override
