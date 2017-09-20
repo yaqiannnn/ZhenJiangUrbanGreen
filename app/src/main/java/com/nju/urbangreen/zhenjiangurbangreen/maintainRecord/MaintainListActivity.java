@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -61,6 +62,7 @@ public class MaintainListActivity extends BaseActivity {
     private MaintainListAdapter2 adapter2;
     private List<Maintain> maintainList = new ArrayList<>();
     private int page = 2;
+    final Map<String, Object> multiQuery = new HashMap<>();
 
 
     @Override
@@ -70,7 +72,7 @@ public class MaintainListActivity extends BaseActivity {
         ButterKnife.bind(this);
         initViews();
         initRecyclerView();
-        getMaintainList();
+        getMaintainList(multiQuery);
     }
 
     @Override
@@ -84,7 +86,7 @@ public class MaintainListActivity extends BaseActivity {
         switch (requestCode){
             case GET_REGISTER_RESULT:
                 if(resultCode == RESULT_OK){
-                    getMaintainList();
+                    getMaintainList(multiQuery);
                 }
                 break;
             default:
@@ -113,18 +115,80 @@ public class MaintainListActivity extends BaseActivity {
             }
         });
 
+        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                String[] languages = getResources().getStringArray(R.array.maintainType);
+
+                if(pos>0){
+
+                    multiQuery.put("maintainType",languages[pos]);
+                }
+                if(pos==0&&multiQuery.containsKey("maintainType")){
+                    multiQuery.remove("maintainType");
+
+                }
+                getMaintainList(multiQuery);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                String[] languages = getResources().getStringArray(R.array.maintainDate);
+                if(pos>0){
+                    multiQuery.put("date",languages[pos]);
+                }
+                if(pos==0&&multiQuery.containsKey("date")){
+
+                    multiQuery.remove("date");
+                }
+                getMaintainList(multiQuery);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
+
+        spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                String[] languages = getResources().getStringArray(R.array.maintainStatus);
+                if(pos==1){
+                    multiQuery.put("assess",true);
+                }else if(pos==2){
+                    multiQuery.put("assess",false);
+                }
+                if(pos==0&&multiQuery.containsKey("assess")){
+                    multiQuery.remove("assess");
+
+                }
+                getMaintainList(multiQuery);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
 //        swipeToLoadLayout.setRefreshEnabled(false);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getMaintainList();
+                getMaintainList(multiQuery);
             }
         });
 
         swipeToLoadLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                getMaintainList(page, 8);
+                getMaintainList(multiQuery,page, 8);
                 page++;
             }
         });
@@ -139,19 +203,21 @@ public class MaintainListActivity extends BaseActivity {
     }
 
     //获得列表第一页数据
-    private void getMaintainList() {
+    private void getMaintainList(final Map<String, Object> query) {
+        page = 2;
         final ProgressDialog loading = new ProgressDialog(this);
         loading.setMessage("加载数据中，请稍候...");
         loading.show();
 
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Map<String, Object> query = new HashMap<>();
+
                 String[] errMsg = new String[1];
                 query.put("page", 1);
                 query.put("limit", 8);
-                List<Maintain> tempList = WebServiceUtils.getMaintainRecord(query, errMsg);
+               final List<Maintain> tempList = WebServiceUtils.getMaintainRecord(query, errMsg);
                 if (tempList != null) {
                     maintainList.clear();
                     maintainList.addAll(tempList);
@@ -160,7 +226,16 @@ public class MaintainListActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if(tempList!=null){
 
+                            findViewById(R.id.task_list_emptyview).setVisibility(View.INVISIBLE);
+                        }
+                        if(tempList==null){
+
+                            maintainList.clear();
+                            findViewById(R.id.floatingbtn_add_maintain).setVisibility(View.INVISIBLE);
+                            findViewById(R.id.task_list_emptyview).setVisibility(View.VISIBLE);
+                        }
                         loading.dismiss();
                         adapter2.notifyDataSetChanged();
                         swipeToLoadLayout.setRefreshing(false);
@@ -171,11 +246,10 @@ public class MaintainListActivity extends BaseActivity {
     }
 
 
-    private List<Maintain> getMaintainList(final int page, final int limit) {
+    private List<Maintain> getMaintainList(final Map<String, Object> query, final int page, final int limit) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Map<String, Object> query = new HashMap<>();
                 String[] errMsg = new String[1];
                 query.put("page", page);
                 query.put("limit", limit);
