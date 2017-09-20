@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
 public class MaintainListActivity extends BaseActivity {
 
     @BindView(R.id.floatingbtn_add_maintain)
-    public FloatingActionButton fbtnAddMaintain;//悬浮按钮
+    FloatingActionButton fbtnAddMaintain;//悬浮按钮
     @BindView(R.id.Toolbar)
     Toolbar toolbar;
     @BindView(R.id.material_search_view)
@@ -205,6 +205,8 @@ public class MaintainListActivity extends BaseActivity {
     //获得列表第一页数据
     private void getMaintainList(final Map<String, Object> query) {
         page = 2;
+        swipeToLoadLayout.setLoadMoreEnabled(true);
+
         final ProgressDialog loading = new ProgressDialog(this);
         loading.setMessage("加载数据中，请稍候...");
         loading.show();
