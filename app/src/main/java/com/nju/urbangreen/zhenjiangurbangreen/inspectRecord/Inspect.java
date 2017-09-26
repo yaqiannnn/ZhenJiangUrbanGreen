@@ -21,6 +21,19 @@ public class Inspect implements Serializable{
     private String IR_LogTime;
     private String IR_LastEditorPID;
 
+    public String getUGO_IDs() {
+        return UGO_IDs;
+    }
+
+    public void setUGO_IDs(String UGO_IDs) {
+        this.UGO_IDs = UGO_IDs;
+    }
+
+    private String UGO_IDs;
+
+    public Inspect() {
+    }
+
     public Inspect(String IR_ID, String IR_Code, String IR_Type, String IR_InspectDate, String IR_CompanyID, String IR_Inspector, String IR_Score, String IR_Content, String IR_InspectOpinion, String IR_LoggerPID, String IR_LogTime, String IR_LastEditorPID) {
         this.IR_ID = IR_ID;
         this.IR_Code = IR_Code;
