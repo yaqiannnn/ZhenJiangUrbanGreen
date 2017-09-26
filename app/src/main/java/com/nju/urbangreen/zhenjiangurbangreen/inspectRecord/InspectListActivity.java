@@ -117,14 +117,14 @@ public class InspectListActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
-                String[] languages = getResources().getStringArray(R.array.maintainType);
+                String[] languages = getResources().getStringArray(R.array.inspectType);
 
                 if(pos>0){
 
-                    multiQuery.put("maintainType",languages[pos]);
+                    multiQuery.put("type",languages[pos]);
                 }
-                if(pos==0&&multiQuery.containsKey("maintainType")){
-                    multiQuery.remove("maintainType");
+                if(pos==0&&multiQuery.containsKey("type")){
+                    multiQuery.remove("type");
 
                 }
                 getInspectList(multiQuery);
@@ -242,8 +242,17 @@ public class InspectListActivity extends BaseActivity {
                             swipeToLoadLayout.setLoadingMore(false);
                             if (newInspectList.size() < limit) {
                                 swipeToLoadLayout.setLoadMoreEnabled(false);
-                                Toast.makeText(InspectListActivity.this, "加载完毕", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(InspectListActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
                             }
+                        }
+                    });
+                }else{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeToLoadLayout.setLoadingMore(false);
+                            swipeToLoadLayout.setLoadMoreEnabled(false);
+                            Toast.makeText(InspectListActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

@@ -45,8 +45,8 @@ public class InspectListAdapter extends RecyclerView.Adapter<BaseItemViewHolder>
     @Override
     public void onBindViewHolder(BaseItemViewHolder viewHolder, int i) {
         Inspect inspect = inspectList.get(i);
-        viewHolder.itemTitle.setText(inspect.getCode() + "/" + inspect.getInspectType());
-        viewHolder.itemContent.setText(inspect.getContent());
+        viewHolder.itemTitle.setText(inspect.getIR_Code() + "/" + inspect.getIR_Type());
+        viewHolder.itemContent.setText(inspect.getIR_Content());
     }
 
     @Override

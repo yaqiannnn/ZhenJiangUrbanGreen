@@ -35,7 +35,7 @@
         <item>人为事故</item>
         <item>交通事故</item>
     </string-array>
-    <string-array name="insepctType">
+    <string-array name="inspectType">
         <item>巡查类型</item>
         <item>保洁考核</item>
         <item>管养考核</item>

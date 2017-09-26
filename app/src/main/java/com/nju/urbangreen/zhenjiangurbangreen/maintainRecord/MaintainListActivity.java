@@ -59,7 +59,7 @@ public class MaintainListActivity extends BaseActivity {
     LoadMoreFooterView swipeLoadMoreFooter;
 
     public static final int GET_REGISTER_RESULT = 1;
-    private MaintainListAdapter2 adapter2;
+    private MaintainListAdapter adapter;
     private List<Maintain> maintainList = new ArrayList<>();
     private int page = 2;
     final Map<String, Object> multiQuery = new HashMap<>();
@@ -239,7 +239,7 @@ public class MaintainListActivity extends BaseActivity {
                             findViewById(R.id.task_list_emptyview).setVisibility(View.VISIBLE);
                         }
                         loading.dismiss();
-                        adapter2.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                         swipeToLoadLayout.setRefreshing(false);
                     }
                 });
@@ -261,14 +261,17 @@ public class MaintainListActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapter2.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
                             swipeToLoadLayout.setLoadingMore(false);
                             if (newMaintainList.size() < limit) {
                                 swipeToLoadLayout.setLoadMoreEnabled(false);
-                                Toast.makeText(MaintainListActivity.this, "加载完毕", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MaintainListActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+                }else{
+                    swipeToLoadLayout.setLoadMoreEnabled(false);
+                    Toast.makeText(MaintainListActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
                 }
             }
         }).start();
@@ -281,9 +284,9 @@ public class MaintainListActivity extends BaseActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerMaintainList.getContext(),
                 linearLayoutManager.getOrientation());
         recyclerMaintainList.addItemDecoration(dividerItemDecoration);
-        adapter2 = new MaintainListAdapter2(maintainList);
-        recyclerMaintainList.setAdapter(adapter2);
-        adapter2.notifyDataSetChanged();
+        adapter = new MaintainListAdapter(maintainList);
+        recyclerMaintainList.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 }
