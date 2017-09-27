@@ -241,20 +241,6 @@ public class MaintainListActivity extends BaseActivity {
                     maintainList.clear();
                     maintainList.addAll(tempList);
                 }
-                else{
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            View invisibleView;
-                            invisibleView = findViewById(R.id.floatingbtn_add_maintain);
-                            invisibleView.setVisibility(View.INVISIBLE);
-                            View visibleView;
-                            visibleView = findViewById(R.id.none_List);
-                            visibleView.setVisibility(View.VISIBLE);
-                        }
-                    });
-
-                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
