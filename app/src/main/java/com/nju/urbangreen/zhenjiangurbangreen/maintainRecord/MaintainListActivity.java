@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
@@ -62,7 +63,11 @@ public class MaintainListActivity extends BaseActivity {
     private MaintainListAdapter2 adapter2;
     private List<Maintain> maintainList = new ArrayList<>();
     private int page = 2;
+
+    private String id;
+
     final Map<String, Object> multiQuery = new HashMap<>();
+
 
 
     @Override
@@ -72,7 +77,13 @@ public class MaintainListActivity extends BaseActivity {
         ButterKnife.bind(this);
         initViews();
         initRecyclerView();
+
+
+        Intent intent = getIntent();
+        id = intent.getStringExtra("UGO_Ucode");
+
         getMaintainList(multiQuery);
+
     }
 
     @Override
@@ -214,12 +225,31 @@ public class MaintainListActivity extends BaseActivity {
                 String[] errMsg = new String[1];
                 query.put("page", 1);
                 query.put("limit", 8);
+
+                if(id != ""){
+                    query.put("UGO_ID", id);
+                }
+
                final List<Maintain> tempList = WebServiceUtils.getMaintainRecord(query, errMsg);
+
                 if (tempList != null) {
                     maintainList.clear();
                     maintainList.addAll(tempList);
                 }
+                else{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            View invisibleView;
+                            invisibleView = findViewById(R.id.floatingbtn_add_maintain);
+                            invisibleView.setVisibility(View.INVISIBLE);
+                            View visibleView;
+                            visibleView = findViewById(R.id.none_List);
+                            visibleView.setVisibility(View.VISIBLE);
+                        }
+                    });
 
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -250,6 +280,9 @@ public class MaintainListActivity extends BaseActivity {
                 String[] errMsg = new String[1];
                 query.put("page", page);
                 query.put("limit", limit);
+                if(id != ""){
+                    query.put("UGO_ID", id);
+                }
                 final List<Maintain> newMaintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
                 if (newMaintainList != null) {
                     maintainList.addAll(newMaintainList);
@@ -270,6 +303,7 @@ public class MaintainListActivity extends BaseActivity {
         return maintainList;
     }
 
+
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerMaintainList.setLayoutManager(linearLayoutManager);
@@ -280,5 +314,6 @@ public class MaintainListActivity extends BaseActivity {
         recyclerMaintainList.setAdapter(adapter2);
         adapter2.notifyDataSetChanged();
     }
+
 
 }
