@@ -212,7 +212,6 @@ public class InspectListActivity extends BaseActivity {
                         if(tempList==null){
 
                             inspectList.clear();
-                            findViewById(R.id.floatingbtn_add_inspect).setVisibility(View.INVISIBLE);
                             findViewById(R.id.task_list_emptyview).setVisibility(View.VISIBLE);
                         }
                         loading.dismiss();
