@@ -58,11 +58,6 @@
             android:layout_weight="8">
 
             <include layout="@layout/recycler_loadmore_view"/>
-
-
-          
-
-
             <include layout="@layout/task_list_emptyview" />
 
             <android.support.design.widget.FloatingActionButton
