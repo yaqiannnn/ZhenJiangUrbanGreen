@@ -113,7 +113,8 @@ public class MaintainRegisterActivity extends BaseRegisterActivity {
                 Intent intent2 = new Intent(MaintainRegisterActivity.this, UgoListActivity.class);
                 if (maintainId != null)
                     intent2.putExtra("id", maintainId);
-                startActivity(intent2);
+                intent2.putExtra("activity","maintain");
+                    startActivity(intent2);
                 break;
             default:
         }

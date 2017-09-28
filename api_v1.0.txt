@@ -135,7 +135,7 @@ Param中带"*"的为一定包含的参数
 
 
 6.获取事件记录涉及绿化对象(所有种类，包括绿地、古树名木、行道树)
-    Method: GetInspectRecordUGO
+    Method: GetEventUGO
     Param: {
     *   string id 事件记录ID
     }
