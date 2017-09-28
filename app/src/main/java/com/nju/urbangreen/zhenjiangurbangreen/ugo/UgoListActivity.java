@@ -44,7 +44,8 @@ public class UgoListActivity extends BaseActivity {
     private UgoListAdapter adapter;
     private ProgressDialog progressDialog;
     private MultipleAdapter multipleAdapter;
-    private String maintainId;
+    private String id;
+    private String activity;
     ACache mCache;
 
 
@@ -58,12 +59,14 @@ public class UgoListActivity extends BaseActivity {
         initRecyclerView();
 
         Intent intent = getIntent();
-        maintainId = intent.getStringExtra("id");
+        id = intent.getStringExtra("id");
+        activity = intent.getStringExtra("activity");
+
 //        mCache = ACache.get(this);
 
-        if (CacheUtil.hasRelatedUgos() && maintainId !=null) {
+        if (CacheUtil.hasRelatedUgos() && id !=null) {
             getUgosFromCache();
-        } else if (maintainId != null) {
+        } else if (id != null) {
             getUgosFromWeb();
         }
 
@@ -130,7 +133,19 @@ public class UgoListActivity extends BaseActivity {
             @Override
             public void run() {
                 String[] errMsg = new String[1];
-                List<GreenObject> tempList = WebServiceUtils.GetMaintainRecordUGO(maintainId, errMsg);
+                List<GreenObject> tempList = new ArrayList<>();
+                switch (activity) {
+                    case "maintain":
+                        tempList = WebServiceUtils.GetMaintainRecordUGO(id, errMsg);
+                        break;
+                    case "inspect":
+                        tempList = WebServiceUtils.GetInspectRecordUGO(id, errMsg);
+                        break;
+                    case "event":
+                        tempList = WebServiceUtils.GetEventRecordUGO(id,errMsg);
+                        break;
+                    default:
+                }
                 if (tempList != null) {
                     ugObjectList.addAll(tempList);
                 }

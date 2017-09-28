@@ -14,6 +14,16 @@ public class Inspect implements Serializable{
     private String IR_InspectDate;
     private String IR_CompanyID;
     private String IR_Inspector;
+
+    public String getIR_Location() {
+        return IR_Location;
+    }
+
+    public void setIR_Location(String IR_Location) {
+        this.IR_Location = IR_Location;
+    }
+
+    private String IR_Location;
     private String IR_Score;
     private String IR_Content;
     private String IR_InspectOpinion;

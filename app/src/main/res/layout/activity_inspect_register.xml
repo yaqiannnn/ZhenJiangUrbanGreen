@@ -1,242 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    xmlns:toolbar="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".inspectRecord.InspectRegisterActivity"
-    >
+    android:orientation="vertical"
+    tools:context=".inspectRecord.InspectListActivity">
 
-    <include layout="@layout/toolbar"/>
-
+    <include layout="@layout/toolbar"></include>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+            <TableLayout
+                android:id="@+id/ly_maintain_info_table"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:divider="@drawable/table_divider_line"
                 android:orientation="vertical"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="6dp">
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="巡查记录ID"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorAccent"/>
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_inspectInfo_ID"
-                    android:textSize="24sp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp">
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="巡查记录Code"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorAccent"/>
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_inspectInfo_Code"
-                    android:textSize="24sp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp">
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="事件类型"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorAccent"/>
-                <com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText
-                    android:id="@+id/droplist_inspectInfo_type"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent">
-                </com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp"
-                android:orientation="vertical">
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="巡查日期"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorAccent"/>
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_inspectInfo_date"
-                    android:textSize="24sp" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp">
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/et_inspectInfo_inspector">
-                    <EditText
-                        android:hint="巡查单位"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="24dp"
-                        android:inputType="number"
-                        android:maxLines="1"/>
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp">
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/et_inspectInfo_score">
-                    <EditText
-                        android:hint="巡查得分"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="24dp"
-                        android:inputType="number"
-                        android:maxLines="1"/>
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp">
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/et_inspectInfo_content">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="巡查记录"
-                        android:textSize="24sp"/>
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp">
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/et_inspectInfo_opinion">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="巡查意见"
-                        android:textSize="24sp"/>
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp">
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="初始登记人ID"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorAccent"/>
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_inspectInfo_LoggerPID"
-                    android:textSize="24sp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp">
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="初始登记时间"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorAccent"/>
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_inspectInfo_LogTime"
-                    android:textSize="24sp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp">
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="最后修改人ID"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorAccent"/>
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_inspectInfo_LastEditorPID"
-                    android:textSize="24sp"/>
-            </LinearLayout>
+                android:showDividers="middle"
+                android:shrinkColumns="1"
+                android:stretchColumns="1">
 
+                <TableRow
+                    style="@style/RecordItem">
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="巡查记录ID"/>
+                    <TextView
+                        android:id="@+id/tv_inspectInfo_ID"
+                        style="@style/RecordItemText" />
+                </TableRow>
+
+                <TableRow
+                    style="@style/RecordItem">
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="巡查类型"/>
+                    <com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText
+                        android:id="@+id/droplist_inspectInfo_type"
+                        android:layout_width="wrap_content">
+                    </com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText>
+                </TableRow>
+
+                <TableRow
+                    style="@style/RecordItem">
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="巡查日期"/>
+                    <EditText
+                        android:id="@+id/et_inspectInfo_date"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:gravity="center"/>
+                </TableRow>
+
+                <TableRow
+                    style="@style/RecordItem">
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="巡查得分"/>
+                    <EditText
+                        android:id="@+id/et_inspectInfo_score"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+                <TableRow
+                    style="@style/RecordItem">
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="巡查人员"/>
+                    <EditText
+                        android:id="@+id/et_inspectInfo_staff"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+                <TableRow
+                    style="@style/RecordItem">
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="巡查地点"/>
+                    <EditText
+                        android:id="@+id/et_inspectInfo_location"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+
+                <TableRow
+                    style="@style/RecordItem">
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="巡查内容"/>
+                    <EditText
+                        android:id="@+id/et_inspectInfo_content"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext"/>
+                </TableRow>
+
+                <TableRow
+                    style="@style/RecordItem">
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="巡查意见"/>
+                    <EditText
+                        android:id="@+id/et_inspectInfo_opinion"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext"/>
+                </TableRow>
+
+            </TableLayout>
             <android.support.v7.widget.AppCompatButton
                 android:background="@drawable/button_shape"
                 android:id="@+id/btn_inspect_register_submit"
@@ -249,9 +135,6 @@
                 android:text="提交"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"/>
-
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>
