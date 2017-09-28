@@ -119,6 +119,7 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
                 Intent intent2 = new Intent(this, UgoListActivity.class);
                 if (inspectId != null)
                     intent2.putExtra("id", inspectId);
+                intent2.putExtra("activity","inspect");
                 startActivity(intent2);
                 break;
             default:
@@ -182,7 +183,7 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
                             if (tvInspectInfoID.getText() == "") {
                                 res = WebServiceUtils.AddInspectRecord(errMsg, inspectObject);
                             } else {
-                                res = WebServiceUtils.UpdateInspetRecord(errMsg, inspectObject);
+                                res = WebServiceUtils.UpdateInspectRecord(errMsg, inspectObject);
                             }
 
                             runOnUiThread(new Runnable() {
