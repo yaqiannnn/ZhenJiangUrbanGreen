@@ -1,42 +1,10 @@
 package com.nju.urbangreen.zhenjiangurbangreen.events;
 
-import android.app.DatePickerDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
-import com.nju.urbangreen.zhenjiangurbangreen.ugo.UgoListActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.R;
-import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
-import com.nju.urbangreen.zhenjiangurbangreen.util.UrbanGreenDB;
-import com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText;
-import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class EventRegisterActivity extends BaseActivity {
 
+<<<<<<< HEAD
     private int state;
 
     @BindView(R.id.btn_event_register_add_ugo)
@@ -230,36 +198,7 @@ public class EventRegisterActivity extends BaseActivity {
         etReason.setText(oneEvent.getUGE_Reason());
         etRelevantDescription.setText(oneEvent.getUGE_RelevantDescription());
     }
+=======
+>>>>>>> 38eaaad13923791142ee2eda7047286e04332708
 
-    /**
-     * 处理一些退出登记界面的事情
-     */
-    private void processBack() {
-        //如果用户没有填写编号，就会弹框提示一下
-        if (etCode.getText().toString().equals("")) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("温馨提示");
-            builder.setMessage("您没有填写事件编号，返回后相关信息不会保存");
-            builder.setCancelable(false);
-            builder.setPositiveButton("仍然退出", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    finish();
-                }
-            });
-            builder.setNegativeButton("继续编辑", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-            builder.show();
-        } else {
-            if (oneEvent == null) {//oneEvent为null，说明不是从详情按钮过来的
-                Toast.makeText(this, "事件登记成功~", Toast.LENGTH_SHORT).show();
-                saveTempViewData();
-            }
-            finish();
-        }
-    }
 }

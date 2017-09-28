@@ -4,18 +4,20 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+=======
+>>>>>>> 38eaaad13923791142ee2eda7047286e04332708
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -37,6 +39,7 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
+<<<<<<< HEAD
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ActivityCollector;
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
@@ -403,6 +406,15 @@ public class EventListActivity extends BaseActivity {
 
         popupMenu.show();
     }
+=======
+import com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
+import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
+
+public class EventListActivity extends BaseActivity {
+
+//
+>>>>>>> 38eaaad13923791142ee2eda7047286e04332708
 }
 
 
