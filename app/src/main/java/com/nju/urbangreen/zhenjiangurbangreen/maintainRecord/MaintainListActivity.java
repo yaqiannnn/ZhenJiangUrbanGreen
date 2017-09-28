@@ -235,19 +235,6 @@ public class MaintainListActivity extends BaseActivity {
                 if (tempList != null) {
                     maintainList.clear();
                     maintainList.addAll(tempList);
-                }
-                else{
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            View invisibleView;
-                            invisibleView = findViewById(R.id.floatingbtn_add_maintain);
-                            invisibleView.setVisibility(View.INVISIBLE);
-                            View visibleView;
-                            visibleView = findViewById(R.id.none_List);
-                            visibleView.setVisibility(View.VISIBLE);
-                        }
-                    });
 
                 }
                 runOnUiThread(new Runnable() {
@@ -256,6 +243,7 @@ public class MaintainListActivity extends BaseActivity {
                         if(tempList!=null){
 
                             findViewById(R.id.task_list_emptyview).setVisibility(View.INVISIBLE);
+                            findViewById(R.id.floatingbtn_add_maintain).setVisibility(View.VISIBLE);
                         }
                         if(tempList==null){
 

@@ -151,8 +151,8 @@ public abstract class BaseListAdapter extends RecyclerView.Adapter<BaseRecordVie
                 m_filteredList.addAll(m_originList);
             }else {
                 for(OneEvent oneEvent:m_originList){
-                    if(oneEvent.getCode().contains(filterStr)
-                            || oneEvent.getName().contains(filterStr))
+                    if(oneEvent.getUGE_Code().contains(filterStr)
+                            || oneEvent.getUGE_Name().contains(filterStr))
                         m_filteredList.add(oneEvent);
                 }
             }

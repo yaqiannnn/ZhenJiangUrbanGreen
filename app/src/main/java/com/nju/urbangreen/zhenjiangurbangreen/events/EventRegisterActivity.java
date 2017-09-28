@@ -189,23 +189,23 @@ public class EventRegisterActivity extends BaseActivity {
     //如果用户在登记了一些信息后没有上传就返回了，需要将其数据保存到数据库中
     public void saveTempViewData() {
         OneEvent tempEvent = new OneEvent();
-        tempEvent.setCode(etCode.getText().toString());
-        tempEvent.setName(etName.getText().toString());
-        tempEvent.setType(dropdownEditText.getText());
-        tempEvent.setLocation(etLocation.getText().toString());
-        tempEvent.setDate_time(etDateSelect.getText().toString());
-        tempEvent.setDamageDegree(etDamageDegree.getText().toString());
+        tempEvent.setUGE_Code(etCode.getText().toString());
+        tempEvent.setUGE_Name(etName.getText().toString());
+        tempEvent.setUGE_Type(dropdownEditText.getText());
+        tempEvent.setUGE_Location(etLocation.getText().toString());
+        tempEvent.setUGE_Time(etDateSelect.getText().toString());
+        tempEvent.setUGE_DamageDegree(etDamageDegree.getText().toString());
 
-        tempEvent.setLostFee(etLostFee.getText().toString());
-        tempEvent.setCompensation(etCompensation.getText().toString());
-        tempEvent.setRelevantPerson(etRelevantPerson.getText().toString());
-        tempEvent.setRelevantLicensePlate(etRelevantLicensePlate.getText().toString());
-        tempEvent.setRelevantContact(etRelevantContact.getText().toString());
-        tempEvent.setRelevantCompany(etRelevantCompany.getText().toString());
-        tempEvent.setRelevantAddress(etRelevantAddress.getText().toString());
-        tempEvent.setRelevantDescription(etRelevantDescription.getText().toString());
-        tempEvent.setDescription(etDescription.getText().toString());
-        tempEvent.setReason(etReason.getText().toString());
+        tempEvent.setUGE_LostFee(etLostFee.getText().toString());
+        tempEvent.setUGE_Compensation(etCompensation.getText().toString());
+        tempEvent.setUGE_RelevantPerson(etRelevantPerson.getText().toString());
+        tempEvent.setUGE_RelevantLicensePlate(etRelevantLicensePlate.getText().toString());
+        tempEvent.setUGE_RelevantContact(etRelevantContact.getText().toString());
+        tempEvent.setUGE_RelevantCompany(etRelevantCompany.getText().toString());
+        tempEvent.setUGE_RelevantAddress(etRelevantAddress.getText().toString());
+        tempEvent.setUGE_RelevantDescription(etRelevantDescription.getText().toString());
+        tempEvent.setUGE_Description(etDescription.getText().toString());
+        tempEvent.setUGE_Reason(etReason.getText().toString());
         tempEvent.setRegistrar("xk");
         tempEvent.setState(state);
         UrbanGreenDB urbanGreenDB = UrbanGreenDB.getInstance(EventRegisterActivity.this);
@@ -213,22 +213,22 @@ public class EventRegisterActivity extends BaseActivity {
     }
 
     private void addDataToViews(OneEvent oneEvent) {
-        etCode.setText(oneEvent.getCode());
-        etName.setText(oneEvent.getName());
-        dropdownEditText.setText(oneEvent.getType());
-        etLocation.setText(oneEvent.getLocation());
-        etDateSelect.setText(oneEvent.getDate_time().toString());
-        etDamageDegree.setText(oneEvent.getDamageDegree());
-        etLostFee.setText(oneEvent.getLostFee());
-        etCompensation.setText(oneEvent.getCompensation());
-        etRelevantPerson.setText(oneEvent.getRelevantPerson());
-        etRelevantLicensePlate.setText(oneEvent.getRelevantLicensePlate());
-        etRelevantContact.setText(oneEvent.getRelevantContact());
-        etRelevantCompany.setText(oneEvent.getRelevantCompany());
-        etRelevantAddress.setText(oneEvent.getRelevantAddress());
-        etDescription.setText(oneEvent.getDescription());
-        etReason.setText(oneEvent.getReason());
-        etRelevantDescription.setText(oneEvent.getRelevantDescription());
+        etCode.setText(oneEvent.getUGE_Code());
+        etName.setText(oneEvent.getUGE_Name());
+        dropdownEditText.setText(oneEvent.getUGE_Type());
+        etLocation.setText(oneEvent.getUGE_Location());
+        etDateSelect.setText(oneEvent.getUGE_Time().toString());
+        etDamageDegree.setText(oneEvent.getUGE_DamageDegree());
+        etLostFee.setText(oneEvent.getUGE_LostFee());
+        etCompensation.setText(oneEvent.getUGE_Compensation());
+        etRelevantPerson.setText(oneEvent.getUGE_RelevantPerson());
+        etRelevantLicensePlate.setText(oneEvent.getUGE_RelevantLicensePlate());
+        etRelevantContact.setText(oneEvent.getUGE_RelevantContact());
+        etRelevantCompany.setText(oneEvent.getUGE_RelevantCompany());
+        etRelevantAddress.setText(oneEvent.getUGE_RelevantAddress());
+        etDescription.setText(oneEvent.getUGE_Description());
+        etReason.setText(oneEvent.getUGE_Reason());
+        etRelevantDescription.setText(oneEvent.getUGE_RelevantDescription());
     }
 
     /**

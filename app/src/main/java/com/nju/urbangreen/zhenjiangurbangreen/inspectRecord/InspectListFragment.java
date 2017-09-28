@@ -69,10 +69,10 @@ public class InspectListFragment extends Fragment{
 
             @Override
             public void bindData(BaseRecordViewHolder holder, int position, OneEvent item) {
-                holder.setText(R.id.tv_one_insepct_name,item.getName());
+                holder.setText(R.id.tv_one_insepct_name,item.getUGE_Name());
                 holder.setText(R.id.tv_one_insepct_registrar,item.getRegistrar());
-                holder.setText(R.id.tv_one_insepct_location,item.getLocation());
-                holder.setText(R.id.tv_one_insepct_date_time,item.getDate_time().toString());
+                holder.setText(R.id.tv_one_insepct_location,item.getUGE_Location());
+                holder.setText(R.id.tv_one_insepct_date_time,item.getUGE_Time().toString());
             }
         };
 
