@@ -64,8 +64,10 @@ public class WebServiceUtils {
     public static final String Get_Event = "GetEvent";
     public static final String Get_Maintain_Record_UGO = "GetMaintainRecordUGO";
     public static final String Get_Inspect_Record = "GetInspectRecord";
+    public static final String Get_Inspect_Record_Ugo = "GetInspectRecordUGO";
     public static final String Add_Inspect_Record = "AddInspectRecord";
     public static final String Add_Maintain_Record = "AddMaintainRecord";
+    public static final String Get_Event_Record_UGO = "GetEventUGO";
     public static final String Get_UGO_Info_Except_ST = "GetUGOInfoExceptST";//ST表示行道树
     public static final String Get_Near_Street_Tree = "GetNearStreetTree";
     public static final String GET_UGO_Suggest = "GetUGOSuggest";
@@ -296,13 +298,12 @@ public class WebServiceUtils {
         if (inspectObject.getIR_Content() != null) {
             params.put("inspector", inspectObject.getIR_Inspector());
         }
-//        if (inspectObject.getIR_Content() != null) {
-//            params.put("location", inspectObject.);
-//        }
-        if (inspectObject.getIR_Content() != null) {
+        if (inspectObject.getIR_Location() != null) {
+            params.put("location", inspectObject.getIR_Location());
+        }
+        if (inspectObject.getIR_InspectOpinion() != null) {
             params.put("opinion", inspectObject.getIR_InspectOpinion());
         }
-
 
         Map<String, Object> results = callMethod(Add_Inspect_Record, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
@@ -317,7 +318,7 @@ public class WebServiceUtils {
 
     }
 
-    public static boolean UpdateInspetRecord(String[] errorMessage, Inspect inspectObject) {
+    public static boolean UpdateInspectRecord(String[] errorMessage, Inspect inspectObject) {
         if (is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
         }
@@ -337,6 +338,9 @@ public class WebServiceUtils {
         }
         if (inspectObject.getIR_Content() != null) {
             params.put("opinion", inspectObject.getIR_InspectOpinion());
+        }
+        if (inspectObject.getIR_Location() != null) {
+            params.put("location", inspectObject.getIR_Location());
         }
 
         Map<String, Object> results = callMethod(Update_Inspect_Record, params);
@@ -359,6 +363,48 @@ public class WebServiceUtils {
         Map<String, Object> params = new HashMap<>();
         params.put("id", record_id);
         Map<String, Object> results = callMethod(Get_Maintain_Record_UGO, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get Attachment Info: " + errorMessage[0]);
+            }
+            return null;
+        }
+
+    }
+
+    public static List<GreenObject> GetEventRecordUGO(String record_id, String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", record_id);
+        Map<String, Object> results = callMethod(Get_Event_Record_UGO, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get Attachment Info: " + errorMessage[0]);
+            }
+            return null;
+        }
+
+    }
+
+    public static List<GreenObject> GetInspectRecordUGO(String record_id, String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", record_id);
+        Map<String, Object> results = callMethod(Get_Inspect_Record_Ugo, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
             return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {

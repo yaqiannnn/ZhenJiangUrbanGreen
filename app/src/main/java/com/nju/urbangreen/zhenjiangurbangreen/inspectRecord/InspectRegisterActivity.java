@@ -3,19 +3,20 @@ package com.nju.urbangreen.zhenjiangurbangreen.inspectRecord;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatSpinner;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -42,39 +43,32 @@ import static com.nju.urbangreen.zhenjiangurbangreen.basisClass.Constants.CLICK_
 
 public class InspectRegisterActivity extends BaseRegisterActivity {
 
-
-    public DatePickerDialog dtpckInspectDate;
     @BindView(R.id.Toolbar)
-    Toolbar toolbar;
+    android.support.v7.widget.Toolbar toolbar;
     @BindView(R.id.material_search_view)
     MaterialSearchView materialSearchView;
     @BindView(R.id.tv_inspectInfo_ID)
-    AppCompatTextView tvInspectID;
-    @BindView(R.id.tv_inspectInfo_Code)
-    AppCompatTextView tvInspectCode;
-
-    @BindView(R.id.tv_inspectInfo_date)
-    AppCompatTextView tvInspectDate;
-    @BindView(R.id.et_inspectInfo_inspector)
-    TextInputLayout etInspector;
-    @BindView(R.id.et_inspectInfo_score)
-    TextInputLayout etInspectScore;
-    @BindView(R.id.et_inspectInfo_content)
-    TextInputLayout etInspectContent;
-    @BindView(R.id.et_inspectInfo_opinion)
-    TextInputLayout etEtInspectOpinion;
-    @BindView(R.id.tv_inspectInfo_LoggerPID)
-    AppCompatTextView tvInspectLoggerPID;
-    @BindView(R.id.tv_inspectInfo_LogTime)
-    AppCompatTextView tvInspectInfoLogTime;
-    @BindView(R.id.tv_inspectInfo_LastEditorPID)
-    AppCompatTextView tvInspectLastEditorPID;
-    @BindView(R.id.btn_inspect_register_submit)
-    AppCompatButton btnInspectRegisterSubmit;
+    TextView tvInspectInfoID;
     @BindView(R.id.droplist_inspectInfo_type)
     DropdownEditText droplistInspectInfoType;
-    private String[] typeArray;
-    private ArrayAdapter<String> typeAdapter;
+    @BindView(R.id.et_inspectInfo_date)
+    EditText etInspectInfoDate;
+    @BindView(R.id.et_inspectInfo_score)
+    EditText etInspectInfoScore;
+    @BindView(R.id.et_inspectInfo_staff)
+    EditText etInspectInfoStaff;
+    @BindView(R.id.et_inspectInfo_location)
+    EditText etInspectInfoLocation;
+    @BindView(R.id.et_inspectInfo_content)
+    EditText etInspectInfoContent;
+    @BindView(R.id.et_inspectInfo_opinion)
+    EditText etInspectInfoOpinion;
+    @BindView(R.id.ly_maintain_info_table)
+    TableLayout lyMaintainInfoTable;
+    @BindView(R.id.btn_inspect_register_submit)
+    AppCompatButton btnInspectRegisterSubmit;
+
+    public DatePickerDialog dtpckInspectDate;
     private String inspectId;
 
     private Inspect inspectObject;
@@ -84,19 +78,20 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspect_register);
         ButterKnife.bind(this);
-        initView();
         initToolbar();
         initDatePicker();
         getInspectObject();
+        initDroplist();
         upload();
 
     }
 
-    private void initView() {
+    private void initDroplist() {
         ArrayList<String> dropdownList = new ArrayList<>();
-        dropdownList.addAll(Arrays.asList(getResources().getStringArray(R.array.inspectType)));
+        dropdownList.addAll(Arrays.asList(getResources().getStringArray(R.array.insepctTypeDropList)));
         droplistInspectInfoType.setDropdownList(dropdownList);
     }
+
 
     private void initToolbar() {
         toolbar.setTitle("巡查记录登记");
@@ -124,6 +119,7 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
                 Intent intent2 = new Intent(this, UgoListActivity.class);
                 if (inspectId != null)
                     intent2.putExtra("id", inspectId);
+                intent2.putExtra("activity","inspect");
                 startActivity(intent2);
                 break;
             default:
@@ -135,12 +131,15 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
         Intent intent = getIntent();
         Serializable serializableObject = intent.getSerializableExtra("inspect_object");
         if (serializableObject != null) {
-            tvInspectID.setText(inspectObject.getIR_ID());
-            tvInspectCode.setText(inspectObject.getIR_Code());
-            etInspector.getEditText().setText(inspectObject.getIR_Inspector());
-            etInspectScore.getEditText().setText(inspectObject.getIR_Score());
-            etInspectContent.getEditText().setText(inspectObject.getIR_Content());
-            etEtInspectOpinion.getEditText().setText(inspectObject.getIR_InspectOpinion());
+            inspectObject = (Inspect) serializableObject;
+            tvInspectInfoID.setText(inspectObject.getIR_ID());
+            droplistInspectInfoType.setText(inspectObject.getIR_Type());
+            etInspectInfoDate.setText(inspectObject.getIR_InspectDate());
+            etInspectInfoScore.setText(inspectObject.getIR_Score());
+            etInspectInfoContent.setText(inspectObject.getIR_Content());
+            etInspectInfoOpinion.setText(inspectObject.getIR_InspectOpinion());
+            etInspectInfoStaff.setText(inspectObject.getIR_Inspector());
+            etInspectInfoLocation.setText(inspectObject.getIR_Location());
             inspectId = inspectObject.getIR_ID();
         }
     }
@@ -156,16 +155,16 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
         dtpckInspectDate = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                tvInspectDate.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                etInspectInfoDate.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
             }
         }, year, month, day);
-        tvInspectDate.setOnClickListener(new View.OnClickListener() {
+        etInspectInfoDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dtpckInspectDate.show();
             }
         });
-        tvInspectDate.setText(year + "-" + (month + 1) + "-" + day);
+        etInspectInfoDate.setText(year + "-" + (month + 1) + "-" + day);
     }
 
     //上传（提交）表单
@@ -181,10 +180,10 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
                         @Override
                         public void run() {
                             final Boolean res;
-                            if (tvInspectID.getText() == "") {
+                            if (tvInspectInfoID.getText() == "") {
                                 res = WebServiceUtils.AddInspectRecord(errMsg, inspectObject);
                             } else {
-                                res = WebServiceUtils.UpdateInspetRecord(errMsg, inspectObject);
+                                res = WebServiceUtils.UpdateInspectRecord(errMsg, inspectObject);
                             }
 
                             runOnUiThread(new Runnable() {
@@ -214,10 +213,10 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
         inspectObject = new Inspect();
 
         inspectObject.setIR_Type(droplistInspectInfoType.getText());
-        inspectObject.setIR_InspectDate(tvInspectDate.getText().toString());
-        inspectObject.setIR_ID(tvInspectID.getText().toString());
-        if (etInspectContent.getEditText().getText() != null) {
-            inspectObject.setIR_Content(etInspectContent.getEditText().getText().toString());
+        inspectObject.setIR_InspectDate(etInspectInfoDate.getText().toString());
+        inspectObject.setIR_ID(tvInspectInfoID.getText().toString());
+        if (etInspectInfoContent.getText() != null) {
+            inspectObject.setIR_Content(etInspectInfoContent.getText().toString());
         }
         inspectObject.setUGO_IDs(getUGOIDs());
     }
@@ -237,6 +236,11 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
                 droplistInspectInfoType.setEmptyWarning();
             else
                 droplistInspectInfoType.setCommonDrawable();
+            if (emptyStatus >= 10)
+                etInspectInfoStaff.setBackground(getResources().getDrawable(R.drawable.bkg_edittext_empty));
+            else
+                etInspectInfoStaff.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));
+
             showPrompt(flag);
             return false;
         } else {
