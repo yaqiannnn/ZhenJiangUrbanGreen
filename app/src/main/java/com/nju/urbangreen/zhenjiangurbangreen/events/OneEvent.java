@@ -6,346 +6,174 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by ljy on 2017/9/27.
+ * Created by Liwei on 2016/11/25.
  */
 //事件记录类
 public class OneEvent implements Serializable{
 
-    private String UGE_Code;
-    private String UGE_DamageDegree;
-    private String UGE_Name;
-    private boolean UGE_EventOrActivity;
-    private String UGE_Type;
-    private String UGE_Description;
-    private String UGE_Location;
-    private String UGE_Time;
-    private String UGE_Endtime;
-    private String UGE_Reason;
-    private String UGE_LoggerPID;
-    private String UGE_LogTime;
-    private String UGE_LastEditorPID;
-    private String UGE_LastEditTime;
-    private boolean UGE_IsConcluded;
-    private String UGE_ConcludePID;
-    private String UGE_ConcludeTime;
-    private String UGE_ConcludeDescription;
-    private String UGE_TotalFee;
-    private String UGE_LostFee;
-    private String UGE_Compensation;
-    private String UGE_RelevantPerson;
-    private String UGE_RelevantLicensePlate;
-    private String UGE_RelevantContact;
-    private String UGE_RelevantCompany;
-    private String UGE_RelevantAddress;
-    private String UGE_RelevantDescription;
-    private String UGE_LastStateID;
-    private String UGE_LoggerName;
-    private String UGE_LastEditorName;
-    private String UGE_ConcludeName;
-
-
-
+    private String code;
+    private String name;
+    private String type;
+    private String location;
+    private Date date_time;
+    private String damageDegree;
+    private String totalFee;//总损失
+    private String lostFee;//损失总价
+    private String compensation;//实际赔偿
+    private String relevantPerson;
+    private String relevantLicensePlate;
+    private String relevantContact;
+    private String relevantCompany;
+    private String relevantAddress;
+    private String relevantDescription;
     private String registrar;
+    private String description;
+
+
+
     private String reason;
     private int state;//0 :未提交；1 :已提交
 
-    public OneEvent(String UGE_Code, String UGE_DamageDegree, String UGE_Name, boolean UGE_EventOrActivity, String UGE_Type,
-                    String UGE_Description, String UGE_Location, String UGE_Time, String UGE_Endtime, String UGE_Reason,
-                    String UGE_LoggerPID, String UGE_LogTime, String UGE_LastEditorPID, String UGE_LastEditTime,
-                    boolean UGE_IsConcluded, String UGE_ConcludePID, String UGE_ConcludeTime, String UGE_ConcludeDescription,
-                    String UGE_TotalFee, String UGE_LostFee, String UGE_Compensation, String UGE_RelevantPerson,
-                    String UGE_RelevantLicensePlate, String UGE_RelevantContact, String UGE_RelevantCompany, String UGE_RelevantAddress,
-                    String UGE_RelevantDescription, String UGE_LastStateID, String UGE_LoggerName, String UGE_LastEditorName, String UGE_ConcludeName)
-    {
-        this.UGE_Code = UGE_Code;
-        this.UGE_DamageDegree = UGE_DamageDegree;
-        this.UGE_Name = UGE_Name;
-        this.UGE_EventOrActivity = UGE_EventOrActivity;
-        this.UGE_Type = UGE_Type;
-        this.UGE_Description = UGE_Description;
-        this.UGE_Location = UGE_Location;
-        this.UGE_Time = UGE_Time;
-        this.UGE_Endtime = UGE_Endtime;
-        this.UGE_Reason = UGE_Reason;
-        this.UGE_LoggerPID = UGE_LoggerPID;
-        this.UGE_LogTime = UGE_LogTime;
-        this.UGE_LastEditorPID = UGE_LastEditorPID;
-        this.UGE_LastEditTime = UGE_LastEditTime;
-        this.UGE_IsConcluded = UGE_IsConcluded;
-        this.UGE_ConcludePID = UGE_ConcludePID;
-        this.UGE_ConcludeTime = UGE_ConcludeTime;
-        this.UGE_ConcludeDescription = UGE_ConcludeDescription;
-        this.UGE_TotalFee = UGE_TotalFee;
-        this.UGE_LostFee = UGE_LostFee;
-        this.UGE_Compensation = UGE_Compensation;
-        this.UGE_RelevantPerson = UGE_RelevantPerson;
-        this.UGE_RelevantLicensePlate = UGE_RelevantLicensePlate;
-        this.UGE_RelevantContact = UGE_RelevantContact;
-        this.UGE_RelevantCompany = UGE_RelevantCompany;
-        this.UGE_RelevantAddress = UGE_RelevantAddress;
-        this.UGE_RelevantDescription = UGE_RelevantDescription;
-        this.UGE_LastStateID = UGE_LastStateID;
-        this.UGE_LoggerName = UGE_LoggerName;
-        this.UGE_LastEditorName = UGE_LastEditorName;
-        this.UGE_ConcludeName = UGE_ConcludeName;
+
+
+    public OneEvent(String name, String registrar, String location, Date date_time){
+        this.name = name;
+        this.registrar = registrar;
+        this.location = location;
+        this.date_time = date_time;
+
     }
+
     public OneEvent(){}
 
-    public String getUGE_Code() {
-        return UGE_Code;
+    public String getCode() {
+        return code;
     }
 
-    public String getUGE_DamageDegree() {
-        return UGE_DamageDegree;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getUGE_Name() {
-        return UGE_Name;
+    public String getName() {
+        return name;
     }
 
-    public boolean isUGE_EventOrActivity() {
-        return UGE_EventOrActivity;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUGE_Type() {
-        return UGE_Type;
+    public String getType() {
+        return type;
     }
 
-    public String getUGE_Location() {
-        return UGE_Location;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getUGE_Time() {
-
-        return UGE_Time;
+    public String getLocation() {
+        return location;
     }
 
-    public String getUGE_Description() {
-        return UGE_Description;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public String getUGE_Endtime() {
-        return UGE_Endtime;
+    public Date getDate_time() {
+        return date_time;
     }
 
-    public String getUGE_LastEditorPID() {
-        return UGE_LastEditorPID;
+    public void setDate_time(Date date_time) {
+        this.date_time = date_time;
     }
 
-    public String getUGE_Reason() {
-        return UGE_Reason;
+    public void setDate_time(String date_time_str){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try{
+            this.date_time = sdf.parse(date_time_str);
+        }catch (ParseException e){
+            this.date_time = new Date();
+        }
+
     }
 
-    public String getUGE_LoggerPID() {
-        return UGE_LoggerPID;
+    public String getDamageDegree() {
+        return damageDegree;
     }
 
-    public String getUGE_LogTime() {
-        return UGE_LogTime;
+    public void setDamageDegree(String damageDegree) {
+        this.damageDegree = damageDegree;
     }
 
-    public String getUGE_LastEditTime() {
-        return UGE_LastEditTime;
+    public String getTotalFee() {
+        return this.totalFee;
     }
 
-    public boolean isUGE_IsConcluded() {
-        return UGE_IsConcluded;
+    public void setTotalFee(String fee) {
+        this.totalFee = fee;
     }
 
-    public String getUGE_ConcludePID() {
-        return UGE_ConcludePID;
+    public String getLostFee() {
+        return lostFee;
     }
 
-    public String getUGE_ConcludeTime() {
-        return UGE_ConcludeTime;
+    public void setLostFee(String lostFee) {
+        this.lostFee = lostFee;
     }
 
-    public String getUGE_ConcludeDescription() {
-        return UGE_ConcludeDescription;
+    public String getCompensation() {
+        return compensation;
     }
 
-    public String getUGE_TotalFee() {
-        return UGE_TotalFee;
+    public void setCompensation(String compensation) {
+        this.compensation = compensation;
     }
 
-    public String getUGE_LostFee() {
-        return UGE_LostFee;
+    public String getRelevantPerson() {
+        return relevantPerson;
     }
 
-    public String getUGE_Compensation() {
-        return UGE_Compensation;
+    public void setRelevantPerson(String relevantPerson) {
+        this.relevantPerson = relevantPerson;
     }
 
-    public String getUGE_RelevantPerson() {
-        return UGE_RelevantPerson;
+    public String getRelevantLicensePlate() {
+        return relevantLicensePlate;
     }
 
-    public String getUGE_RelevantLicensePlate() {
-        return UGE_RelevantLicensePlate;
+    public void setRelevantLicensePlate(String relevantLicensePlate) {
+        this.relevantLicensePlate = relevantLicensePlate;
     }
 
-    public String getUGE_RelevantContact() {
-        return UGE_RelevantContact;
+    public String getRelevantContact() {
+        return relevantContact;
     }
 
-    public String getUGE_RelevantCompany() {
-        return UGE_RelevantCompany;
+    public void setRelevantContact(String relevantContact) {
+        this.relevantContact = relevantContact;
     }
 
-    public String getUGE_RelevantDescription() {
-        return UGE_RelevantDescription;
+    public String getRelevantCompany() {
+        return relevantCompany;
     }
 
-    public String getUGE_LastStateID() {
-        return UGE_LastStateID;
+    public void setRelevantCompany(String relevantCompany) {
+        this.relevantCompany = relevantCompany;
     }
 
-    public String getUGE_LoggerName() {
-        return UGE_LoggerName;
+    public String getRelevantAddress() {
+        return relevantAddress;
     }
 
-    public String getUGE_LastEditorName() {
-        return UGE_LastEditorName;
+    public void setRelevantAddress(String relevantAddress) {
+        this.relevantAddress = relevantAddress;
     }
 
-    public String getUGE_ConcludeName() {
-        return UGE_ConcludeName;
+    public String getRelevantDescription() {
+        return relevantDescription;
     }
 
-    public String getUGE_RelevantAddress() {
-        return UGE_RelevantAddress;
-    }
-
-    public void setUGE_Code(String UGE_Code) {
-        this.UGE_Code = UGE_Code;
-    }
-
-    public void setUGE_DamageDegree(String UGE_DamageDegree) {
-        this.UGE_DamageDegree = UGE_DamageDegree;
-    }
-
-    public void setUGE_Name(String UGE_Name) {
-        this.UGE_Name = UGE_Name;
-    }
-
-    public void setUGE_EventOrActivity(boolean UGE_EventOrActivity) {
-        this.UGE_EventOrActivity = UGE_EventOrActivity;
-    }
-
-    public void setUGE_Type(String UGE_Type) {
-        this.UGE_Type = UGE_Type;
-    }
-
-    public void setUGE_Description(String UGE_Description) {
-        this.UGE_Description = UGE_Description;
-    }
-
-    public void setUGE_Location(String UGE_Location) {
-        this.UGE_Location = UGE_Location;
-    }
-
-    public void setUGE_Time(String UGE_Time) {
-        this.UGE_Time = UGE_Time;
-    }
-
-    public void setUGE_Endtime(String UGE_Endtime) {
-        this.UGE_Endtime = UGE_Endtime;
-    }
-
-    public void setUGE_Reason(String UGE_Reason) {
-        this.UGE_Reason = UGE_Reason;
-    }
-
-    public void setUGE_LoggerPID(String UGE_LoggerPID) {
-        this.UGE_LoggerPID = UGE_LoggerPID;
-    }
-
-    public void setUGE_LogTime(String UGE_LogTime) {
-        this.UGE_LogTime = UGE_LogTime;
-    }
-
-    public void setUGE_LastEditorPID(String UGE_LastEditorPID) {
-        this.UGE_LastEditorPID = UGE_LastEditorPID;
-    }
-
-    public void setUGE_LastEditTime(String UGE_LastEditTime) {
-        this.UGE_LastEditTime = UGE_LastEditTime;
-    }
-
-    public void setUGE_IsConcluded(boolean UGE_IsConcluded) {
-        this.UGE_IsConcluded = UGE_IsConcluded;
-    }
-
-    public void setUGE_ConcludePID(String UGE_ConcludePID) {
-        this.UGE_ConcludePID = UGE_ConcludePID;
-    }
-
-    public void setUGE_ConcludeTime(String UGE_ConcludeTime) {
-        this.UGE_ConcludeTime = UGE_ConcludeTime;
-    }
-
-    public void setUGE_ConcludeDescription(String UGE_ConcludeDescription) {
-        this.UGE_ConcludeDescription = UGE_ConcludeDescription;
-    }
-
-    public void setUGE_TotalFee(String UGE_TotalFee) {
-        this.UGE_TotalFee = UGE_TotalFee;
-    }
-
-    public void setUGE_LostFee(String UGE_LostFee) {
-        this.UGE_LostFee = UGE_LostFee;
-    }
-
-    public void setUGE_Compensation(String UGE_Compensation) {
-        this.UGE_Compensation = UGE_Compensation;
-    }
-
-    public void setUGE_RelevantPerson(String UGE_RelevantPerson) {
-        this.UGE_RelevantPerson = UGE_RelevantPerson;
-    }
-
-    public void setUGE_RelevantLicensePlate(String UGE_RelevantLicensePlate) {
-        this.UGE_RelevantLicensePlate = UGE_RelevantLicensePlate;
-    }
-
-    public void setUGE_RelevantContact(String UGE_RelevantContact) {
-        this.UGE_RelevantContact = UGE_RelevantContact;
-    }
-
-    public void setUGE_RelevantCompany(String UGE_RelevantCompany) {
-        this.UGE_RelevantCompany = UGE_RelevantCompany;
-    }
-
-    public void setUGE_RelevantAddress(String UGE_RelevantAddress) {
-        this.UGE_RelevantAddress = UGE_RelevantAddress;
-    }
-
-    public void setUGE_RelevantDescription(String UGE_RelevantDescription) {
-        this.UGE_RelevantDescription = UGE_RelevantDescription;
-    }
-
-    public void setUGE_LastStateID(String UGE_LastStateID) {
-        this.UGE_LastStateID = UGE_LastStateID;
-    }
-
-    public void setUGE_LoggerName(String UGE_LoggerName) {
-        this.UGE_LoggerName = UGE_LoggerName;
-    }
-
-    public void setUGE_LastEditorName(String UGE_LastEditorName) {
-        this.UGE_LastEditorName = UGE_LastEditorName;
-    }
-
-    public void setUGE_ConcludeName(String UGE_ConcludeName) {
-        this.UGE_ConcludeName = UGE_ConcludeName;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
+    public void setRelevantDescription(String relevantDescription) {
+        this.relevantDescription = relevantDescription;
     }
 
     public String getRegistrar() {
@@ -356,7 +184,27 @@ public class OneEvent implements Serializable{
         this.registrar = registrar;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
 }
-
-
-
