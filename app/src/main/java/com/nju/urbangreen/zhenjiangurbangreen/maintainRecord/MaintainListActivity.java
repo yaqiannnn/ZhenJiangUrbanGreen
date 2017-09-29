@@ -240,10 +240,6 @@ public class MaintainListActivity extends BaseActivity {
                 if (tempList != null) {
                     maintainList.clear();
                     maintainList.addAll(tempList);
-<<<<<<< HEAD
-
-=======
->>>>>>> 38eaaad13923791142ee2eda7047286e04332708
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -251,7 +247,6 @@ public class MaintainListActivity extends BaseActivity {
                         if(tempList!=null){
 
                             findViewById(R.id.task_list_emptyview).setVisibility(View.INVISIBLE);
-                            findViewById(R.id.floatingbtn_add_maintain).setVisibility(View.VISIBLE);
                         }
                         if(tempList==null){
 
