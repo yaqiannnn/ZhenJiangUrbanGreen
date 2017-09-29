@@ -13,7 +13,11 @@ import com.google.gson.reflect.TypeToken;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentRecord;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
+<<<<<<< HEAD
+import com.nju.urbangreen.zhenjiangurbangreen.events.OneEvent;
+=======
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.Inspect;
+>>>>>>> 38eaaad13923791142ee2eda7047286e04332708
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.Maintain;
 import com.nju.urbangreen.zhenjiangurbangreen.message.Message;
 
@@ -57,6 +61,7 @@ public class WebServiceUtils {
     public static final String Check_Update = "CheckUpdate";
     public static final String Login = "Login";
     public static final String Get_Maintain_Record = "GetMaintainRecord";
+    public static final String Get_Event = "GetEvent";
     public static final String Get_Maintain_Record_UGO = "GetMaintainRecordUGO";
     public static final String Get_Inspect_Record = "GetInspectRecord";
     public static final String Get_Inspect_Record_Ugo = "GetInspectRecordUGO";
@@ -220,6 +225,24 @@ public class WebServiceUtils {
             return null;
         }
 
+    }
+
+    public static List<OneEvent> getEvent(Map<String, Object> query, String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> res = callMethod(Get_Event, query);
+        if (Integer.parseInt(res.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return gson.fromJson(res.get(KEY_RESULT).toString(),
+                    new TypeToken<List<OneEvent>>() {
+                    }.getType());
+        } else {
+            if (errorMessage != null && res.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = res.get(KEY_ERRMESSAGE).toString();
+            }
+            return null;
+        }
     }
 
     public static List<Maintain> getMaintainRecord(Map<String, Object> query, String[] errorMessage) {
