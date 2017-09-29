@@ -75,48 +75,11 @@ public class BaseListAdapter extends RecyclerView.Adapter<BaseItemViewHolder>{
             intent.putExtra("maintain_object", maintain);
             view.getContext().startActivity(intent);
         }
-<<<<<<< HEAD
-        public void refreshOriginList(List<OneEvent> originList) {
-            this.m_originList=new ArrayList<>(originList);
-        }
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            // 在程序实际的运行过程中，returnData和originData中的事件列表有可能和数据库中的列表不一致
-            // 这是由于adapter中的事件列表和数据库中的事件列表不一致造成的
-            // 因此，需要从数据库更新一下originData的数据
-            updateDataFromDB();
-
-            String filterStr=constraint.toString().toLowerCase().trim();
-            FilterResults results = new FilterResults();
-            m_filteredList.clear();
-            //如果查询内容为空，就直接返回originData
-            if(TextUtils.isEmpty(filterStr)){
-                m_filteredList.addAll(m_originList);
-            }else {
-                for(OneEvent oneEvent:m_originList){
-                    if(oneEvent.getUGE_Code().contains(filterStr)
-                            || oneEvent.getUGE_Name().contains(filterStr))
-                        m_filteredList.add(oneEvent);
-                }
-            }
-            results.values = m_filteredList;
-            results.count = m_filteredList.size();
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults filterResults) {
-            m_adapter.mData.clear();
-            m_adapter.mData.addAll((ArrayList<OneEvent>)(filterResults.values));
-            m_adapter.notifyDataSetChanged();
-=======
         if(type.equals("inspect")){
             Inspect inspect = (Inspect)list.get(position);
             Intent intent = new Intent(view.getContext(), InspectRegisterActivity.class);
             intent.putExtra("inspect_object", inspect);
             view.getContext().startActivity(intent);
->>>>>>> 38eaaad13923791142ee2eda7047286e04332708
         }
     }
 }
