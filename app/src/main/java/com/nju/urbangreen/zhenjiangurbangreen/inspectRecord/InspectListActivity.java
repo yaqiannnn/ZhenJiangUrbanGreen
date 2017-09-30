@@ -2,14 +2,6 @@ package com.nju.urbangreen.zhenjiangurbangreen.inspectRecord;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-<<<<<<< HEAD
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-=======
->>>>>>> 38eaaad13923791142ee2eda7047286e04332708
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DividerItemDecoration;
@@ -30,20 +22,10 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
-<<<<<<< HEAD
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseListAdapter;
-import com.nju.urbangreen.zhenjiangurbangreen.events.EventRegisterActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.widget.PagerSlidingTabStrip;
-import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout;
-import com.nju.urbangreen.zhenjiangurbangreen.widget.TitleSearchView;
-
-public class InspectListActivity extends BaseActivity {
-=======
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.LoadMoreFooterView;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.RefreshHeaderView;
->>>>>>> 38eaaad13923791142ee2eda7047286e04332708
 
 import java.util.ArrayList;
 import java.util.HashMap;
