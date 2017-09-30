@@ -42,6 +42,7 @@ import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.symbol.Symbol;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
+import com.nju.urbangreen.zhenjiangurbangreen.events.EventListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.InspectListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.MaintainListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.settings.SystemFileActivity;
@@ -463,7 +464,7 @@ public class MapActivity extends BaseActivity {
         btnEventRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MapActivity.this, InspectListActivity.class);
+                Intent intent = new Intent(MapActivity.this, EventListActivity.class);
                 intent.putExtra("UGO_Ucode", curUGOID);
                 startActivity(intent);
             }
