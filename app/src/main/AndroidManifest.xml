@@ -80,6 +80,9 @@
         <activity
             android:name=".maintainRecord.MaintainListActivity"
             android:exported="true" />
+        <activity
+            android:name=".events.EventListActivity"
+            android:exported="true" />
         <activity android:name=".ugo.UgoListActivity" />
         <activity
             android:name=".ugo.SearchUgoActivity"
