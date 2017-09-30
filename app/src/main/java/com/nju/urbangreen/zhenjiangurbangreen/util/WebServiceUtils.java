@@ -305,7 +305,7 @@ public class WebServiceUtils {
         params.put("id",  inspectObject.getIR_ID());
         params.put("type", inspectObject.getIR_Type());
         params.put("date", inspectObject.getIR_InspectDate());
-        params.put("UGO_ID", inspectObject.getIR_ID());
+        params.put("UGO_ID", inspectObject.getUGO_IDs());
         if (inspectObject.getIR_Content() != null) {
             params.put("content", inspectObject.getIR_Content());
         }

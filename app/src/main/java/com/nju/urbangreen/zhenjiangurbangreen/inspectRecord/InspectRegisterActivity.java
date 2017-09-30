@@ -211,19 +211,20 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
         inspectObject.setIR_InspectDate(etInspectInfoDate.getText().toString());
         inspectObject.setIR_ID(tvInspectInfoID.getText().toString());
         inspectObject.setUGO_IDs(getUGOIDs());
-        if(inspectObject.getIR_InspectOpinion()!=null){
+        Log.d("ira", "outputObject: "+getUGOIDs());
+        if(etInspectInfoOpinion.getText()!=null){
             inspectObject.setIR_InspectOpinion(etInspectInfoOpinion.getText().toString());
         }
-        if(inspectObject.getIR_Score()!=null){
+        if(etInspectInfoScore.getText()!=null){
             inspectObject.setIR_Score(etInspectInfoScore.getText().toString());
         }
-        if(inspectObject.getIR_Inspector()!=null){
+        if(etInspectInfoStaff.getText()!=null){
             inspectObject.setIR_Inspector(etInspectInfoStaff.getText().toString());
         }
-        if(inspectObject.getIR_Location()!=null){
+        if(etInspectInfoLocation.getText()!=null){
             inspectObject.setIR_Location(etInspectInfoLocation.getText().toString());
         }
-        if(inspectObject.getIR_Content()!=null){
+        if(etInspectInfoContent.getText()!=null){
             inspectObject.setIR_Content(etInspectInfoContent.getText().toString());
         }
     }

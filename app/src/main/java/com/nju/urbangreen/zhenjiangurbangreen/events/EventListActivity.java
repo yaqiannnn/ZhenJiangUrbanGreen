@@ -10,14 +10,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
@@ -278,12 +276,14 @@ public class EventListActivity extends BaseActivity {
                         if(tempList!=null){
 
                             findViewById(R.id.task_list_emptyview).setVisibility(View.INVISIBLE);
-                            findViewById(R.id.floatingbtn_add_event).setVisibility(View.VISIBLE);
+                            if(tempList.size() < 8){
+                                swipeToLoadLayout.setLoadMoreEnabled(false);
+                            }
                         }
+
                         if(tempList==null){
 
                             eventList.clear();
-                            findViewById(R.id.floatingbtn_add_event).setVisibility(View.INVISIBLE);
                             findViewById(R.id.task_list_emptyview).setVisibility(View.VISIBLE);
                         }
                         loading.dismiss();

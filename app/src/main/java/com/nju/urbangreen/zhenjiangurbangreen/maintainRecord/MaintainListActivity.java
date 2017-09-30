@@ -87,6 +87,7 @@ public class MaintainListActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        getMaintainList(multiQuery);
         CacheUtil.removeRelatedUgos();
     }
 
@@ -243,14 +244,16 @@ public class MaintainListActivity extends BaseActivity {
                     @Override
                     public void run() {
                         if(tempList!=null){
-
                             findViewById(R.id.task_list_emptyview).setVisibility(View.INVISIBLE);
-                            findViewById(R.id.floatingbtn_add_maintain).setVisibility(View.VISIBLE);
+//                            findViewById(R.id.floatingbtn_add_maintain).setVisibility(View.VISIBLE);
+                            if(tempList.size() < 8){
+                                swipeToLoadLayout.setLoadMoreEnabled(false);
+                            }
                         }
+
                         if(tempList==null){
 
                             maintainList.clear();
-                            findViewById(R.id.floatingbtn_add_maintain).setVisibility(View.INVISIBLE);
                             findViewById(R.id.task_list_emptyview).setVisibility(View.VISIBLE);
                         }
                         loading.dismiss();
