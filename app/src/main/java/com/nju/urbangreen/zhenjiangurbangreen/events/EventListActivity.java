@@ -10,12 +10,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
@@ -224,7 +226,6 @@ public class EventListActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 0) {
                     multiQuery.put("is_activity", false);
-
                 } else {
                     multiQuery.put("is_activity", true);
                 }
@@ -276,14 +277,12 @@ public class EventListActivity extends BaseActivity {
                         if(tempList!=null){
 
                             findViewById(R.id.task_list_emptyview).setVisibility(View.INVISIBLE);
-                            if(tempList.size() < 8){
-                                swipeToLoadLayout.setLoadMoreEnabled(false);
-                            }
+                            findViewById(R.id.floatingbtn_add_event).setVisibility(View.VISIBLE);
                         }
-
                         if(tempList==null){
 
                             eventList.clear();
+                            findViewById(R.id.floatingbtn_add_event).setVisibility(View.INVISIBLE);
                             findViewById(R.id.task_list_emptyview).setVisibility(View.VISIBLE);
                         }
                         loading.dismiss();
@@ -350,9 +349,19 @@ public class EventListActivity extends BaseActivity {
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent i = new Intent(EventListActivity.this , EventRegisterActivity.class);
-                startActivity(i);
+                String title = item.getTitle().toString();
+                switch (item.getItemId())
+                {
+                    case R.id.action_event:
+                        Intent i_event = new Intent(EventListActivity.this , EventRegisterActivity.class);
+                        startActivity(i_event);
+                        break;
+                    case R.id.action_activity:
+                        Intent i_activity = new Intent(EventListActivity.this , ActivityRegisterActivity.class);
+                        startActivity(i_activity);
+                        break;
 
+                }
                 return false;
             }
         });
