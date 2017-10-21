@@ -13,7 +13,10 @@ import com.google.gson.reflect.TypeToken;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentRecord;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
+import com.nju.urbangreen.zhenjiangurbangreen.events.OneEvent;
+import com.nju.urbangreen.zhenjiangurbangreen.inspectRecord.Inspect;
 import com.nju.urbangreen.zhenjiangurbangreen.maintainRecord.Maintain;
+import com.nju.urbangreen.zhenjiangurbangreen.message.Message;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -55,6 +58,15 @@ public class WebServiceUtils {
     public static final String Check_Update = "CheckUpdate";
     public static final String Login = "Login";
     public static final String Get_Maintain_Record = "GetMaintainRecord";
+    public static final String Get_Event = "GetEvent";
+    public static final String Get_Maintain_Record_UGO = "GetMaintainRecordUGO";
+    public static final String Get_Inspect_Record = "GetInspectRecord";
+    public static final String Get_Inspect_Record_Ugo = "GetInspectRecordUGO";
+    public static final String Add_Inspect_Record = "AddInspectRecord";
+    public static final String Add_Maintain_Record = "AddMaintainRecord";
+    public static final String Add_Event = "AddEvent";
+    public static final String Add_Activity = "AddActivity";
+    public static final String Get_Event_Record_UGO = "GetEventUGO";
     public static final String Get_UGO_Info_Except_ST = "GetUGOInfoExceptST";//ST表示行道树
     public static final String Get_Near_Street_Tree = "GetNearStreetTree";
     public static final String GET_UGO_Suggest = "GetUGOSuggest";
@@ -69,6 +81,14 @@ public class WebServiceUtils {
     public static final String OPERATION_NAME = "RequestServices";
     public static final String OPERATION_NAME_WITHOUT_USERINFO = "RequestServicesWithoutUserInfo";
     public static final String KEY_OPERATION_PARAM = "RequestInfo";
+    public static final String Get_Messages = "GetAllMessage";
+    public static final String Update_Message = "UpdateMessage";
+    public static final String Update_Maintain_Record = "UpdateMaintainRecord";
+    public static final String Update_Inspect_Record = "UpdateInspectRecord";
+    public static final String Update_Event = "UpdateEvent";
+
+
+    public static final String Delete_Message = "DeleteMessage";
     /**
      * 登录名
      */
@@ -227,6 +247,460 @@ public class WebServiceUtils {
         }
     }
 
+    public static List<Inspect> getInspectRecord(Map<String, Object> query, String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> res = callMethod(Get_Inspect_Record, query);
+        if (Integer.parseInt(res.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return gson.fromJson(res.get(KEY_RESULT).toString(),
+                    new TypeToken<List<Inspect>>() {
+                    }.getType());
+        } else {
+            if (errorMessage != null && res.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = res.get(KEY_ERRMESSAGE).toString();
+            }
+            return null;
+        }
+    }
+
+    public static boolean AddInspectRecord(String[] errorMessage,Inspect inspectObject) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("type", inspectObject.getIR_Type());
+        params.put("date", inspectObject.getIR_InspectDate());
+        params.put("UGO_ID", inspectObject.getUGO_IDs());
+        if (inspectObject.getIR_Content() != null) {
+            params.put("content", inspectObject.getIR_Content());
+        }
+        if (inspectObject.getIR_Score() != null) {
+            params.put("score", inspectObject.getIR_Score());
+        }
+        if (inspectObject.getIR_Content() != null) {
+            params.put("inspector", inspectObject.getIR_Inspector());
+        }
+        if (inspectObject.getIR_Location() != null) {
+            params.put("location", inspectObject.getIR_Location());
+        }
+        if (inspectObject.getIR_InspectOpinion() != null) {
+            params.put("opinion", inspectObject.getIR_InspectOpinion());
+        }
+
+        Map<String, Object> results = callMethod(Add_Inspect_Record, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return true;
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误消息", "checkUpdate: " + errorMessage[0]);
+            }
+            return false;
+        }
+
+    }
+
+    public static boolean UpdateInspectRecord(String[] errorMessage, Inspect inspectObject) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id",  inspectObject.getIR_ID());
+        params.put("type", inspectObject.getIR_Type());
+        params.put("date", inspectObject.getIR_InspectDate());
+        params.put("UGO_ID", inspectObject.getIR_ID());
+        if (inspectObject.getIR_Content() != null) {
+            params.put("content", inspectObject.getIR_Content());
+        }
+        if (inspectObject.getIR_Score() != null) {
+            params.put("score", inspectObject.getIR_Score());
+        }
+        if (inspectObject.getIR_Content() != null) {
+            params.put("inspector", inspectObject.getIR_Inspector());
+        }
+        if (inspectObject.getIR_Content() != null) {
+            params.put("opinion", inspectObject.getIR_InspectOpinion());
+        }
+        if (inspectObject.getIR_Location() != null) {
+            params.put("location", inspectObject.getIR_Location());
+        }
+
+        Map<String, Object> results = callMethod(Update_Inspect_Record, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return true;
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误消息", "checkUpdate: " + errorMessage[0]);
+            }
+            return false;
+        }
+    }
+
+
+    public static List<GreenObject> GetMaintainRecordUGO(String record_id, String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", record_id);
+        Map<String, Object> results = callMethod(Get_Maintain_Record_UGO, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get Attachment Info: " + errorMessage[0]);
+            }
+            return null;
+        }
+
+    }
+
+    public static List<GreenObject> GetEventRecordUGO(String record_id, String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", record_id);
+        Map<String, Object> results = callMethod(Get_Event_Record_UGO, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get Attachment Info: " + errorMessage[0]);
+            }
+            return null;
+        }
+
+    }
+
+    public static List<GreenObject> GetInspectRecordUGO(String record_id, String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", record_id);
+        Map<String, Object> results = callMethod(Get_Inspect_Record_Ugo, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get Attachment Info: " + errorMessage[0]);
+            }
+            return null;
+        }
+
+    }
+
+    public static List<Message> getAllMessages(String[] errorMessage, String UserName, Boolean isRead) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("UserName", UserName);
+        params.put("isRead", isRead);
+        Map<String, Object> res = callMethod(Get_Messages, params);
+        if (Integer.parseInt(res.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return gson.fromJson(res.get(KEY_RESULT).toString(),
+                    new TypeToken<List<Message>>() {
+                    }.getType());
+        } else {
+            if (errorMessage != null && res.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = res.get(KEY_ERRMESSAGE).toString();
+            }
+            return null;
+        }
+
+    }
+
+
+    public static boolean DeleteMessage(String[] errorMessage, String Id) {
+        //public static boolean DeleteMessage(String[] errorMessage,String UserName,boolean isRead) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("Id", Id);
+        //params.put("UserName", UserName);
+        //params.put("isRead",isRead);
+        //Map<String, Object> results = callMethod(Get_Messages,params);
+        Map<String, Object> results = callMethod(Delete_Message, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            //  String jsonResults = results.get(KEY_RESULT).toString();
+            return true;
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+            }
+            return false;
+        }
+    }
+
+    public static boolean UpdateMessage(String[] errorMessage, String Id) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("Id", Id);
+        Map<String, Object> results = callMethod(Update_Message, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            // String jsonResults = results.get(KEY_RESULT).toString();
+            return true;
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+            }
+            return false;
+        }
+    }
+
+
+    public static boolean UpdateMaintainRecord(String[] errorMessage, Maintain maintainObject) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", maintainObject.MR_ID);
+        params.put("type", maintainObject.MR_MaintainType);
+        params.put("date", maintainObject.MR_MaintainDate);
+        params.put("staff", maintainObject.MR_MaintainStaff);
+        params.put("UGO_ID", maintainObject.UGO_IDs);
+        if (maintainObject.MR_MaintainContent != null) {
+            params.put("content", maintainObject.MR_MaintainContent);
+        }
+
+        Map<String, Object> results = callMethod(Update_Maintain_Record, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return true;
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误消息", "checkUpdate: " + errorMessage[0]);
+            }
+            return false;
+        }
+
+    }
+    public static boolean UpdateEvent(String[] errorMessage, OneEvent eventObject) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("id",  eventObject.getUGE_ID());
+        params.put("title", eventObject.getUGE_Name());
+        params.put("type", eventObject.getUGE_Type());
+        params.put("location", eventObject.getUGE_Location());
+        params.put("date", eventObject.getUGE_Time());
+        params.put("UGO_ID",eventObject.getUGO_IDs());
+
+        //添加绿化对象id,逗号隔开
+
+
+        if (eventObject.getUGE_DamageDegree() != null) {
+            params.put("damage_degree", eventObject.getUGE_DamageDegree());
+        }
+        if (eventObject.getUGE_LostFee() != null) {
+            params.put("lost_fee", eventObject.getUGE_LostFee());
+        }
+        if (eventObject.getUGE_Compensation() != null) {
+            params.put("compensation", eventObject.getUGE_Compensation());
+        }
+        if (eventObject.getUGE_RelevantPerson() != null) {
+            params.put("rela_person", eventObject.getUGE_RelevantPerson());
+        }
+        if (eventObject.getUGE_RelevantLicensePlate() != null) {
+            params.put("rela_no", eventObject.getUGE_RelevantLicensePlate());
+        }
+        if (eventObject.getUGE_RelevantContact() != null) {
+            params.put("rela_contact", eventObject.getUGE_RelevantContact());
+        }
+        if (eventObject.getUGE_RelevantCompany() != null) {
+            params.put("rela_company", eventObject.getUGE_RelevantCompany());
+        }
+        if (eventObject.getUGE_RelevantAddress() != null) {
+            params.put("rela_address", eventObject.getUGE_RelevantAddress());
+        }
+        if (eventObject.getUGE_Description() != null) {
+            params.put("desc", eventObject.getUGE_Description());
+        }
+        if (eventObject.getUGE_Reason() != null) {
+            params.put("reason", eventObject.getUGE_Reason());
+        }
+        if (eventObject.getUGE_RelevantDescription() != null) {
+            params.put("rela_desc", eventObject.getUGE_RelevantDescription());
+        }
+
+        Map<String, Object> results = callMethod(Update_Event, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return true;
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误消息", "checkUpdate: " + errorMessage[0]);
+            }
+            return false;
+        }
+    }
+
+
+
+
+    public static boolean AddMaintainRecord(String[] errorMessage,Maintain inspectObject) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("type", inspectObject.MR_MaintainType);
+        params.put("date", inspectObject.MR_MaintainDate);
+        params.put("staff", inspectObject.MR_MaintainStaff);
+        params.put("UGO_ID", inspectObject.UGO_IDs);
+        if (inspectObject.MR_MaintainContent != null) {
+            params.put("content", inspectObject.MR_MaintainContent);
+        }
+
+        Map<String, Object> results = callMethod(Add_Maintain_Record, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return true;
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误消息", "checkUpdate: " + errorMessage[0]);
+            }
+            return false;
+        }
+
+    }
+
+    public static boolean AddEvent(String[] errorMessage,OneEvent eventObject) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("title", eventObject.getUGE_Name());
+        params.put("type", eventObject.getUGE_Type());
+        params.put("location", eventObject.getUGE_Location());
+        params.put("date", eventObject.getUGE_Time());
+        params.put("UGO_ID",eventObject.getUGO_IDs());
+        //添加绿化对象id
+        if (eventObject.getUGE_DamageDegree() != null) {
+            params.put("damage_degree", eventObject.getUGE_DamageDegree());
+        }
+        if (eventObject.getUGE_LostFee() != null) {
+            params.put("lost_fee", eventObject.getUGE_LostFee());
+        }
+        if (eventObject.getUGE_Compensation() != null) {
+            params.put("compensation", eventObject.getUGE_Compensation());
+        }
+        if (eventObject.getUGE_RelevantPerson() != null) {
+            params.put("rela_person", eventObject.getUGE_RelevantPerson());
+        }
+        if (eventObject.getUGE_RelevantLicensePlate() != null) {
+            params.put("rela_no", eventObject.getUGE_RelevantLicensePlate());
+        }
+        if (eventObject.getUGE_RelevantContact() != null) {
+            params.put("rela_contact", eventObject.getUGE_RelevantContact());
+        }
+        if (eventObject.getUGE_RelevantCompany() != null) {
+            params.put("rela_company", eventObject.getUGE_RelevantCompany());
+        }
+        if (eventObject.getUGE_RelevantAddress() != null) {
+            params.put("rela_address", eventObject.getUGE_RelevantAddress());
+        }
+        if (eventObject.getUGE_Description() != null) {
+            params.put("desc", eventObject.getUGE_Description());
+        }
+        if (eventObject.getUGE_Reason() != null) {
+            params.put("reason", eventObject.getUGE_Reason());
+        }
+        if (eventObject.getUGE_RelevantDescription() != null) {
+            params.put("rela_desc", eventObject.getUGE_RelevantDescription());
+        }
+
+        Map<String, Object> results = callMethod(Add_Event, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return true;
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误消息", "checkUpdate: " + errorMessage[0]);
+            }
+            return false;
+        }
+
+    }
+    public static boolean AddActivity(String[] errorMessage,OneEvent eventObject) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+        }
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("title", eventObject.getUGE_Name());
+        params.put("type", eventObject.getUGE_Type());
+        params.put("location", eventObject.getUGE_Location());
+        params.put("date", eventObject.getUGE_Time());
+        params.put("UGO_ID",eventObject.getUGO_IDs());
+        //添加绿化对象id
+        if (eventObject.getUGE_DamageDegree() != null) {
+            params.put("damage_degree", eventObject.getUGE_DamageDegree());
+        }
+        if (eventObject.getUGE_LostFee() != null) {
+            params.put("lost_fee", eventObject.getUGE_LostFee());
+        }
+        if (eventObject.getUGE_Compensation() != null) {
+            params.put("compensation", eventObject.getUGE_Compensation());
+        }
+        if (eventObject.getUGE_RelevantPerson() != null) {
+            params.put("rela_person", eventObject.getUGE_RelevantPerson());
+        }
+        if (eventObject.getUGE_RelevantLicensePlate() != null) {
+            params.put("rela_no", eventObject.getUGE_RelevantLicensePlate());
+        }
+        if (eventObject.getUGE_RelevantContact() != null) {
+            params.put("rela_contact", eventObject.getUGE_RelevantContact());
+        }
+        if (eventObject.getUGE_RelevantCompany() != null) {
+            params.put("rela_company", eventObject.getUGE_RelevantCompany());
+        }
+        if (eventObject.getUGE_RelevantAddress() != null) {
+            params.put("rela_address", eventObject.getUGE_RelevantAddress());
+        }
+        if (eventObject.getUGE_Description() != null) {
+            params.put("desc", eventObject.getUGE_Description());
+        }
+        if (eventObject.getUGE_Reason() != null) {
+            params.put("reason", eventObject.getUGE_Reason());
+        }
+        if (eventObject.getUGE_RelevantDescription() != null) {
+            params.put("rela_desc", eventObject.getUGE_RelevantDescription());
+        }
+
+        Map<String, Object> results = callMethod(Add_Activity, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return true;
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误消息", "checkUpdate: " + errorMessage[0]);
+            }
+            return false;
+        }
+
+    }
+
+
     public static List<GreenObject> getUGOInfoExceptST(String[] errorMessage) {
         if (CacheUtil.hasUGOs()) {
             return CacheUtil.getUGOs();
@@ -282,7 +756,7 @@ public class WebServiceUtils {
             return null;
         }
         Map<String, Object> params = new HashMap<>();
-        params.put(flag,ugoParam);
+        params.put(flag, ugoParam);
 
         Map<String, Object> results = callMethod(SEARCH_UGO_INFO, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
@@ -293,6 +767,25 @@ public class WebServiceUtils {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
                 Log.i("错误信息", "Get UGO Sug: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
+
+    public static List<OneEvent> getEvent(Map<String, Object> query, String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> res = callMethod(Get_Event, query);
+        if (Integer.parseInt(res.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            return gson.fromJson(res.get(KEY_RESULT).toString(),
+                    new TypeToken<List<OneEvent>>() {
+                    }.getType());
+        } else {
+            if (errorMessage != null && res.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = res.get(KEY_ERRMESSAGE).toString();
             }
             return null;
         }
@@ -319,7 +812,7 @@ public class WebServiceUtils {
 
     public static List<AttachmentRecord.AttachmentRecordInDB> getRecordAttachmentInfo(
             String record_id, String errorMessage[]) {
-        if(is_offline()) {
+        if (is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
         }
         Map<String, Object> params = new HashMap<>();
@@ -327,7 +820,8 @@ public class WebServiceUtils {
         Map<String, Object> results = callMethod(Get_Record_Attachment, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<AttachmentRecord.AttachmentRecordInDB>>(){}.getType());
+            return gson.fromJson(jsonResults, new TypeToken<List<AttachmentRecord.AttachmentRecordInDB>>() {
+            }.getType());
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
@@ -338,7 +832,7 @@ public class WebServiceUtils {
     }
 
     public static boolean removeAttachment(String file_id, String errorMessage[]) {
-        if(is_offline()) {
+        if (is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
         }
         Map<String, Object> params = new HashMap<>();
@@ -357,7 +851,7 @@ public class WebServiceUtils {
 
 
     public static List<GreenObject> searchUGOByCode(String code, boolean[] type, String[] errorMessage) {
-        if(is_offline()) {
+        if (is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
         }
         Map<String, Object> params = new HashMap<>();
@@ -368,7 +862,8 @@ public class WebServiceUtils {
         Map<String, Object> results = callMethod(Search_UGO_By_ID, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>(){}.getType());
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
+            }.getType());
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
@@ -420,7 +915,7 @@ public class WebServiceUtils {
         try {
             return UPLOAD_ADDRESS + "?RequestInfo=" +
                     URLEncoder.encode(ZipUtils.compress(gson.toJson(inputParam)), "utf-8");
-        } catch( UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             return UPLOAD_ADDRESS;
         }
     }
@@ -433,7 +928,7 @@ public class WebServiceUtils {
         try {
             return DOWNLOAD_ADDRESS + "?RequestInfo=" +
                     URLEncoder.encode(ZipUtils.compress(gson.toJson(inputParam)), "utf-8");
-        } catch( UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             return DOWNLOAD_ADDRESS;
         }
     }
@@ -442,7 +937,7 @@ public class WebServiceUtils {
         return Server_Address;
     }
 
-    public static void putServerAddress(String address) throws Exception{
+    public static void putServerAddress(String address) throws Exception {
         String pattern = "^(https://|http://)?"
                 + "(([0-9]{1,3}\\.){3}[0-9]{1,3}" // IP形式的URL- 199.194.52.184
                 + "|" // 允许IP和DOMAIN（域名）
@@ -452,7 +947,7 @@ public class WebServiceUtils {
                 + "(:[0-9]{1,4})?" // 端口- :80
                 + "((/?)|" // a slash isn't required if there is no file name
                 + "(/[0-9a-zA-Z_!~*'().;?:@&=+$,%#-]+)+/?)$";
-        if(Pattern.matches(pattern, address)) {
+        if (Pattern.matches(pattern, address)) {
             SPUtils.put("Server_Address", address);
             Server_Address = address;
         } else {

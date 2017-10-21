@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:toolbar="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.nju.urbangreen.zhenjiangurbangreen.events.EventRegisterActivity">
 
-    <com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout
-        android:id="@+id/ly_events_register_title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
-
-    </com.nju.urbangreen.zhenjiangurbangreen.widget.TitleBarLayout>
+    <include layout="@layout/toolbar"></include>
 
     <ScrollView
         android:id="@+id/ly_events_register_scroll"
@@ -42,10 +37,9 @@
                         style="@style/RecordItemTitle"
                         android:text="事件编号" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/edit_event_register_code"
-                        style="@style/RecordItemContent"
-                        android:background="@drawable/bkg_edittext" />
+                        style="@style/RecordItemContent" />
                 </TableRow>
 
                 <TableRow style="@style/RecordItem">
@@ -236,30 +230,19 @@
                         android:background="@drawable/bkg_edittext" />
                 </TableRow>
             </TableLayout>
-
             <android.support.v7.widget.AppCompatButton
                 android:background="@drawable/button_shape"
-                android:id="@+id/btn_event_register_add_files"
+                android:id="@+id/btn_event_register_submit"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="8dp"
-                android:text="查看附件"
+                android:text="提交"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"/>
-            <android.support.v7.widget.AppCompatButton
-                android:background="@drawable/button_shape"
-                android:id="@+id/btn_event_register_add_ugo"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginBottom="8dp"
-                android:text="添加相关养护对象"
-                android:textSize="20sp"
-                android:textColor="#FFFFFF"/>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

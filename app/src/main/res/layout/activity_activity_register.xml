@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:toolbar="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.nju.urbangreen.zhenjiangurbangreen.events.ActivityRegisterActivity">
+
+    <include layout="@layout/toolbar"></include>
+
+    <ScrollView
+        android:id="@+id/ly_activity_register_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:id="@+id/ly_activity_register_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:divider="@drawable/table_divider_line"
+                android:orientation="vertical"
+                android:showDividers="middle"
+                android:shrinkColumns="1"
+                android:stretchColumns="1">
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="活动编号" />
+
+                    <TextView
+                        android:id="@+id/edit_activity_register_code"
+                        style="@style/RecordItemContent" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="活动名称" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_name"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="活动类型" />
+
+                    <com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText
+                        android:id="@+id/droplist_activity_register_type"
+                        android:layout_width="wrap_content"></com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText>
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="活动地点" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_location"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="活动时间" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_time"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:gravity="center"
+                        android:paddingLeft="0dp" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="伤害程度" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_damage_degree"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="损失总价(元)" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_lost_fee"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext"
+                        android:digits="0123456789."
+                        android:inputType="number" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="实际赔偿(元)" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_compensation"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext"
+                        android:digits="0123456789."
+                        android:inputType="number" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="活动相关方" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_relevant_person"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="相关方车牌号" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_relevant_license_plate"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="相关方所属单位" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_relevant_company"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="相关方联系方式" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_relevant_contact"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext"
+                        android:inputType="phone" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="相关方通讯地址" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_relevant_address"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="活动描述" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_description"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="活动原因" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_reason"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="相关方其他说明" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_relevant_description"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext" />
+                </TableRow>
+            </TableLayout>
+            <android.support.v7.widget.AppCompatButton
+                android:background="@drawable/button_shape"
+                android:id="@+id/btn_activity_register_submit"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="8dp"
+                android:text="提交"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
