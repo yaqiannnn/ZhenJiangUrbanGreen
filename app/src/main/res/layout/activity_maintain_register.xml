@@ -40,7 +40,7 @@
                     style="@style/RecordItem">
                     <TextView
                         style="@style/RecordItemTitle"
-                        android:text="养护记录CODE"/>
+                        android:text="记录编号"/>
                     <TextView
                         android:id="@+id/tv_maintainInfo_Code"
                         style="@style/RecordItemText" />
