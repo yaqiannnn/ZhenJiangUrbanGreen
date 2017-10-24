@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
@@ -56,6 +57,10 @@ public class MaintainListActivity extends BaseActivity {
     RefreshHeaderView swipeRefreshHeader;
     @BindView(R.id.swipe_load_more_footer)
     LoadMoreFooterView swipeLoadMoreFooter;
+    @BindView(R.id.spinner4)
+    Spinner spinner4;
+    @BindView(R.id.task_list_emptyview)
+    TextView taskListEmptyview;
 
     public static final int GET_REGISTER_RESULT = 1;
     private MaintainListAdapter adapter;
@@ -65,7 +70,6 @@ public class MaintainListActivity extends BaseActivity {
     private String id;
 
     final Map<String, Object> multiQuery = new HashMap<>();
-
 
 
     @Override
@@ -93,9 +97,9 @@ public class MaintainListActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
+        switch (requestCode) {
             case GET_REGISTER_RESULT:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     getMaintainList(multiQuery);
                 }
                 break;
@@ -131,16 +135,17 @@ public class MaintainListActivity extends BaseActivity {
                                        int pos, long id) {
                 String[] languages = getResources().getStringArray(R.array.maintainType);
 
-                if(pos>0){
+                if (pos > 0) {
 
-                    multiQuery.put("maintainType",languages[pos]);
+                    multiQuery.put("maintainType", languages[pos]);
                 }
-                if(pos==0&&multiQuery.containsKey("maintainType")){
+                if (pos == 0 && multiQuery.containsKey("maintainType")) {
                     multiQuery.remove("maintainType");
 
                 }
                 getMaintainList(multiQuery);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Another interface callback
@@ -151,15 +156,16 @@ public class MaintainListActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
                 String[] languages = getResources().getStringArray(R.array.maintainDate);
-                if(pos>0){
-                    multiQuery.put("date",languages[pos]);
+                if (pos > 0) {
+                    multiQuery.put("date", languages[pos]);
                 }
-                if(pos==0&&multiQuery.containsKey("date")){
+                if (pos == 0 && multiQuery.containsKey("date")) {
 
                     multiQuery.remove("date");
                 }
                 getMaintainList(multiQuery);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Another interface callback
@@ -170,21 +176,43 @@ public class MaintainListActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
-                String[] languages = getResources().getStringArray(R.array.maintainStatus);
-                if(pos==1){
-                    multiQuery.put("assess",true);
-                }else if(pos==2){
-                    multiQuery.put("assess",false);
+//                String[] languages = getResources().getStringArray(R.array.maintainStatus);
+                if (pos == 1) {
+                    multiQuery.put("assess", true);
+                } else if (pos == 2) {
+                    multiQuery.put("assess", false);
                 }
-                if(pos==0&&multiQuery.containsKey("assess")){
+                if (pos == 0 && multiQuery.containsKey("assess")) {
                     multiQuery.remove("assess");
 
                 }
                 getMaintainList(multiQuery);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Another interface callback
+            }
+        });
+        spinner4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+                String[] languages = getResources().getStringArray(R.array.maintainSubmit);
+                if (pos == 1) {
+                    multiQuery.put("submit", true);
+                } else if (pos == 2) {
+                    multiQuery.put("submit", false);
+                }
+                if (pos == 0 && multiQuery.containsKey("submit")) {
+                    multiQuery.remove("submit");
+
+                }
+                getMaintainList(multiQuery);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 //        swipeToLoadLayout.setRefreshEnabled(false);
@@ -198,7 +226,7 @@ public class MaintainListActivity extends BaseActivity {
         swipeToLoadLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                getMaintainList(multiQuery,page, 8);
+                getMaintainList(multiQuery, page, 8);
                 page++;
             }
         });
@@ -230,11 +258,11 @@ public class MaintainListActivity extends BaseActivity {
                 query.put("page", 1);
                 query.put("limit", 8);
 
-                if(id != ""){
+                if (id != "") {
                     query.put("UGO_ID", id);
                 }
 
-               final List<Maintain> tempList = WebServiceUtils.getMaintainRecord(query, errMsg);
+                final List<Maintain> tempList = WebServiceUtils.getMaintainRecord(query, errMsg);
 
                 if (tempList != null) {
                     maintainList.clear();
@@ -243,15 +271,15 @@ public class MaintainListActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(tempList!=null){
+                        if (tempList != null) {
                             findViewById(R.id.task_list_emptyview).setVisibility(View.INVISIBLE);
 //                            findViewById(R.id.floatingbtn_add_maintain).setVisibility(View.VISIBLE);
-                            if(tempList.size() < 8){
+                            if (tempList.size() < 8) {
                                 swipeToLoadLayout.setLoadMoreEnabled(false);
                             }
                         }
 
-                        if(tempList==null){
+                        if (tempList == null) {
 
                             maintainList.clear();
                             findViewById(R.id.task_list_emptyview).setVisibility(View.VISIBLE);
@@ -273,7 +301,7 @@ public class MaintainListActivity extends BaseActivity {
                 String[] errMsg = new String[1];
                 query.put("page", page);
                 query.put("limit", limit);
-                if(id != ""){
+                if (id != "") {
                     query.put("UGO_ID", id);
                 }
                 final List<Maintain> newMaintainList = WebServiceUtils.getMaintainRecord(query, errMsg);
@@ -290,7 +318,7 @@ public class MaintainListActivity extends BaseActivity {
                             }
                         }
                     });
-                }else{
+                } else {
                     swipeToLoadLayout.setLoadMoreEnabled(false);
                     Toast.makeText(MaintainListActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
                 }
