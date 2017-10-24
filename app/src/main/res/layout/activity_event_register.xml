@@ -89,8 +89,7 @@
                         android:background="@drawable/bkg_edittext"
                         android:clickable="true"
                         android:focusable="false"
-                        android:gravity="center"
-                        android:paddingLeft="0dp" />
+                         />
                 </TableRow>
 
                 <TableRow style="@style/RecordItem">
