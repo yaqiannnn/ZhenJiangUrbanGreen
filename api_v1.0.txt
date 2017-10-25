@@ -351,13 +351,13 @@
 3. 获得所有巡查记录
     Method: GetIRSuggest
     Return: List<{
-        string MR_Code
+        string IR_Code
     }>
 
 4. 获得所有事件记录
     Method: GetEventSuggest
     Return: List<{
-        string MR_Code
+        string UGE_Code
     }>
 
 // 搜索记录信息
