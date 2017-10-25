@@ -420,7 +420,7 @@
     Param: {
     *   string code 管养对象MR_Code(精确搜索)
     }
-    Return: List<{
+    Return: {
         MR_ID
         MR_Code
         MR_CompanyID
@@ -442,14 +442,14 @@
         MR_LoggerName
         MR_LastEditorName
         MR_SubmitorName
-    }>
+    }
     
     4.搜索巡查记录
     Method: SearchInspectRecord
     Param: {
     *   string code 巡查对象IR_Code(精确搜索)
     }
-    Return: List<{
+    Return:{
         IR_ID
         IR_Code
         FlowNo_In_CodeGroup
@@ -464,14 +464,14 @@
         IR_LogTime
         IR_LastEditorPID
         IR_LastEditTime
-    }>
+    }
     
     5.搜索事件记录
     Method: SearchEventRecord
     Param: {
     *   string code 事件对象UGE_Code(精确搜索)
     }
-    Return: List<{
+    Return: {
         UGE_ID
         UGE_Code
         FlowNo_in_CodeGroup
@@ -502,7 +502,7 @@
         UGE_RelevantAddress
         UGE_RelevantDescription
         UGE_LastStateID
-    }>
+    }
 
 //删除附件
     Method: RemoveAttachment
