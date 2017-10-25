@@ -58,6 +58,7 @@ public class InspectListActivity extends BaseActivity {
     public static final int GET_REGISTER_RESULT = 1;
     private InspectListAdapter adapter;
     private List<Inspect> inspectList = new ArrayList<>();
+    private List<Inspect> inspectSugList = new ArrayList<>();
     private int page = 2;
     private String id;
     final Map<String, Object> multiQuery = new HashMap<>();
@@ -180,6 +181,37 @@ public class InspectListActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.menu_toolbar_maintain_search, menu);
         MenuItem item = menu.findItem(R.id.menu_toolbar_item_search);
         searchView.setMenuItem(item);
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //从服务端获取object
+                /*----**测试数据***/
+                Inspect inspect = new Inspect();
+                inspect.setIR_Code(query);
+                inspect.setIR_Content("hehe");
+                /*----***/
+                Intent intent = new Intent(InspectListActivity.this,InspectRegisterActivity.class);
+                intent.putExtra("inspect_object",inspect);
+                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                getInspectSug();
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -286,6 +318,30 @@ public class InspectListActivity extends BaseActivity {
         adapter = new InspectListAdapter(inspectList);
         recyclerInspectList.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    private void getInspectSug() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String[] errMsg = new String[1];
+                inspectSugList = WebServiceUtils.getInspectSug(errMsg);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setInspectSug();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void setInspectSug(){
+        String [] inspectSuggestions = new String[inspectSugList.size()];
+        for(int i =0; i < inspectSugList.size(); i++){
+            inspectSuggestions[i] = inspectSugList.get(i).getIR_Code();
+        }
+        searchView.setSuggestions(inspectSuggestions);
     }
 
 }

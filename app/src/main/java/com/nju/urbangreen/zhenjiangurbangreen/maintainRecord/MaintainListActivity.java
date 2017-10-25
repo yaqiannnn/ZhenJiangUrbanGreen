@@ -49,6 +49,8 @@ public class MaintainListActivity extends BaseActivity {
     Spinner spinner2;
     @BindView(R.id.spinner3)
     Spinner spinner3;
+    @BindView(R.id.spinner4)
+    Spinner spinner4;
     @BindView(R.id.swipe_target)
     RecyclerView recyclerMaintainList;
     @BindView(R.id.swipeToLoadLayout)
@@ -57,14 +59,13 @@ public class MaintainListActivity extends BaseActivity {
     RefreshHeaderView swipeRefreshHeader;
     @BindView(R.id.swipe_load_more_footer)
     LoadMoreFooterView swipeLoadMoreFooter;
-    @BindView(R.id.spinner4)
-    Spinner spinner4;
     @BindView(R.id.task_list_emptyview)
     TextView taskListEmptyview;
 
     public static final int GET_REGISTER_RESULT = 1;
     private MaintainListAdapter adapter;
     private List<Maintain> maintainList = new ArrayList<>();
+    private List<Maintain> maintainSugList = new ArrayList<>();
     private int page = 2;
 
     private String id;
@@ -83,9 +84,8 @@ public class MaintainListActivity extends BaseActivity {
 
         Intent intent = getIntent();
         id = intent.getStringExtra("UGO_Ucode");
-
         getMaintainList(multiQuery);
-
+//        getMaintainSug();
     }
 
     @Override
@@ -171,7 +171,6 @@ public class MaintainListActivity extends BaseActivity {
                 // Another interface callback
             }
         });
-
         spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
@@ -215,6 +214,7 @@ public class MaintainListActivity extends BaseActivity {
 
             }
         });
+
 //        swipeToLoadLayout.setRefreshEnabled(false);
         swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -237,6 +237,37 @@ public class MaintainListActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.menu_toolbar_maintain_search, menu);
         MenuItem item = menu.findItem(R.id.menu_toolbar_item_search);
         searchView.setMenuItem(item);
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //从服务端获取object
+                /*----**测试数据***/
+                Maintain maintain = new Maintain();
+                maintain.MR_Code = query;
+                maintain.MR_MaintainType = "呵呵";
+                /*----***/
+                Intent intent = new Intent(MaintainListActivity.this,MaintainRegisterActivity.class);
+                intent.putExtra("maintain_object",maintain);
+                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                getMaintainSug();
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -327,7 +358,6 @@ public class MaintainListActivity extends BaseActivity {
         return maintainList;
     }
 
-
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerMaintainList.setLayoutManager(linearLayoutManager);
@@ -339,5 +369,29 @@ public class MaintainListActivity extends BaseActivity {
         adapter.notifyDataSetChanged();
     }
 
+    private void getMaintainSug() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String[] errMsg = new String[1];
+                maintainSugList = WebServiceUtils.getMaintainSug(errMsg);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setMaintainSug();
+                    }
+                });
+            }
+        }).start();
+
+    }
+
+    private void setMaintainSug(){
+        String [] maintainSuggestions = new String[maintainSugList.size()];
+        for(int i =0; i < maintainSugList.size(); i++){
+            maintainSuggestions[i] = maintainSugList.get(i).MR_Code;
+        }
+        searchView.setSuggestions(maintainSuggestions);
+    }
 
 }

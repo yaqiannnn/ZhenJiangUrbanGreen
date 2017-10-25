@@ -58,6 +58,9 @@ public class WebServiceUtils {
     public static final String Check_Update = "CheckUpdate";
     public static final String Login = "Login";
     public static final String Get_Maintain_Record = "GetMaintainRecord";
+    public static final String GET_Maintain_Suggest = "GetMRSuggest";
+    public static final String GET_Inspect_Suggest = "GetIRSuggest";
+    public static final String GET_Event_Suggest = "GetEventSuggest";
     public static final String Get_Event = "GetEvent";
     public static final String Get_Maintain_Record_UGO = "GetMaintainRecordUGO";
     public static final String Get_Inspect_Record = "GetInspectRecord";
@@ -826,6 +829,63 @@ public class WebServiceUtils {
         } else {
             if (errorMessage != null && res.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = res.get(KEY_ERRMESSAGE).toString();
+            }
+            return null;
+        }
+    }
+
+    public static List<Maintain> getMaintainSug(String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> results = callMethod(GET_Maintain_Suggest, null);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<Maintain>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get maintain Sug: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
+    public static List<Inspect> getInspectSug(String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> results = callMethod(GET_Inspect_Suggest, null);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<Inspect>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get inspect Sug: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
+    public static List<OneEvent> getEventSug(String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> results = callMethod(GET_Event_Suggest, null);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<OneEvent>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get event Sug: " + errorMessage[0]);
             }
             return null;
         }
