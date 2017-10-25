@@ -77,8 +77,8 @@ public class WebServiceUtils {
     public static final String Search_UGO_By_ID = "SearchUGOInfo_1";
     public static final String SEARCH_UGO_INFO = "SearchUGOInfo_2";
     public static final String Search_Maintain_Record="SearchMaintainRecord";
-    public static final String Search_Inspect_Record="SearchMaintainRecord";
-    public static final String Search_Event_Record="SearchMaintainRecord";
+    public static final String Search_Inspect_Record="SearchInspectRecord";
+    public static final String Search_Event_Record="SearchEventRecord";
 
     public static final String Remove_Attachment = "RemoveAttachment";
 
@@ -819,7 +819,7 @@ public class WebServiceUtils {
         }
     }
 
-    public static List<Maintain> searchMaintainRecord(String[] errorMessage, String code) {
+    public static Maintain searchMaintainRecord(String[] errorMessage, String code) {
         if (is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
             return null;
@@ -830,7 +830,7 @@ public class WebServiceUtils {
         Map<String, Object> results = callMethod(Search_Maintain_Record, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<Maintain>>() {
+            return gson.fromJson(jsonResults, new TypeToken<Maintain>() {
             }.getType());
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
@@ -840,7 +840,7 @@ public class WebServiceUtils {
             return null;
         }
     }
-    public static List<Inspect> searchInspectRecord(String[] errorMessage, String code) {
+    public static Inspect searchInspectRecord(String[] errorMessage, String code) {
         if (is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
             return null;
@@ -851,7 +851,7 @@ public class WebServiceUtils {
         Map<String, Object> results = callMethod(Search_Inspect_Record, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<Inspect>>() {
+            return gson.fromJson(jsonResults, new TypeToken<Inspect>() {
             }.getType());
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
@@ -861,7 +861,7 @@ public class WebServiceUtils {
             return null;
         }
     }
-    public static List<OneEvent> searchEventRecord(String[] errorMessage, String code) {
+    public static OneEvent searchEventRecord(String[] errorMessage, String code) {
         if (is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
             return null;
@@ -872,7 +872,7 @@ public class WebServiceUtils {
         Map<String, Object> results = callMethod(Search_Event_Record, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<OneEvent>>() {
+            return gson.fromJson(jsonResults, new TypeToken<OneEvent>() {
             }.getType());
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {

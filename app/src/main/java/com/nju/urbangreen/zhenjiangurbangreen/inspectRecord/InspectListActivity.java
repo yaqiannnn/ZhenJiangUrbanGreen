@@ -183,16 +183,24 @@ public class InspectListActivity extends BaseActivity {
         searchView.setMenuItem(item);
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(final String query) {
                 //从服务端获取object
-                /*----**测试数据***/
-                Inspect inspect = new Inspect();
-                inspect.setIR_Code(query);
-                inspect.setIR_Content("hehe");
-                /*----***/
-                Intent intent = new Intent(InspectListActivity.this,InspectRegisterActivity.class);
-                intent.putExtra("inspect_object",inspect);
-                startActivity(intent);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String[] errMsg = new String[1];
+                        final Inspect inspect = WebServiceUtils.searchInspectRecord(errMsg,query);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(InspectListActivity.this,InspectRegisterActivity.class);
+                                intent.putExtra("inspect_object",inspect);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+                }).start();
                 return false;
             }
 

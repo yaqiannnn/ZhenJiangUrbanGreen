@@ -239,16 +239,24 @@ public class MaintainListActivity extends BaseActivity {
         searchView.setMenuItem(item);
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(final String query) {
                 //从服务端获取object
-                /*----**测试数据***/
-                Maintain maintain = new Maintain();
-                maintain.MR_Code = query;
-                maintain.MR_MaintainType = "呵呵";
-                /*----***/
-                Intent intent = new Intent(MaintainListActivity.this,MaintainRegisterActivity.class);
-                intent.putExtra("maintain_object",maintain);
-                startActivity(intent);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String[] errMsg = new String[1];
+                        final Maintain maintain = WebServiceUtils.searchMaintainRecord(errMsg,query);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(MaintainListActivity.this,MaintainRegisterActivity.class);
+                                intent.putExtra("maintain_object",maintain);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+                }).start();
                 return false;
             }
 

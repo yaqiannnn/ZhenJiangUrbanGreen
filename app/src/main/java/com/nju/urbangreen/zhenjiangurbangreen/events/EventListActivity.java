@@ -240,23 +240,33 @@ public class EventListActivity extends BaseActivity {
         searchView.setMenuItem(item);
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(final String query) {
                 //从服务端获取object
-                /*----**测试数据***/
-                OneEvent event = new OneEvent();
-                event.setUGE_Code(query);
-                event.setUGE_Description("hahah");
-                /*----***/
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String[] errMsg = new String[1];
+                        final OneEvent event = WebServiceUtils.searchEventRecord(errMsg,query);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(event == null){
+                                    return ;
+                                }
+                                if (event.isUGE_EventOrActivity()) {
+                                    Intent intent = new Intent(EventListActivity.this, ActivityRegisterActivity.class);
+                                    intent.putExtra("event_object", event);
+                                    startActivity(intent);
+                                }else {
+                                    Intent intent2 = new Intent(EventListActivity.this, EventRegisterActivity.class);
+                                    intent2.putExtra("event_object", event);
+                                    startActivity(intent2);
+                                }
+                            }
+                        });
+                    }
 
-                if (event.isUGE_EventOrActivity()) {
-                    Intent intent = new Intent(EventListActivity.this, ActivityRegisterActivity.class);
-                    intent.putExtra("event_object", event);
-                    startActivity(intent);
-                }else {
-                    Intent intent2 = new Intent(EventListActivity.this, EventRegisterActivity.class);
-                    intent2.putExtra("event_object", event);
-                    startActivity(intent2);
-                }
+                }).start();
                 return false;
             }
 
