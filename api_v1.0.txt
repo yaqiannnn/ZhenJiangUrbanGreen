@@ -443,7 +443,66 @@
         MR_LastEditorName
         MR_SubmitorName
     }>
-
+    
+    4.搜索巡查记录
+    Method: SearchInspectRecord
+    Param: {
+    *   string code 巡查对象IR_Code(精确搜索)
+    }
+    Return: List<{
+        IR_ID
+        IR_Code
+        FlowNo_In_CodeGroup
+        IR_Type
+        IR_InspectDate
+        IR_Location
+        IR_Inspector
+        IR_Score
+        IR_Content
+        IR_InspectOpinion
+        IR_LoggerPID
+        IR_LogTime
+        IR_LastEditorPID
+        IR_LastEditTime
+    }>
+    
+    5.搜索事件记录
+    Method: SearchEventRecord
+    Param: {
+    *   string code 事件对象UGE_Code(精确搜索)
+    }
+    Return: List<{
+        UGE_ID
+        UGE_Code
+        FlowNo_in_CodeGroup
+        UGE_DamageDegree
+        UGE_Name
+        UGE_EventOrActivity
+        UGE_Type
+        UGE_Description
+        UGE_Location
+        UGE_Time
+        UGE_Endtime
+        UGE_Reason
+        UGE_LoggerPID
+        UGE_LogTime
+        UGE_LastEditorPID
+        UGE_LastEditTime
+        UGE_IsConcluded
+        UGE_ConcludePID
+        UGE_ConcludeTime
+        UGE_ConcludeDescription
+        UGE_TotalFee
+        UGE_LostFee
+        UGE_Compensation
+        UGE_RelevantPerson
+        UGE_RelevantLicensePlate
+        UGE_RelevantContact
+        UGE_RelevantCompany
+        UGE_RelevantAddress
+        UGE_RelevantDescription
+        UGE_LastStateID
+    }>
 
 //删除附件
     Method: RemoveAttachment
