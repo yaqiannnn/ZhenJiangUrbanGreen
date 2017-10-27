@@ -35,7 +35,7 @@
 
                     <TextView
                         style="@style/RecordItemTitle"
-                        android:text="事件编号" />
+                        android:text="记录编号" />
 
                     <TextView
                         android:id="@+id/edit_event_register_code"
@@ -89,8 +89,7 @@
                         android:background="@drawable/bkg_edittext"
                         android:clickable="true"
                         android:focusable="false"
-                        android:gravity="center"
-                        android:paddingLeft="0dp" />
+                         />
                 </TableRow>
 
                 <TableRow style="@style/RecordItem">
@@ -227,6 +226,13 @@
                     <EditText
                         android:id="@+id/edit_event_register_relevant_description"
                         style="@style/RecordItemContent"
+                        android:inputType="textMultiLine"
+                        android:minLines="5"
+                        android:maxLines="10"
+                        android:scrollbars="vertical"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|start"
+                        android:paddingTop="5dp"
                         android:background="@drawable/bkg_edittext" />
                 </TableRow>
             </TableLayout>

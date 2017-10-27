@@ -35,7 +35,7 @@
 
                     <TextView
                         style="@style/RecordItemTitle"
-                        android:text="活动编号" />
+                        android:text="记录编号" />
 
                     <TextView
                         android:id="@+id/edit_activity_register_code"
@@ -89,48 +89,33 @@
                         android:background="@drawable/bkg_edittext"
                         android:clickable="true"
                         android:focusable="false"
-                        android:gravity="center"
-                        android:paddingLeft="0dp" />
+                       />
+                </TableRow>
+                <TableRow style="@style/RecordItem">
+
+                    <TextView
+                        style="@style/RecordItemTitle"
+                        android:text="活动结束时间" />
+
+                    <EditText
+                        android:id="@+id/edit_activity_register_end_time"
+                        style="@style/RecordItemContent"
+                        android:background="@drawable/bkg_edittext"
+                        android:clickable="true"
+                        android:focusable="false"
+                         />
                 </TableRow>
 
                 <TableRow style="@style/RecordItem">
 
                     <TextView
                         style="@style/RecordItemTitle"
-                        android:text="伤害程度" />
+                        android:text="活动描述" />
 
                     <EditText
-                        android:id="@+id/edit_activity_register_damage_degree"
+                        android:id="@+id/edit_activity_register_description"
                         style="@style/RecordItemContent"
                         android:background="@drawable/bkg_edittext" />
-                </TableRow>
-
-                <TableRow style="@style/RecordItem">
-
-                    <TextView
-                        style="@style/RecordItemTitle"
-                        android:text="损失总价(元)" />
-
-                    <EditText
-                        android:id="@+id/edit_activity_register_lost_fee"
-                        style="@style/RecordItemContent"
-                        android:background="@drawable/bkg_edittext"
-                        android:digits="0123456789."
-                        android:inputType="number" />
-                </TableRow>
-
-                <TableRow style="@style/RecordItem">
-
-                    <TextView
-                        style="@style/RecordItemTitle"
-                        android:text="实际赔偿(元)" />
-
-                    <EditText
-                        android:id="@+id/edit_activity_register_compensation"
-                        style="@style/RecordItemContent"
-                        android:background="@drawable/bkg_edittext"
-                        android:digits="0123456789."
-                        android:inputType="number" />
                 </TableRow>
 
                 <TableRow style="@style/RecordItem">
@@ -145,17 +130,7 @@
                         android:background="@drawable/bkg_edittext" />
                 </TableRow>
 
-                <TableRow style="@style/RecordItem">
 
-                    <TextView
-                        style="@style/RecordItemTitle"
-                        android:text="相关方车牌号" />
-
-                    <EditText
-                        android:id="@+id/edit_activity_register_relevant_license_plate"
-                        style="@style/RecordItemContent"
-                        android:background="@drawable/bkg_edittext" />
-                </TableRow>
 
                 <TableRow style="@style/RecordItem">
 
@@ -194,41 +169,9 @@
                         android:background="@drawable/bkg_edittext" />
                 </TableRow>
 
-                <TableRow style="@style/RecordItem">
 
-                    <TextView
-                        style="@style/RecordItemTitle"
-                        android:text="活动描述" />
 
-                    <EditText
-                        android:id="@+id/edit_activity_register_description"
-                        style="@style/RecordItemContent"
-                        android:background="@drawable/bkg_edittext" />
-                </TableRow>
 
-                <TableRow style="@style/RecordItem">
-
-                    <TextView
-                        style="@style/RecordItemTitle"
-                        android:text="活动原因" />
-
-                    <EditText
-                        android:id="@+id/edit_activity_register_reason"
-                        style="@style/RecordItemContent"
-                        android:background="@drawable/bkg_edittext" />
-                </TableRow>
-
-                <TableRow style="@style/RecordItem">
-
-                    <TextView
-                        style="@style/RecordItemTitle"
-                        android:text="相关方其他说明" />
-
-                    <EditText
-                        android:id="@+id/edit_activity_register_relevant_description"
-                        style="@style/RecordItemContent"
-                        android:background="@drawable/bkg_edittext" />
-                </TableRow>
             </TableLayout>
             <android.support.v7.widget.AppCompatButton
                 android:background="@drawable/button_shape"

@@ -244,10 +244,11 @@ public class EventRegisterActivity extends BaseRegisterActivity {
         eventObject.setUGE_Type(dropdownEventType.getText().toString());
         eventObject.setUGE_Time(etDateSelect.getText().toString());
         eventObject.setUGE_Location(etLocation.getText().toString());
+        eventObject.setUGE_ID(eventId);
 
 
         if (tvCode.getText() != null) {
-            eventObject.setUGE_ID(tvCode.getText().toString());
+            eventObject.setUGE_Code(tvCode.getText().toString());
         }
         if (etDamageDegree.getText() != null) {
             eventObject.setUGE_DamageDegree((etDamageDegree.getText()).toString());

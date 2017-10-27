@@ -50,16 +50,10 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
     public EditText etLocation;
     @BindView(R.id.edit_activity_register_time)
     public EditText etDateSelect;//日期选择编辑框
-    @BindView(R.id.edit_activity_register_damage_degree)
-    public EditText etDamageDegree;
-    @BindView(R.id.edit_activity_register_lost_fee)
-    public EditText etLostFee;
-    @BindView(R.id.edit_activity_register_compensation)
-    public EditText etCompensation;
+    @BindView(R.id.edit_activity_register_end_time)
+    public EditText etEndDateSelect;//日期选择编辑框
     @BindView(R.id.edit_activity_register_relevant_person)
     public EditText etRelevantPerson;
-    @BindView(R.id.edit_activity_register_relevant_license_plate)
-    public EditText etRelevantLicensePlate;
     @BindView(R.id.edit_activity_register_relevant_contact)
     public EditText etRelevantContact;
     @BindView(R.id.edit_activity_register_relevant_company)
@@ -68,18 +62,13 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
     public EditText etRelevantAddress;
     @BindView(R.id.edit_activity_register_description)
     public EditText etDescription;
-    @BindView(R.id.edit_activity_register_reason)
-    public EditText etReason;
-    @BindView(R.id.edit_activity_register_relevant_description)
-    public EditText etRelevantDescription;
-
     @BindView(R.id.btn_activity_register_submit)
     AppCompatButton btnEventRegisterSubmit;
 
 
 
-
     public DatePickerDialog dtpckEventDate;
+    public DatePickerDialog dtpckEventDate2;
     private OneEvent eventObject;
     private int updateState;
 
@@ -115,17 +104,14 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
             dropdownEventType.setText(eventObject.getUGE_Type());
             etLocation.setText(eventObject.getUGE_Location());
             etDateSelect.setText(eventObject.getUGE_Time());
-            etDamageDegree.setText(eventObject.getUGE_DamageDegree());
-            etLostFee.setText(eventObject.getUGE_LostFee());
-            etCompensation.setText(eventObject.getUGE_Compensation());
+            etEndDateSelect.setText(eventObject.getUGE_Endtime());
             etRelevantPerson.setText(eventObject.getUGE_RelevantPerson());
-            etRelevantLicensePlate.setText(eventObject.getUGE_RelevantLicensePlate());
+
             etRelevantContact.setText(eventObject.getUGE_RelevantContact());
             etRelevantCompany.setText(eventObject.getUGE_RelevantCompany());
             etRelevantAddress.setText(eventObject.getUGE_RelevantAddress());
             etDescription.setText(eventObject.getUGE_Description());
-            etReason.setText(eventObject.getUGE_Reason());
-            etRelevantDescription.setText(eventObject.getUGE_RelevantDescription());
+
 
             eventId = eventObject.getUGE_ID();
         }
@@ -190,6 +176,20 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
             }
         });
         etDateSelect.setText(year + "-" + (month + 1) + "-" + day);
+
+        dtpckEventDate2 = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                etEndDateSelect.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+            }
+        }, year, month, day);
+        etEndDateSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dtpckEventDate2.show();
+            }
+        });
+        etEndDateSelect.setText(year + "-" + (month + 1) + "-" + day);
     }
 
     //上传（提交）表单
@@ -209,7 +209,7 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
                                // eventObject.setUGE_EventOrActivity(false);//false是事件，true是活动
                                 res = WebServiceUtils.AddActivity(errMsg, eventObject);
                             } else {
-                                res = WebServiceUtils.UpdateEvent(errMsg, eventObject);
+                                res = WebServiceUtils.UpdateActivity(errMsg, eventObject);
                             }
 
                             runOnUiThread(new Runnable() {
@@ -240,26 +240,19 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
         eventObject.setUGE_Name(etName.getText().toString());
         eventObject.setUGE_Type(dropdownEventType.getText().toString());
         eventObject.setUGE_Time(etDateSelect.getText().toString());
+
         eventObject.setUGE_Location(etLocation.getText().toString());
+        eventObject.setUGE_ID(eventId);
 
 
         if (tvCode.getText() != null) {
-            eventObject.setUGE_ID(tvCode.getText().toString());
-        }
-        if (etDamageDegree.getText() != null) {
-            eventObject.setUGE_DamageDegree((etDamageDegree.getText()).toString());
-        }
-        if (etLostFee.getText() != null) {
-            eventObject.setUGE_LostFee((etLostFee.getText()).toString());
-        }
-        if (etCompensation.getText() != null) {
-            eventObject.setUGE_Compensation((etCompensation.getText()).toString());
+            eventObject.setUGE_Code(tvCode.getText().toString());
         }
         if (etRelevantPerson.getText() != null) {
             eventObject.setUGE_RelevantPerson((etRelevantPerson.getText()).toString());
         }
-        if (etRelevantLicensePlate.getText() != null) {
-            eventObject.setUGE_RelevantLicensePlate((etRelevantLicensePlate.getText()).toString());
+        if (etEndDateSelect.getText() != null) {
+            eventObject.setUGE_Endtime((etEndDateSelect.getText()).toString());
         }
         if (etRelevantContact.getText() != null) {
             eventObject.setUGE_RelevantContact((etRelevantContact.getText()).toString());
@@ -272,12 +265,6 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
         }
         if (etDescription.getText() != null) {
             eventObject.setUGE_Description((etDescription.getText()).toString());
-        }
-        if (etReason.getText() != null) {
-            eventObject.setUGE_Reason((etReason.getText()).toString());
-        }
-        if (etRelevantDescription.getText() != null) {
-            eventObject.setUGE_RelevantDescription((etRelevantDescription.getText()).toString());
         }
         eventObject.setUGO_IDs(getUGOIDs());
     }
