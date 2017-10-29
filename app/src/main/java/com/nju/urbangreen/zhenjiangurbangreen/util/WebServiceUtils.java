@@ -783,7 +783,7 @@ public class WebServiceUtils {
         }
         Map<String, Object> params = new HashMap<>();
         params.put("radius", radius);
-        params.put("pos_json_str", GeoJsonUtil.Point2WKTString(x, y));
+        params.put("pos_json_str", GeoJsonUtil.GeoPoint2WKTString(x, y));
         Map<String, Object> results = callMethod(Get_Near_Street_Tree, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
@@ -805,7 +805,7 @@ public class WebServiceUtils {
         }
         Map<String, Object> params = new HashMap<>();
         params.put("radius", radius);
-        params.put("pos_json_str", GeoJsonUtil.Point2WKTString(x, y));
+        params.put("pos_json_str", GeoJsonUtil.ZJPoint2WKTString(x, y));
         Map<String, Object> results = callMethod(Get_Near_UGO, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
