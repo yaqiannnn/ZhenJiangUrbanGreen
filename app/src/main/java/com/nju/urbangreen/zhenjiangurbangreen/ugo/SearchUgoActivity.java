@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +27,7 @@ import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObjectSug;
+import com.nju.urbangreen.zhenjiangurbangreen.map.BufferMapActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ACache;
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ListUtil;
@@ -54,10 +56,10 @@ public class SearchUgoActivity extends BaseActivity {
     private String sugAddresses[];
     private ProgressDialog loadingDialog;
     private UgoListAdapter adapter;
+    private MultipleAdapter multipleAdapter;
     private List<GreenObject> searchResult = new ArrayList<>();
     private List<GreenObject> selectResult = new ArrayList<>();
     public String flag;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +75,21 @@ public class SearchUgoActivity extends BaseActivity {
         initSuggestionList();
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(REQUEST_CODE == requestCode && resultCode == 200) {
+//            ArrayList<GreenObject> result = (ArrayList<GreenObject>) data.getSerializableExtra("selectedUGOs");
+//            searchResult.addAll(result);
+//            if(multipleAdapter == null) {
+//                initRecyclerView();
+//            }
+//            adapter.notifyDataSetChanged();
+//            multipleAdapter.notifyDataSetChanged();
+//        }
+//    }
 
     private void initToolbar() {
-        toolbar.setTitle("搜索绿化对象");
+        toolbar.setTitle("添加绿化对象");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -193,7 +207,7 @@ public class SearchUgoActivity extends BaseActivity {
         recyclerUgoSearchResult.setLayoutManager(linearLayoutManager);
         adapter = new UgoListAdapter(searchResult);
 
-        MultipleAdapter multipleAdapter = MultipleSelect.with(this)
+        multipleAdapter = MultipleSelect.with(this)
                 .adapter(adapter)
                 .decorateFactory(new CheckBoxFactory(R.color.colorPrimary))
                 .stateChangeListener(new StateChangeListener() {

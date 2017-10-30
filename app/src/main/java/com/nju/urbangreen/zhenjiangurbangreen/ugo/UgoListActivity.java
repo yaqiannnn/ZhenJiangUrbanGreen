@@ -3,6 +3,7 @@ package com.nju.urbangreen.zhenjiangurbangreen.ugo;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.goyourfly.multiple.adapter.MultipleAdapter;
 import com.goyourfly.multiple.adapter.MultipleSelect;
 import com.goyourfly.multiple.adapter.menu.SimpleDeleteMenuBar;
@@ -20,6 +23,7 @@ import com.goyourfly.multiple.adapter.viewholder.view.CheckBoxFactory;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
+import com.nju.urbangreen.zhenjiangurbangreen.map.BufferMapActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.util.ACache;
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
@@ -38,6 +42,10 @@ public class UgoListActivity extends BaseActivity {
     RecyclerView recyclerUgoList;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.floatingbtn_map_select)
+    FloatingActionButton btnMapSelect;
+    @BindView(R.id.floatingbtn_text_select)
+    FloatingActionButton btnTextSelect;
 
 
     private List<GreenObject> ugObjectList = new ArrayList<>();
@@ -48,6 +56,8 @@ public class UgoListActivity extends BaseActivity {
     private String activity;
     ACache mCache;
 
+    private final int TEXT_SELECT = 1, MAP_SELECT = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +66,7 @@ public class UgoListActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initToolbar();
+        initSelectButton();
         initRecyclerView();
 
         Intent intent = getIntent();
@@ -70,6 +81,23 @@ public class UgoListActivity extends BaseActivity {
             getUgosFromWeb();
         }
 
+    }
+
+    private void initSelectButton() {
+        btnMapSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UgoListActivity.this, BufferMapActivity.class);
+                startActivityForResult(intent, MAP_SELECT);
+            }
+        });
+        btnTextSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UgoListActivity.this, SearchUgoActivity.class);
+                startActivityForResult(intent, TEXT_SELECT);
+            }
+        });
     }
 
     private void initToolbar() {
@@ -90,10 +118,17 @@ public class UgoListActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case 1:
+            case TEXT_SELECT:
                 if (resultCode == RESULT_OK) {
 //                    String returnData = data.getStringExtra("selectUgos");
                     List<GreenObject> tempList = (List<GreenObject>) data.getSerializableExtra("selectUgo");
+                    ugObjectList.addAll(tempList);
+                    multipleAdapter.notifyDataSetChanged();
+                }
+                break;
+            case MAP_SELECT:
+                if(resultCode == RESULT_OK) {
+                    ArrayList<GreenObject> tempList = (ArrayList<GreenObject>) data.getSerializableExtra("selectUgo");
                     ugObjectList.addAll(tempList);
                     multipleAdapter.notifyDataSetChanged();
                 }
@@ -197,23 +232,6 @@ public class UgoListActivity extends BaseActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_ugo_list, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.add_ugo:
-                Intent intent = new Intent(UgoListActivity.this, SearchUgoActivity.class);
-                startActivityForResult(intent, 1);
-                break;
-            default:
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     private boolean hasCache() {
         return mCache.getAsObjectList("ugo_select") != null;
