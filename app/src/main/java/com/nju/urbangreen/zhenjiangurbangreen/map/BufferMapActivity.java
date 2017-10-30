@@ -161,8 +161,8 @@ public class BufferMapActivity  extends BaseActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.menu_toolbar_item_check_selected) {
             Intent intent = new Intent();
-            intent.putExtra("selectedUGOs", selectedUGOs);
-            setResult(200, intent);
+            intent.putExtra("selectUgo", selectedUGOs);
+            setResult(RESULT_OK, intent);
             finish();
         }
         return super.onOptionsItemSelected(item);

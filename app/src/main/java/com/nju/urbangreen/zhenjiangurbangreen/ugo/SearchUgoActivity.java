@@ -51,8 +51,6 @@ public class SearchUgoActivity extends BaseActivity {
     MaterialSearchView searchView;
     @BindView(R.id.recycler_ugo_search_result)
     RecyclerView recyclerUgoSearchResult;
-    @BindView(R.id.floatingbtn_map_select)
-    FloatingActionButton btnMapSelect;
 
     private String sugCodes[];
     private String sugAddresses[];
@@ -62,8 +60,6 @@ public class SearchUgoActivity extends BaseActivity {
     private List<GreenObject> searchResult = new ArrayList<>();
     private List<GreenObject> selectResult = new ArrayList<>();
     public String flag;
-
-    private final int REQUEST_CODE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,27 +73,20 @@ public class SearchUgoActivity extends BaseActivity {
         initToolbar();
         initSearchView();
         initSuggestionList();
-        btnMapSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SearchUgoActivity.this, BufferMapActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
-            }
-        });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(REQUEST_CODE == requestCode && resultCode == 200) {
-            ArrayList<GreenObject> result = (ArrayList<GreenObject>) data.getSerializableExtra("selectedUGOs");
-            searchResult.addAll(result);
-            if(multipleAdapter == null) {
-                initRecyclerView();
-            }
-            multipleAdapter.notifyDataSetChanged();
-            recyclerUgoSearchResult.invalidate();
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(REQUEST_CODE == requestCode && resultCode == 200) {
+//            ArrayList<GreenObject> result = (ArrayList<GreenObject>) data.getSerializableExtra("selectedUGOs");
+//            searchResult.addAll(result);
+//            if(multipleAdapter == null) {
+//                initRecyclerView();
+//            }
+//            adapter.notifyDataSetChanged();
+//            multipleAdapter.notifyDataSetChanged();
+//        }
+//    }
 
     private void initToolbar() {
         toolbar.setTitle("添加绿化对象");

@@ -1,4 +1,4 @@
-﻿Param中带"*"的为一定包含的参数
+Param中带"*"的为一定包含的参数
 
 // 获取列表信息
 1.获取管养记录
@@ -189,6 +189,22 @@
     }
     Return: List<{
         UGO_ID
+        UGO_ClassType_ID
+        UGO_Name
+        UGO_Name_PinYinAbbrevation
+        UGO_Geo_Location
+        UGO_Address
+    }>
+
+8.1获取绿化对象(某个点周围)
+    Method: GetNearUGO
+    Param: {
+    *   string pos_json_str,
+    *   double radius
+    }
+    Return: List<{
+        UGO_ID
+        UGO_Ucode
         UGO_ClassType_ID
         UGO_Name
         UGO_Name_PinYinAbbrevation
