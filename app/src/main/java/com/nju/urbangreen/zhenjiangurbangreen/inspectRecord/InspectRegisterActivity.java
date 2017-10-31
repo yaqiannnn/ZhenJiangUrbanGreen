@@ -209,7 +209,8 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
         inspectObject = new Inspect();
         inspectObject.setIR_Type(droplistInspectInfoType.getText());
         inspectObject.setIR_InspectDate(etInspectInfoDate.getText().toString());
-        inspectObject.setIR_ID(tvInspectInfoCode.getText().toString());
+        inspectObject.setIR_Code(tvInspectInfoCode.getText().toString());
+        inspectObject.setIR_ID(inspectId);
         inspectObject.setUGO_IDs(getUGOIDs());
         Log.d("ira", "outputObject: "+getUGOIDs());
         if(etInspectInfoOpinion.getText()!=null){

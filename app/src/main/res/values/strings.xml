@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ZhenJiangUrbanGreen</string>
+    <string name="app_name">镇江绿化</string>
     <string-array name="insepctTypeDropList">
         <item>保洁考核</item>
         <item>管养考核</item>

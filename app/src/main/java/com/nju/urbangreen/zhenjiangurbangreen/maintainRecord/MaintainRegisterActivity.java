@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -19,12 +18,10 @@ import android.widget.Toast;
 
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseRegisterActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.Constants;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.GreenObject;
 import com.nju.urbangreen.zhenjiangurbangreen.ugo.UgoListActivity;
-import com.nju.urbangreen.zhenjiangurbangreen.util.ACache;
 import com.nju.urbangreen.zhenjiangurbangreen.util.CacheUtil;
 import com.nju.urbangreen.zhenjiangurbangreen.util.WebServiceUtils;
 import com.nju.urbangreen.zhenjiangurbangreen.widget.DropdownEditText;
@@ -205,6 +202,7 @@ public class MaintainRegisterActivity extends BaseRegisterActivity {
 
     private void outputObject() {
         maintainObject = new Maintain();
+        maintainObject.MR_ID = maintainId;
         maintainObject.MR_MaintainType = dropdownMaintainType.getText();
         maintainObject.MR_MaintainDate = etMaintainDate.getText().toString();
         maintainObject.MR_MaintainStaff = etMaintainStaff.getText().toString();
@@ -239,7 +237,11 @@ public class MaintainRegisterActivity extends BaseRegisterActivity {
                 etMaintainStaff.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));
             showPrompt(flag);
             return false;
-        } else {
+        } else if( getUGOIDs().equals("")){
+            Toast.makeText(this, "绿化对象不能为空！", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else {
             return true;
         }
     }
