@@ -252,6 +252,7 @@ public class EventListActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 if(event == null){
+                                    Toast.makeText(EventListActivity.this, "没有搜索到相关内容", Toast.LENGTH_SHORT).show();
                                     return ;
                                 }
                                 if (event.isUGE_EventOrActivity()) {

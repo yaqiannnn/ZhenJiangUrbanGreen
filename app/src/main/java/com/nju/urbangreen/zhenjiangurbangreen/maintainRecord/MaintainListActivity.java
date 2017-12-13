@@ -250,8 +250,12 @@ public class MaintainListActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 Intent intent = new Intent(MaintainListActivity.this,MaintainRegisterActivity.class);
-                                intent.putExtra("maintain_object",maintain);
-                                startActivity(intent);
+                                if(maintain != null) {
+                                    intent.putExtra("maintain_object", maintain);
+                                    startActivity(intent);
+                                }else{
+                                    Toast.makeText(MaintainListActivity.this, "没有搜索到相关内容", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
                     }

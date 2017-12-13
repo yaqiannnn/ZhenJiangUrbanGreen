@@ -194,8 +194,12 @@ public class InspectListActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 Intent intent = new Intent(InspectListActivity.this,InspectRegisterActivity.class);
-                                intent.putExtra("inspect_object",inspect);
-                                startActivity(intent);
+                                if(inspect != null) {
+                                    intent.putExtra("inspect_object", inspect);
+                                    startActivity(intent);
+                                }else{
+                                    Toast.makeText(InspectListActivity.this, "没有搜索到相关内容", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
                     }

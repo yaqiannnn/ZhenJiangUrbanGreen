@@ -141,7 +141,7 @@ public class SearchUgoActivity extends BaseActivity {
                             public void run() {
                                 loadingDialog.dismiss();
                                 if (searchResult == null) {
-                                    Toast.makeText(SearchUgoActivity.this, "找不到结果(是否没输入完整的Code？)", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SearchUgoActivity.this, "找不到结果", Toast.LENGTH_SHORT).show();
                                     searchView.clearFocus();
                                 } else {
                                     initRecyclerView();
