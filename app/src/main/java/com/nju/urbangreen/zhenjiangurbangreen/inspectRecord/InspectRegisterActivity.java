@@ -256,6 +256,9 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
 
             showPrompt(flag);
             return false;
+        }else if( getUGOIDs().equals("")){
+            Toast.makeText(this, "绿化对象不能为空！", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             return true;
         }

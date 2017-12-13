@@ -12,10 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseRegisterActivity;
@@ -56,30 +58,19 @@ public class EventRegisterActivity extends BaseRegisterActivity {
     public EditText etLostFee;
     @BindView(R.id.edit_event_register_compensation)
     public EditText etCompensation;
-    @BindView(R.id.edit_event_register_relevant_person)
-    public EditText etRelevantPerson;
-    @BindView(R.id.edit_event_register_relevant_license_plate)
-    public EditText etRelevantLicensePlate;
-    @BindView(R.id.edit_event_register_relevant_contact)
-    public EditText etRelevantContact;
-    @BindView(R.id.edit_event_register_relevant_company)
-    public EditText etRelevantCompany;
-    @BindView(R.id.edit_event_register_relevant_address)
-    public EditText etRelevantAddress;
     @BindView(R.id.edit_event_register_description)
     public EditText etDescription;
     @BindView(R.id.edit_event_register_reason)
     public EditText etReason;
-    @BindView(R.id.edit_event_register_relevant_description)
-    public EditText etRelevantDescription;
-
     @BindView(R.id.btn_event_register_submit)
     AppCompatButton btnEventRegisterSubmit;
 
 
-
-
     public DatePickerDialog dtpckEventDate;
+    @BindView(R.id.material_search_view)
+    MaterialSearchView materialSearchView;
+    @BindView(R.id.ly_events_register_scroll)
+    ScrollView lyEventsRegisterScroll;
     private OneEvent eventObject;
     private int updateState;
 
@@ -118,14 +109,10 @@ public class EventRegisterActivity extends BaseRegisterActivity {
             etDamageDegree.setText(eventObject.getUGE_DamageDegree());
             etLostFee.setText(eventObject.getUGE_LostFee());
             etCompensation.setText(eventObject.getUGE_Compensation());
-            etRelevantPerson.setText(eventObject.getUGE_RelevantPerson());
-            etRelevantLicensePlate.setText(eventObject.getUGE_RelevantLicensePlate());
-            etRelevantContact.setText(eventObject.getUGE_RelevantContact());
-            etRelevantCompany.setText(eventObject.getUGE_RelevantCompany());
-            etRelevantAddress.setText(eventObject.getUGE_RelevantAddress());
+
             etDescription.setText(eventObject.getUGE_Description());
             etReason.setText(eventObject.getUGE_Reason());
-            etRelevantDescription.setText(eventObject.getUGE_RelevantDescription());
+
 
             eventId = eventObject.getUGE_ID();
         }
@@ -139,7 +126,7 @@ public class EventRegisterActivity extends BaseRegisterActivity {
                 if (eventId != null) {
                     intent.putExtra("id", eventId);
                     startActivity(intent);
-                }else{
+                } else {
                     Toast.makeText(this, "请先保存信息再上传附件", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -147,7 +134,7 @@ public class EventRegisterActivity extends BaseRegisterActivity {
                 Intent intent2 = new Intent(EventRegisterActivity.this, UgoListActivity.class);
                 if (eventId != null)
                     intent2.putExtra("id", eventId);
-                intent2.putExtra("activity","event");
+                intent2.putExtra("activity", "event");
                 startActivity(intent2);
                 break;
             default:
@@ -202,15 +189,15 @@ public class EventRegisterActivity extends BaseRegisterActivity {
             @Override
             public void onClick(View view) {
                 final String[] errMsg = new String[1];
-                if (validateEmpty(Constants.CLICK_UPLOAD_BUTTON)==true) {
+                if (validateEmpty(Constants.CLICK_UPLOAD_BUTTON) == true) {
                     outputObject();
 
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             final Boolean res;
-                            if (tvCode.getText().toString()== "") {
-                               // eventObject.setUGE_EventOrActivity(false);//false是事件，true是活动
+                            if (tvCode.getText().toString() == "") {
+                                // eventObject.setUGE_EventOrActivity(false);//false是事件，true是活动
                                 res = WebServiceUtils.AddEvent(errMsg, eventObject);
                             } else {
                                 res = WebServiceUtils.UpdateEvent(errMsg, eventObject);
@@ -222,8 +209,8 @@ public class EventRegisterActivity extends BaseRegisterActivity {
                                     if (res) {
                                         Toast.makeText(EventRegisterActivity.this, "上传成功!", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent();
-                                        intent.putExtra("upload_status",true);
-                                        setResult(RESULT_OK,intent);
+                                        intent.putExtra("upload_status", true);
+                                        setResult(RESULT_OK, intent);
                                         finish();
                                     } else {
                                         Toast.makeText(EventRegisterActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
@@ -260,30 +247,14 @@ public class EventRegisterActivity extends BaseRegisterActivity {
         if (etCompensation.getText() != null) {
             eventObject.setUGE_Compensation((etCompensation.getText()).toString());
         }
-        if (etRelevantPerson.getText() != null) {
-            eventObject.setUGE_RelevantPerson((etRelevantPerson.getText()).toString());
-        }
-        if (etRelevantLicensePlate.getText() != null) {
-            eventObject.setUGE_RelevantLicensePlate((etRelevantLicensePlate.getText()).toString());
-        }
-        if (etRelevantContact.getText() != null) {
-            eventObject.setUGE_RelevantContact((etRelevantContact.getText()).toString());
-        }
-        if (etRelevantCompany.getText() != null) {
-            eventObject.setUGE_RelevantCompany((etRelevantCompany.getText()).toString());
-        }
-        if (etRelevantAddress.getText() != null) {
-            eventObject.setUGE_RelevantAddress((etRelevantAddress.getText()).toString());
-        }
+
         if (etDescription.getText() != null) {
             eventObject.setUGE_Description((etDescription.getText()).toString());
         }
         if (etReason.getText() != null) {
             eventObject.setUGE_Reason((etReason.getText()).toString());
         }
-        if (etRelevantDescription.getText() != null) {
-            eventObject.setUGE_RelevantDescription((etRelevantDescription.getText()).toString());
-        }
+
         eventObject.setUGO_IDs(getUGOIDs());
     }
 
@@ -292,44 +263,41 @@ public class EventRegisterActivity extends BaseRegisterActivity {
     private boolean validateEmpty(int flag) {
         int emptyStatus = 0;
         //个位数为1代表type为空，十位数为1代表staff为空
-        if (dropdownEventType.getText().equals(""))
-        {   dropdownEventType.setEmptyWarning();
-            emptyStatus=1;
+        if (dropdownEventType.getText().equals("")) {
+            dropdownEventType.setEmptyWarning();
+            emptyStatus = 1;
+        } else {
+            dropdownEventType.setCommonDrawable();
         }
-        else
-        { dropdownEventType.setCommonDrawable();}
 
 
-        if (etName.getText().toString().equals(""))
-        {
+        if (etName.getText().toString().equals("")) {
             etName.setBackground(getResources().getDrawable(R.drawable.bkg_edittext_empty));
-            emptyStatus=1;
+            emptyStatus = 1;
+        } else {
+            etName.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));
         }
-        else
-        { etName.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));}
         //Boolean x=(etName.getText().toString().equals(""))?true:false;
-        if (etLocation.getText().toString().equals(""))
-        {
+        if (etLocation.getText().toString().equals("")) {
             etLocation.setBackground(getResources().getDrawable(R.drawable.bkg_edittext_empty));
-            emptyStatus=1;
+            emptyStatus = 1;
+        } else {
+            etLocation.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));
         }
-        else
-        { etLocation.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));}
 
 
-        if (etDateSelect.getText().toString().equals(""))
-        {
+        if (etDateSelect.getText().toString().equals("")) {
             etDateSelect.setBackground(getResources().getDrawable(R.drawable.bkg_edittext_empty));
-            emptyStatus=1;
+            emptyStatus = 1;
+        } else {
+            etDateSelect.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));
         }
-        else
-        { etDateSelect.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));}
 
 
         //保证必填项不为空
         if (emptyStatus != 0) {
             showPrompt(flag);
-            emptyStatus=0;
+            emptyStatus = 0;
             return false;
         } else {
             return true;
