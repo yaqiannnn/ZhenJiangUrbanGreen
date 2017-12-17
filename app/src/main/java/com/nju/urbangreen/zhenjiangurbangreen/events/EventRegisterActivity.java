@@ -100,6 +100,7 @@ public class EventRegisterActivity extends BaseRegisterActivity {
         Intent intent = getIntent();
         Serializable serializableObject = intent.getSerializableExtra("event_object");
         if (serializableObject != null) {
+            toolbar.setTitle("事件记录修改");
             eventObject = (OneEvent) serializableObject;
             tvCode.setText(eventObject.getUGE_Code());
             etName.setText(eventObject.getUGE_Name());

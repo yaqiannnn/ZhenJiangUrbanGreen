@@ -87,6 +87,7 @@ public class MaintainRegisterActivity extends BaseRegisterActivity {
         Intent intent = getIntent();
         Serializable serializableObject = intent.getSerializableExtra("maintain_object");
         if (serializableObject != null) {
+            toolbar.setTitle("管养记录修改");
             maintainObject = (Maintain) serializableObject;
             tvMaintainCode.setText(maintainObject.MR_Code);
             dropdownMaintainType.setText(maintainObject.MR_MaintainType);

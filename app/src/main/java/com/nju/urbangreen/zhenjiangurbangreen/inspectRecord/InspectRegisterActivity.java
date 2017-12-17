@@ -131,6 +131,7 @@ public class InspectRegisterActivity extends BaseRegisterActivity {
         Intent intent = getIntent();
         Serializable serializableObject = intent.getSerializableExtra("inspect_object");
         if (serializableObject != null) {
+            toolbar.setTitle("巡查记录修改");
             inspectObject = (Inspect) serializableObject;
             tvInspectInfoCode.setText(inspectObject.getIR_Code());
             droplistInspectInfoType.setText(inspectObject.getIR_Type());
