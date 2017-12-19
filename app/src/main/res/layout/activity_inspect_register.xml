@@ -73,6 +73,7 @@
                         android:text="巡查得分"/>
                     <EditText
                         android:id="@+id/et_inspectInfo_score"
+                        android:inputType="number"
                         style="@style/RecordItemContent"
                         android:background="@drawable/bkg_edittext" />
                 </TableRow>

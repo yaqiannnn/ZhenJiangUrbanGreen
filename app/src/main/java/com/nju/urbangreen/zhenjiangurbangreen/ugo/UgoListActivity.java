@@ -59,14 +59,16 @@ public class UgoListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ugo_list);
         ButterKnife.bind(this);
-
-        initToolbar();
-        initSelectButton();
-        initRecyclerView();
-
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
         activity = intent.getStringExtra("activity");
+
+        initToolbar(activity);
+        initSelectButton();
+        initRecyclerView();
+
+
+
 
 //        mCache = ACache.get(this);
 //CacheUtil.hasRelatedUgos() && id !=null
@@ -97,8 +99,23 @@ public class UgoListActivity extends BaseActivity {
         });
     }
 
-    private void initToolbar() {
-        toolbar.setTitle("绿化对象列表");
+    private void initToolbar(String activity) {
+        String explainedStr;
+        switch(activity){
+            case "maintain":
+                explainedStr = "（管养记录）";
+                break;
+            case "inspect":
+                explainedStr = "（巡查记录）";
+                break;
+            case "event":
+                explainedStr = "（事件记录）";
+                break;
+            default:
+                explainedStr = "";
+        }
+
+        toolbar.setTitle("绿化对象列表" + explainedStr) ;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
