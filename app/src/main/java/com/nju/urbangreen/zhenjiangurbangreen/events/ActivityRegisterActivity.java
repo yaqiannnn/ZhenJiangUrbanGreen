@@ -12,10 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.nju.urbangreen.zhenjiangurbangreen.R;
 import com.nju.urbangreen.zhenjiangurbangreen.attachments.AttachmentListActivity;
 import com.nju.urbangreen.zhenjiangurbangreen.basisClass.BaseRegisterActivity;
@@ -52,12 +54,6 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
     public EditText etDateSelect;//日期选择编辑框
     @BindView(R.id.edit_activity_register_end_time)
     public EditText etEndDateSelect;//日期选择编辑框
-    @BindView(R.id.edit_activity_register_relevant_person)
-    public EditText etRelevantPerson;
-    @BindView(R.id.edit_activity_register_relevant_contact)
-    public EditText etRelevantContact;
-    @BindView(R.id.edit_activity_register_relevant_company)
-    public EditText etRelevantCompany;
     @BindView(R.id.edit_activity_register_relevant_address)
     public EditText etRelevantAddress;
     @BindView(R.id.edit_activity_register_description)
@@ -66,9 +62,18 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
     AppCompatButton btnEventRegisterSubmit;
 
 
-
     public DatePickerDialog dtpckEventDate;
     public DatePickerDialog dtpckEventDate2;
+    @BindView(R.id.material_search_view)
+    MaterialSearchView materialSearchView;
+    @BindView(R.id.edit_activity_register_responsible_person)
+    EditText editActivityRegisterResponsiblePerson;
+    @BindView(R.id.edit_activity_register_responsible_company)
+    EditText editActivityRegisterResponsibleCompany;
+    @BindView(R.id.edit_activity_register_responsible_contact)
+    EditText editActivityRegisterResponsibleContact;
+    @BindView(R.id.ly_activity_register_scroll)
+    ScrollView lyActivityRegisterScroll;
     private OneEvent eventObject;
     private int updateState;
 
@@ -98,6 +103,7 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
         Intent intent = getIntent();
         Serializable serializableObject = intent.getSerializableExtra("event_object");
         if (serializableObject != null) {
+            toolbar.setTitle("活动记录修改");
             eventObject = (OneEvent) serializableObject;
             tvCode.setText(eventObject.getUGE_Code());
             etName.setText(eventObject.getUGE_Name());
@@ -105,10 +111,10 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
             etLocation.setText(eventObject.getUGE_Location());
             etDateSelect.setText(eventObject.getUGE_Time());
             etEndDateSelect.setText(eventObject.getUGE_Endtime());
-            etRelevantPerson.setText(eventObject.getUGE_RelevantPerson());
+            editActivityRegisterResponsiblePerson.setText(eventObject.getUGE_RelevantPerson());
 
-            etRelevantContact.setText(eventObject.getUGE_RelevantContact());
-            etRelevantCompany.setText(eventObject.getUGE_RelevantCompany());
+            editActivityRegisterResponsibleContact.setText(eventObject.getUGE_RelevantContact());
+            editActivityRegisterResponsibleCompany.setText(eventObject.getUGE_RelevantCompany());
             etRelevantAddress.setText(eventObject.getUGE_RelevantAddress());
             etDescription.setText(eventObject.getUGE_Description());
 
@@ -122,15 +128,18 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
         switch (item.getItemId()) {
             case R.id.attachment:
                 Intent intent = new Intent(ActivityRegisterActivity.this, AttachmentListActivity.class);
-                if (eventId != null)
+                if (eventId != null) {
                     intent.putExtra("id", eventId);
-                startActivity(intent);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "请先保存信息再上传附件", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.greenObjects:
                 Intent intent2 = new Intent(ActivityRegisterActivity.this, UgoListActivity.class);
                 if (eventId != null)
                     intent2.putExtra("id", eventId);
-                intent2.putExtra("activity","event");
+                intent2.putExtra("activity", "event");
                 startActivity(intent2);
                 break;
             default:
@@ -161,7 +170,7 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
         int year, month, day;
         currentCalendar = Calendar.getInstance();
         year = currentCalendar.get(Calendar.YEAR);
-        month = currentCalendar.get(Calendar.MONTH) + 1;
+        month = currentCalendar.get(Calendar.MONTH);
         day = currentCalendar.get(Calendar.DAY_OF_MONTH);
         dtpckEventDate = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -169,6 +178,7 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
                 etDateSelect.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
             }
         }, year, month, day);
+        dtpckEventDate.getDatePicker().setMaxDate(currentCalendar.getTimeInMillis());
         etDateSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,15 +208,15 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
             @Override
             public void onClick(View view) {
                 final String[] errMsg = new String[1];
-                if (validateEmpty(Constants.CLICK_UPLOAD_BUTTON)==true) {
+                if (validateEmpty(Constants.CLICK_UPLOAD_BUTTON) == true) {
                     outputObject();
 
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             final Boolean res;
-                            if (tvCode.getText().toString()== "") {
-                               // eventObject.setUGE_EventOrActivity(false);//false是事件，true是活动
+                            if (tvCode.getText().toString() == "") {
+                                // eventObject.setUGE_EventOrActivity(false);//false是事件，true是活动
                                 res = WebServiceUtils.AddActivity(errMsg, eventObject);
                             } else {
                                 res = WebServiceUtils.UpdateActivity(errMsg, eventObject);
@@ -218,8 +228,8 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
                                     if (res) {
                                         Toast.makeText(ActivityRegisterActivity.this, "上传成功!", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent();
-                                        intent.putExtra("upload_status",true);
-                                        setResult(RESULT_OK,intent);
+                                        intent.putExtra("upload_status", true);
+                                        setResult(RESULT_OK, intent);
                                         finish();
                                     } else {
                                         Toast.makeText(ActivityRegisterActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
@@ -248,17 +258,17 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
         if (tvCode.getText() != null) {
             eventObject.setUGE_Code(tvCode.getText().toString());
         }
-        if (etRelevantPerson.getText() != null) {
-            eventObject.setUGE_RelevantPerson((etRelevantPerson.getText()).toString());
+        if (editActivityRegisterResponsiblePerson.getText() != null) {
+            eventObject.setUGE_RelevantPerson((editActivityRegisterResponsiblePerson.getText()).toString());
         }
         if (etEndDateSelect.getText() != null) {
             eventObject.setUGE_Endtime((etEndDateSelect.getText()).toString());
         }
-        if (etRelevantContact.getText() != null) {
-            eventObject.setUGE_RelevantContact((etRelevantContact.getText()).toString());
+        if (editActivityRegisterResponsibleContact.getText() != null) {
+            eventObject.setUGE_RelevantContact((editActivityRegisterResponsibleContact.getText()).toString());
         }
-        if (etRelevantCompany.getText() != null) {
-            eventObject.setUGE_RelevantCompany((etRelevantCompany.getText()).toString());
+        if (editActivityRegisterResponsibleCompany.getText() != null) {
+            eventObject.setUGE_RelevantCompany((editActivityRegisterResponsibleCompany.getText()).toString());
         }
         if (etRelevantAddress.getText() != null) {
             eventObject.setUGE_RelevantAddress((etRelevantAddress.getText()).toString());
@@ -274,44 +284,41 @@ public class ActivityRegisterActivity extends BaseRegisterActivity {
     private boolean validateEmpty(int flag) {
         int emptyStatus = 0;
         //个位数为1代表type为空，十位数为1代表staff为空
-        if (dropdownEventType.getText().equals(""))
-        {   dropdownEventType.setEmptyWarning();
-            emptyStatus=1;
+        if (dropdownEventType.getText().equals("")) {
+            dropdownEventType.setEmptyWarning();
+            emptyStatus = 1;
+        } else {
+            dropdownEventType.setCommonDrawable();
         }
-        else
-        { dropdownEventType.setCommonDrawable();}
 
 
-        if (etName.getText().toString().equals(""))
-        {
+        if (etName.getText().toString().equals("")) {
             etName.setBackground(getResources().getDrawable(R.drawable.bkg_edittext_empty));
-            emptyStatus=1;
+            emptyStatus = 1;
+        } else {
+            etName.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));
         }
-        else
-        { etName.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));}
         //Boolean x=(etName.getText().toString().equals(""))?true:false;
-        if (etLocation.getText().toString().equals(""))
-        {
+        if (etLocation.getText().toString().equals("")) {
             etLocation.setBackground(getResources().getDrawable(R.drawable.bkg_edittext_empty));
-            emptyStatus=1;
+            emptyStatus = 1;
+        } else {
+            etLocation.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));
         }
-        else
-        { etLocation.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));}
 
 
-        if (etDateSelect.getText().toString().equals(""))
-        {
+        if (etDateSelect.getText().toString().equals("")) {
             etDateSelect.setBackground(getResources().getDrawable(R.drawable.bkg_edittext_empty));
-            emptyStatus=1;
+            emptyStatus = 1;
+        } else {
+            etDateSelect.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));
         }
-        else
-        { etDateSelect.setBackground(getResources().getDrawable(R.drawable.bkg_edittext));}
 
 
         //保证必填项不为空
         if (emptyStatus != 0) {
             showPrompt(flag);
-            emptyStatus=0;
+            emptyStatus = 0;
             return false;
         } else {
             return true;

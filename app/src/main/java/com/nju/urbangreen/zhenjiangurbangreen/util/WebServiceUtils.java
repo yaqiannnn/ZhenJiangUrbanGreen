@@ -58,6 +58,9 @@ public class WebServiceUtils {
     public static final String Check_Update = "CheckUpdate";
     public static final String Login = "Login";
     public static final String Get_Maintain_Record = "GetMaintainRecord";
+    public static final String GET_Maintain_Suggest = "GetMRSuggest";
+    public static final String GET_Inspect_Suggest = "GetIRSuggest";
+    public static final String GET_Event_Suggest = "GetEventSuggest";
     public static final String Get_Event = "GetEvent";
     public static final String Get_Maintain_Record_UGO = "GetMaintainRecordUGO";
     public static final String Get_Inspect_Record = "GetInspectRecord";
@@ -69,13 +72,14 @@ public class WebServiceUtils {
     public static final String Get_Event_Record_UGO = "GetEventUGO";
     public static final String Get_UGO_Info_Except_ST = "GetUGOInfoExceptST";//ST表示行道树
     public static final String Get_Near_Street_Tree = "GetNearStreetTree";
+    public static final String Get_Near_UGO = "GetNearUGO";
     public static final String GET_UGO_Suggest = "GetUGOSuggest";
     public static final String Get_Record_Attachment = "GetRecordAttachment";
     public static final String Search_UGO_By_ID = "SearchUGOInfo_1";
     public static final String SEARCH_UGO_INFO = "SearchUGOInfo_2";
     public static final String Search_Maintain_Record="SearchMaintainRecord";
-    public static final String Search_Inspect_Record="SearchMaintainRecord";
-    public static final String Search_Event_Record="SearchMaintainRecord";
+    public static final String Search_Inspect_Record="SearchInspectRecord";
+    public static final String Search_Event_Record="SearchEventRecord";
 
     public static final String Remove_Attachment = "RemoveAttachment";
 
@@ -610,17 +614,17 @@ public class WebServiceUtils {
 
 
 
-    public static boolean AddMaintainRecord(String[] errorMessage,Maintain inspectObject) {
+    public static boolean AddMaintainRecord(String[] errorMessage,Maintain maintainObject) {
         if (is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
         }
         Map<String, Object> params = new HashMap<>();
-        params.put("type", inspectObject.MR_MaintainType);
-        params.put("date", inspectObject.MR_MaintainDate);
-        params.put("staff", inspectObject.MR_MaintainStaff);
-        params.put("UGO_ID", inspectObject.UGO_IDs);
-        if (inspectObject.MR_MaintainContent != null) {
-            params.put("content", inspectObject.MR_MaintainContent);
+        params.put("type", maintainObject.MR_MaintainType);
+        params.put("date", maintainObject.MR_MaintainDate);
+        params.put("staff", maintainObject.MR_MaintainStaff);
+        params.put("UGO_ID", maintainObject.UGO_IDs);
+        if (maintainObject.MR_MaintainContent != null) {
+            params.put("content", maintainObject.MR_MaintainContent);
         }
 
         Map<String, Object> results = callMethod(Add_Maintain_Record, params);
@@ -779,7 +783,7 @@ public class WebServiceUtils {
         }
         Map<String, Object> params = new HashMap<>();
         params.put("radius", radius);
-        params.put("pos_json_str", GeoJsonUtil.Point2WKTString(x, y));
+        params.put("pos_json_str", GeoJsonUtil.GeoPoint2WKTString(x, y));
         Map<String, Object> results = callMethod(Get_Near_Street_Tree, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
@@ -789,6 +793,28 @@ public class WebServiceUtils {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
                 Log.i("错误信息", "get near street tree: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
+    public static List<GreenObject> getNearUGO(double x, double y, double radius, String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("radius", radius);
+        params.put("pos_json_str", GeoJsonUtil.ZJPoint2WKTString(x, y));
+        Map<String, Object> results = callMethod(Get_Near_UGO, params);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "get near UGO: " + errorMessage[0]);
             }
             return null;
         }
@@ -816,7 +842,7 @@ public class WebServiceUtils {
         }
     }
 
-    public static List<GreenObject> searchMaintainRecord(String[] errorMessage, String code) {
+    public static Maintain searchMaintainRecord(String[] errorMessage, String code) {
         if (is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
             return null;
@@ -827,7 +853,7 @@ public class WebServiceUtils {
         Map<String, Object> results = callMethod(Search_Maintain_Record, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
+            return gson.fromJson(jsonResults, new TypeToken<Maintain>() {
             }.getType());
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
@@ -837,7 +863,7 @@ public class WebServiceUtils {
             return null;
         }
     }
-    public static List<GreenObject> searchInspectRecord(String[] errorMessage, String code) {
+    public static Inspect searchInspectRecord(String[] errorMessage, String code) {
         if (is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
             return null;
@@ -848,7 +874,7 @@ public class WebServiceUtils {
         Map<String, Object> results = callMethod(Search_Inspect_Record, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
+            return gson.fromJson(jsonResults, new TypeToken<Inspect>() {
             }.getType());
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
@@ -858,7 +884,7 @@ public class WebServiceUtils {
             return null;
         }
     }
-    public static List<GreenObject> searchEventRecord(String[] errorMessage, String code) {
+    public static OneEvent searchEventRecord(String[] errorMessage, String code) {
         if (is_offline()) {
             errorMessage[0] = "网络连接断开，请稍后再试";
             return null;
@@ -869,7 +895,7 @@ public class WebServiceUtils {
         Map<String, Object> results = callMethod(Search_Event_Record, params);
         if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
             String jsonResults = results.get(KEY_RESULT).toString();
-            return gson.fromJson(jsonResults, new TypeToken<List<GreenObject>>() {
+            return gson.fromJson(jsonResults, new TypeToken<OneEvent>() {
             }.getType());
         } else {
             if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
@@ -896,6 +922,63 @@ public class WebServiceUtils {
         } else {
             if (errorMessage != null && res.get(KEY_ERRMESSAGE) != null) {
                 errorMessage[0] = res.get(KEY_ERRMESSAGE).toString();
+            }
+            return null;
+        }
+    }
+
+    public static List<Maintain> getMaintainSug(String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> results = callMethod(GET_Maintain_Suggest, null);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<Maintain>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get maintain Sug: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
+    public static List<Inspect> getInspectSug(String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> results = callMethod(GET_Inspect_Suggest, null);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<Inspect>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get inspect Sug: " + errorMessage[0]);
+            }
+            return null;
+        }
+    }
+
+    public static List<OneEvent> getEventSug(String[] errorMessage) {
+        if (is_offline()) {
+            errorMessage[0] = "网络连接断开，请稍后再试";
+            return null;
+        }
+        Map<String, Object> results = callMethod(GET_Event_Suggest, null);
+        if (Integer.parseInt(results.get(KEY_SUCCEED).toString()) == RESULT_SUCCEED) {
+            String jsonResults = results.get(KEY_RESULT).toString();
+            return gson.fromJson(jsonResults, new TypeToken<List<OneEvent>>() {
+            }.getType());
+        } else {
+            if (errorMessage != null && results.get(KEY_ERRMESSAGE) != null) {
+                errorMessage[0] = results.get(KEY_ERRMESSAGE).toString();
+                Log.i("错误信息", "Get event Sug: " + errorMessage[0]);
             }
             return null;
         }

@@ -40,7 +40,7 @@
                     style="@style/RecordItem">
                     <TextView
                         style="@style/RecordItemTitle"
-                        android:text="养护记录CODE"/>
+                        android:text="记录编号"/>
                     <TextView
                         android:id="@+id/tv_maintainInfo_Code"
                         style="@style/RecordItemText" />
@@ -176,7 +176,7 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="8dp"
-                android:text="提交"
+                android:text="@string/save"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>

@@ -35,7 +35,7 @@
                     style="@style/RecordItem">
                     <TextView
                         style="@style/RecordItemTitle"
-                        android:text="巡查记录CODE"/>
+                        android:text="记录编号"/>
                     <TextView
                         android:id="@+id/tv_inspectInfo_code"
                         style="@style/RecordItemText" />
@@ -73,6 +73,7 @@
                         android:text="巡查得分"/>
                     <EditText
                         android:id="@+id/et_inspectInfo_score"
+                        android:inputType="number"
                         style="@style/RecordItemContent"
                         android:background="@drawable/bkg_edittext" />
                 </TableRow>
@@ -139,7 +140,7 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="8dp"
-                android:text="提交"
+                android:text="@string/save"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>
