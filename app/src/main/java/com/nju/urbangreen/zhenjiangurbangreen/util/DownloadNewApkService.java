@@ -15,8 +15,7 @@ import java.io.File;
 /**
  * Created by HCQIN on 2016/11/6.
  */
-public class DownloadNewApkService extends Service{
-    private String URL_PATH = "http://114.212.112.41/GreenLand/EXT_GreenLand/Mobile/Resources/APK/app-release.apk";
+public class DownloadNewApkService extends Service{k";
     DownloadManager downloadManager;
     Long downloadId;
     DownloadCompleteReceiver receiver;
